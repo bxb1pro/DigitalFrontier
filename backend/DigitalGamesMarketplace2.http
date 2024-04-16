@@ -1,0 +1,6 @@
+@DigitalGamesMarketplace2_HostAddress = http://localhost:5004
+
+GET {{DigitalGamesMarketplace2_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

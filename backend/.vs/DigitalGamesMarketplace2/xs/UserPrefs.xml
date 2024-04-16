@@ -1,0 +1,31 @@
+﻿<Properties StartupConfiguration="{F9B0DADC-AF40-40B6-878E-5E2BB14F79B3}|https">
+  <MonoDevelop.Ide.ItemProperties.DigitalGamesMarketplace2 PreferredExecutionTarget="/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app" />
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Controllers/AccountController.cs">
+    <Files>
+      <File FileName="Migrations/MarketplaceContextModelSnapshot.cs" />
+      <File FileName="Migrations/20240302214146_FullModelsFinal5.cs" />
+      <File FileName="appsettings.json" />
+      <File FileName="../../../.nuget/NuGet/NuGet.Config" />
+      <File FileName="Controllers/AccountController.cs" Line="1" Column="1" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="DigitalGamesMarketplace2" expanded="True" selected="True">
+            <Node name="DigitalGamesMarketplace2" expanded="True">
+              <Node name="Dependencies" expanded="True" />
+              <Node name="Controllers" expanded="True" />
+              <Node name="Migrations" expanded="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+</Properties>
