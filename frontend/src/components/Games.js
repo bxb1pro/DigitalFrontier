@@ -13,7 +13,10 @@ function Games() {
                 <ul>
                     {games.map(game => (
                         <li key={game.id}>
-                            <Link to={`/game/${game.id}`}>{game.title}</Link> - {game.description}
+                             <Link to={`/game/${game.id}`}>
+                                <img src={`/images/game_artwork/${game.imageName}`} alt={game.title} style={{ width: "100px", height: "auto" }} />
+                                {game.title}
+                            </Link> - {game.description}
                         </li>
                     ))}
                 </ul>

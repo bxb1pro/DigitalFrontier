@@ -37,11 +37,13 @@ const gamesSlice = createSlice({
         state.status = 'succeeded';
         // Map the backend game data to the frontend game structure
         state.games = action.payload.map(game => ({
-          id: game.gameId,
+          id: game.id,
           title: game.name,
-          description: game.genre, // Or any other property for the description
+          genre: game.genre, // Or any other property for the description
           price: game.price,
           releaseDate: game.releaseDate,
+          imageName: game.imageName,
+          description: game.description,
           // Include any other data you need from the game object
         }));
       })

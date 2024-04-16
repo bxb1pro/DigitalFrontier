@@ -52,7 +52,7 @@ function HomePage() {
                             <div key={game.id} className="col-md-4 mb-4">
                                 <div className="card h-100">
                                     <Link to={`/game/${game.id}`}>
-                                        <img src={`https://via.placeholder.com/600x900`} className="card-img-top" alt={game.title} />
+                                        <img src={`/images/game_artwork/${game.imageName}`} className="card-img-top" alt={game.title} />
                                     </Link>
                                     <div className="card-body">
                                         <h5 className="card-title">{game.title}</h5>
