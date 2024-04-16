@@ -1,18 +1,27 @@
+// src/components/Games.js
 import React from 'react';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 function Games() {
+    const games = useSelector(state => state.games.games); // Fetch games from Redux store
+
     return (
         <div className="container mt-5">
             <h2>Games</h2>
-            <p>Your favourite games.</p>
+            {games.length > 0 ? (
+                <ul>
+                    {games.map(game => (
+                        <li key={game.id}>
+                            <Link to={`/game/${game.id}`}>{game.title}</Link> - {game.description}
+                        </li>
+                    ))}
+                </ul>
+            ) : (
+                <p>No games found. Please check back later.</p>
+            )}
         </div>
     );
 }
-
-const games = [
-    { id: 1, title: "Game Title 1", description: "Game description here", /* other properties */ },
-    // other games
-];
-
 
 export default Games;
