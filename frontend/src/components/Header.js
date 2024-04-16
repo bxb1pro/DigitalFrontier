@@ -37,6 +37,12 @@ const Header = () => {
                         </div>
                         <ul className="navbar-nav ms-auto">
                             <li className="nav-item">
+                                <Link className="nav-link" to="/developers">Developers</Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link className="nav-link" to="/purchases">Purchases</Link>
+                            </li>
+                            <li className="nav-item">
                                 <Link className="nav-link" to="/account">
                                     <i className="bi bi-person-fill"></i>
                                     <span className="account-text">Account</span>
@@ -46,29 +52,13 @@ const Header = () => {
                                 <Link className="nav-link" to="/login">Register / Login</Link>
                             </li>
                             <li className="nav-item">
-                                <Link className="nav-link" to="/login">Logout</Link>
+                                <Link className="nav-link" to="/logout">Logout</Link>
                             </li>
 
                         </ul>
                     </div>
                 </div>
             </nav>
-                <div className="navbar navbar-expand navbar-dark tabs-navbar">
-                    <ul className="navbar-nav me-auto">
-                        <li className="nav-item tab-item">
-                            <Link className="nav-link tab-link" to="/games">Games</Link>
-                        </li>
-                        <li className="nav-item tab-item">
-                            <Link className="nav-link tab-link" to="/developers">Developers</Link>
-                        </li>
-                        <li className="nav-item tab-item">
-                            <Link className="nav-link tab-link" to="/wishlists">Wishlists</Link>
-                        </li>
-                        <li className="nav-item tab-item">
-                            <Link className="nav-link tab-link" to="/purchases">Purchase History</Link>
-                        </li>
-                    </ul>
-                </div>
         </>
     );
 };

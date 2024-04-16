@@ -1,0 +1,9 @@
+/* HomePage.css */
+.wishlist-box {
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    max-height: 500px;
+    overflow-y: auto;
+}

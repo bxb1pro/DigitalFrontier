@@ -166,62 +166,6 @@
     width: 100%; /* Allows the input to expand */
 }
 
-/* Styles for the tabs-navbar */
-.tabs-navbar {
-    background-color: #000; /* Match the existing header color */
-    width: 100%; /* Ensure it takes full width */
-    margin: 0; /* Remove any default margins */
-    padding: 0.5rem 0; /* Adjust padding as needed */
-}
-
-.tabs-navbar .navbar-nav {
-    display: flex;
-    justify-content: center; /* Center children horizontally */
-    align-items: center; /* Center children vertically */
-    width: 100%;
-    list-style: none; /* Remove default list styling */
-    padding-left: 0; /* Remove default padding */
-}
-
-/* If you want to maintain the existing hover styles for the tab links, you need to be more specific */
-.tabs-navbar .tab-item .tab-link:hover {
-    background-color: #444; /* Or any other style you've set for tabs on hover */
-    color: white; /* If you want to keep the text color white */
-    text-decoration: none;
-}
-
-/* Styles for each tab item */
-.tab-item .tab-link {
-    color: white;
-    padding: 0.5rem 1rem; /* Adjust padding as needed */
-    margin: 0 5px; /* Creates space between tabs */
-    background-color: #000; /* Tab background color */
-    border-radius: 0.25rem 0.25rem 0 0; /* Rounded corners on the top */
-    transition: background-color 0.2s ease-in-out; /* Smooth transition for background color */
-}
-
-/* You may also want to adjust padding or margin of .tab-item if needed */
-.tab-item {
-    display: flex; /* Use flex to center the links if needed */
-    align-items: center; /* Aligns items vertically in the center */
-    justify-content: center; /* Centers the link text horizontally */
-    flex-grow: 1; /* Allows each tab item to grow and take equal space */
-    font-size: 1.4rem;
-}
-
-/* Hover effect for each tab link */
-.tab-item .tab-link:hover,
-.tab-item .tab-link:focus {
-    background-color: #444; /* Hover/focus color */
-    text-decoration: none;
-}
-
-/* Active tab style */
-.tab-item .tab-link.active {
-    background-color: #000; /* Active tab background color */
-    border-bottom: 2px solid #007bff; /* Bottom border for active tab */
-}
-
 /* Responsive adjustments */
 @media (max-width: 991px) {
     .navbar-custom .d-flex {
