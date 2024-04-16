@@ -9049,11 +9049,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/brad/Documents/Coursework/Backend/DigitalGamesMarketplace2.csproj",
+      "projectUniqueName": "/Users/brad/Documents/GitHub/Web-Coursework-Full/backend/DigitalGamesMarketplace2.csproj",
       "projectName": "DigitalGamesMarketplace2",
-      "projectPath": "/Users/brad/Documents/Coursework/Backend/DigitalGamesMarketplace2.csproj",
+      "projectPath": "/Users/brad/Documents/GitHub/Web-Coursework-Full/backend/DigitalGamesMarketplace2.csproj",
       "packagesPath": "/Users/brad/.nuget/packages/",
-      "outputPath": "/Users/brad/Documents/Coursework/Backend/obj/",
+      "outputPath": "/Users/brad/Documents/GitHub/Web-Coursework-Full/backend/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/brad/.nuget/NuGet/NuGet.Config"

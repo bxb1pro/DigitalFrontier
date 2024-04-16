@@ -1,0 +1,237 @@
+/* Header.css */
+
+/* General navbar styles */
+.navbar-custom {
+    background-color: #000;
+    padding: 1rem 0;
+    display: flex;
+    justify-content: center; /* Changed to center */
+    align-items: center;
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+}
+
+.navbar-brand img {
+    height: 100%;
+    width: auto;
+    max-height: 100px;
+}
+
+/* Adjusting the size and alignment of nav links */
+.navbar-custom .navbar-nav .nav-link {
+    color: white;
+    font-size: 1.2rem;
+    padding: 8px 16px;
+}
+
+/* Hover styles for account-related links */
+.navbar-custom .navbar-nav .nav-link:hover {
+    color: #bfbfbf; /* Slightly grey color */
+}
+
+/* Ensuring the parent link is positioned relatively */
+.navbar-custom .nav-link {
+    position: relative; /* This ensures the tooltip is positioned relative to the link */
+    display: flex;
+    align-items: center; /* This centers the icon vertically */
+}
+
+/* Hide text by default */
+.navbar-custom .nav-link .account-text {
+    visibility: hidden;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    transition: opacity 0.2s, width 0.2s;
+    font-size: 1rem;
+    color: white;
+    bottom: 100%; /* Position it fully above the parent link */
+    left: 50%; /* Center it horizontally */
+    transform: translateX(-50%); /* Align center of the tooltip with the center of the link/icon */
+    white-space: nowrap; /* Prevents the text from wrapping */
+}
+
+/* Show text on hover */
+.navbar-custom .nav-link:hover .account-text {
+    visibility: visible;
+    opacity: 1;
+    width: auto;
+}
+
+/* Removing underlines from links on hover */
+.navbar-custom a:hover {
+    text-decoration: none;
+}
+
+/* Styles for the search bar container */
+.navbar-custom .search-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: auto;
+    max-width: 1000px; /* Set the max width for the entire search bar container */
+    margin: 0 auto; /* Center the search container in the available space */
+}
+
+/* Styles specific to the search form elements */
+.navbar-custom .custom-dropdown-toggle,
+.navbar-custom .form-control,
+.navbar-custom .btn {
+    margin: 0; /* Removes margins between elements */
+    border-radius: 0; /* Removes rounded corners for middle elements */
+}
+
+/* Force override left corners of all categories button not rounding */
+.navbar-custom .search-container .dropdown .dropdown-toggle {
+    border-top-left-radius: 0.25rem;
+    border-bottom-left-radius: 0.25rem;
+}
+
+.navbar-custom .search-container > :last-child {
+    border-top-right-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
+}
+
+/* Custom Dropdown Toggle Styles */
+.navbar-custom .custom-dropdown-toggle {
+    background-color: #fff;
+    color: #495057;
+    border: 1px solid #ced4da;
+    border-right: none; /* Aligns with the search input */
+    box-shadow: none;
+}
+
+.navbar-custom .custom-dropdown-toggle:hover, 
+.navbar-custom .custom-dropdown-toggle:focus {
+    background-color: #e9ecef;
+    color: #495057;
+}
+
+.navbar-custom .custom-dropdown-toggle:active,
+.navbar-custom .custom-dropdown-toggle.show {
+    background-color: #fff;
+    color: #495057;
+}
+
+.navbar-custom .dropdown-menu {
+    border: 1px solid #ced4da;
+}
+
+.navbar-custom .dropdown-item {
+    color: #495057;
+}
+
+/* Search input styles */
+.navbar-custom .form-control {
+    border: 1px solid #ced4da;
+    border-radius: 0; /* No corner rounding */
+    flex-grow: 1; /* Takes up the remaining space */
+}
+
+/* Search button styles */
+.navbar-custom .btn {
+    background-color: #007bff;
+    border: 1px solid #007bff;
+    color: white;
+    padding: 0.375rem 0.75rem;
+}
+
+.navbar-custom .btn .bi {
+    font-size: 1.25rem;
+}
+
+/* Hover styles for search button */
+.navbar-custom .btn:hover {
+    background-color: #e2e6ea;
+}
+
+/* Styles for the search bar container */
+.navbar-custom .search-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 60%; /* Full width of the navbar */
+    max-width: 60%; /* Adjust this percentage to make the container smaller */
+    margin: 0 auto; /* This will center the search container */
+}
+
+/* Search input styles */
+.navbar-custom .form-control {
+    border: 1px solid #ced4da;
+    border-radius: 0; /* No corner rounding */
+    flex-grow: 1; /* Takes up the remaining space */
+    width: 100%; /* Allows the input to expand */
+}
+
+/* Styles for the tabs-navbar */
+.tabs-navbar {
+    background-color: #000; /* Match the existing header color */
+    width: 100%; /* Ensure it takes full width */
+    margin: 0; /* Remove any default margins */
+    padding: 0.5rem 0; /* Adjust padding as needed */
+}
+
+.tabs-navbar .navbar-nav {
+    display: flex;
+    justify-content: center; /* Center children horizontally */
+    align-items: center; /* Center children vertically */
+    width: 100%;
+    list-style: none; /* Remove default list styling */
+    padding-left: 0; /* Remove default padding */
+}
+
+/* If you want to maintain the existing hover styles for the tab links, you need to be more specific */
+.tabs-navbar .tab-item .tab-link:hover {
+    background-color: #444; /* Or any other style you've set for tabs on hover */
+    color: white; /* If you want to keep the text color white */
+    text-decoration: none;
+}
+
+/* Styles for each tab item */
+.tab-item .tab-link {
+    color: white;
+    padding: 0.5rem 1rem; /* Adjust padding as needed */
+    margin: 0 5px; /* Creates space between tabs */
+    background-color: #000; /* Tab background color */
+    border-radius: 0.25rem 0.25rem 0 0; /* Rounded corners on the top */
+    transition: background-color 0.2s ease-in-out; /* Smooth transition for background color */
+}
+
+/* You may also want to adjust padding or margin of .tab-item if needed */
+.tab-item {
+    display: flex; /* Use flex to center the links if needed */
+    align-items: center; /* Aligns items vertically in the center */
+    justify-content: center; /* Centers the link text horizontally */
+    flex-grow: 1; /* Allows each tab item to grow and take equal space */
+    font-size: 1.4rem;
+}
+
+/* Hover effect for each tab link */
+.tab-item .tab-link:hover,
+.tab-item .tab-link:focus {
+    background-color: #444; /* Hover/focus color */
+    text-decoration: none;
+}
+
+/* Active tab style */
+.tab-item .tab-link.active {
+    background-color: #000; /* Active tab background color */
+    border-bottom: 2px solid #007bff; /* Bottom border for active tab */
+}
+
+/* Responsive adjustments */
+@media (max-width: 991px) {
+    .navbar-custom .d-flex {
+        flex-basis: 100%;
+        justify-content: space-between;
+    }
+    .navbar-custom .search-container {
+        width: auto;
+    }
+    .navbar-custom .form-control {
+        width: 100%; /* Make sure input expands fully on smaller screens */
+    }
+}
