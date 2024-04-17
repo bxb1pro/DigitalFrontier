@@ -10,6 +10,7 @@ public class Game
     public string Genre { get; set; }
     public string Description { get; set; }
     public string ImageName { get; set; }
+    public List<string> AdditionalImages { get; set; } = new List<string>();
     public DateTimeOffset ReleaseDate { get; set; }
     public int DeveloperId { get; set; } // FK for Developer
 

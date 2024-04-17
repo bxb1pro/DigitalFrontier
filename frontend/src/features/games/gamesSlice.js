@@ -44,7 +44,7 @@ const gamesSlice = createSlice({
           releaseDate: game.releaseDate,
           imageName: game.imageName,
           description: game.description,
-          images: game.images, // array of image names for the carousel
+          images: [game.imageName, ...(game.additionalImages || [])], // array of image names for the carousel
           // Include any other data you need from the game object
         }));
       })
