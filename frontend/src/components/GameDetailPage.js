@@ -4,6 +4,8 @@ import { useSelector } from 'react-redux';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
 import './GameDetailPage.css';
+import DeveloperMap from './DeveloperMap';
+
 
 function GameDetailPage() {
   const { gameId } = useParams();
@@ -86,8 +88,15 @@ const developer = developers.find(d => {
                 <p>Developer information is not available.</p>
               )}
             </Tab>
+            <Tab eventKey="map" title="Map" className="tab-content">
+              {developer ? (
+              <DeveloperMap latitude={developer.latitude} longitude={developer.longitude} />
+              ) : (
+              <p>Map information is not available.</p>
+              )}
+              </Tab>
           </Tabs>
-        </div>
+        </div>  
       </div>
   );
 }

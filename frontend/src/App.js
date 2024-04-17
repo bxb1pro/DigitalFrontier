@@ -10,6 +10,7 @@ import Login from './components/Login';
 import Account from './components/Account';
 import Developers from './components/Developers';
 import Purchases from './components/Purchases';
+import loadScript from './utils/loadScript';
 
 function App() {
   const dispatch = useDispatch();
@@ -34,6 +35,10 @@ function App() {
   const handleGenreChange = (newGenre) => {
     setGenre(newGenre);
   };
+
+  useEffect(() => {
+    loadScript('https://maps.googleapis.com/maps/api/js?key=AIzaSyCwIXyqJr9tjrny4DC3hEL1DoAaXUQV0kM', 'body', 'google-maps-script');
+  }, []);
 
   return (
     <Router>
