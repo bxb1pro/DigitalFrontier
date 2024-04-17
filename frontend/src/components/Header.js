@@ -5,12 +5,18 @@ import { BsSearch } from 'react-icons/bs';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './Header.css';
 
-const Header = ({ onSearchChange }) => {
+const Header = ({ onSearchChange, onGenreChange, genre }) => {
     // Add an event handler for input changes
     const handleInputChange = (event) => {
         // Call the handler from HomePage with the new search term
         onSearchChange(event.target.value);
     };
+
+    // Updated handleGenreChange to call onGenreChange with the event value
+    const handleGenreChange = (event) => {
+        onGenreChange(event.target.textContent); // use textContent to get the dropdown item label
+    };
+
     return (
         <>
             <nav className="navbar navbar-expand-lg navbar-custom">
@@ -26,20 +32,20 @@ const Header = ({ onSearchChange }) => {
                         <div className="search-container">
                             <Dropdown>
                                 <Dropdown.Toggle variant="" id="dropdown-basic" className="custom-dropdown-toggle">
-                                    All Genres
+                                {genre} {/* Set the button label to the current genre */}
                                 </Dropdown.Toggle>
 
                                 <Dropdown.Menu>
-                                    <Dropdown.Item href="#/action-1">All Genres</Dropdown.Item>
-                                    <Dropdown.Item href="#/action-2">Action</Dropdown.Item>
-                                    <Dropdown.Item href="#/action-3">Action RPG</Dropdown.Item>
-                                    <Dropdown.Item href="#/action-4">Battle Royale</Dropdown.Item>
-                                    <Dropdown.Item href="#/action-5">Fighting</Dropdown.Item>
-                                    <Dropdown.Item href="#/action-6">FPS</Dropdown.Item>
-                                    <Dropdown.Item href="#/action-7">Horror</Dropdown.Item>
-                                    <Dropdown.Item href="#/action-8">MMORPG</Dropdown.Item>
-                                    <Dropdown.Item href="#/action-9">MOBA</Dropdown.Item>
-                                    <Dropdown.Item href="#/action-10">Sports</Dropdown.Item>
+                                    <Dropdown.Item onClick={handleGenreChange}>All Genres</Dropdown.Item>
+                                    <Dropdown.Item onClick={handleGenreChange}>Action</Dropdown.Item>
+                                    <Dropdown.Item onClick={handleGenreChange}>Action RPG</Dropdown.Item>
+                                    <Dropdown.Item onClick={handleGenreChange}>Battle Royale</Dropdown.Item>
+                                    <Dropdown.Item onClick={handleGenreChange}>Fighting</Dropdown.Item>
+                                    <Dropdown.Item onClick={handleGenreChange}>FPS</Dropdown.Item>
+                                    <Dropdown.Item onClick={handleGenreChange}>Horror</Dropdown.Item>
+                                    <Dropdown.Item onClick={handleGenreChange}>MMORPG</Dropdown.Item>
+                                    <Dropdown.Item onClick={handleGenreChange}>MOBA</Dropdown.Item>
+                                    <Dropdown.Item onClick={handleGenreChange}>Sports</Dropdown.Item>
                                 </Dropdown.Menu>
                             </Dropdown>
                             <input

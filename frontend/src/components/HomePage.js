@@ -5,9 +5,8 @@ import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchGames, gameAdded, gameRemoved } from '../features/games/gamesSlice';
 import { addToWishlist, removeFromWishlist } from '../features/wishlist/wishlistSlice';
-import Header from './Header.js';
 
-function HomePage({ searchTerm }) {
+function HomePage({ searchTerm, genre }) {
     const dispatch = useDispatch();
     const games = useSelector(state => state.games.games);
     const wishlist = useSelector(state => state.wishlist.items);
@@ -41,10 +40,12 @@ function HomePage({ searchTerm }) {
         dispatch(removeFromWishlist(id));
     };
 
-     // Filter games based on search term passed as a prop
-     const filteredGames = games.filter(game => 
-        game.title.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    // Enhance the filtering logic to include the genre.
+    const filteredGames = games.filter(game => {
+        const matchesSearchTerm = game.title.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesGenre = genre === 'All Genres' || game.genre === genre;
+        return matchesSearchTerm && matchesGenre;
+    });
 
     if (gameStatus === 'loading') return <p>Loading...</p>;
     if (error) return <p>Error: {error}</p>;

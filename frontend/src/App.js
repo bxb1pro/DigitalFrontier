@@ -18,14 +18,23 @@ const [searchTerm, setSearchTerm] = useState('');
 const handleSearchChange = (term) => {
   setSearchTerm(term);
 };
+
+// New genre state and handler
+const [genre, setGenre] = useState('All Genres'); // Add this line
+
+// Define the handleGenreChange function
+const handleGenreChange = (newGenre) => { // Add this function
+  setGenre(newGenre);
+};
+
 return (
   <Router>
     <div>
       {/* Pass handleSearchChange to the Header */}
-      <Header onSearchChange={handleSearchChange} />
+      <Header onSearchChange={handleSearchChange} onGenreChange={handleGenreChange} genre={genre} />
       <Routes>  
         {/* Pass searchTerm to HomePage as a prop */}
-        <Route path="/" element={<HomePage searchTerm={searchTerm} />} exact />
+        <Route path="/" element={<HomePage searchTerm={searchTerm} genre={genre} />} exact />
         <Route path="/login" element={<Login />} />
         <Route path="/account" element={<Account />} />
         <Route path="/developers" element={<Developers />} />
