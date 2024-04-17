@@ -5,6 +5,7 @@ import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
 import './GameDetailPage.css';
 import DeveloperMap from './DeveloperMap';
+import { Button } from 'react-bootstrap';
 
 
 function GameDetailPage() {
@@ -72,6 +73,10 @@ const developer = developers.find(d => {
             <p><strong>Price:</strong> ${game.price.toFixed(2)}</p>
             <p><strong>Genre:</strong> {game.genre}</p>
             <p><strong>Release Date:</strong> {releaseDateFormatted}</p>
+            {/* Purchase button with icon */}
+            <Button variant="primary" className="purchase-button">
+              <i className="bi bi-cart"></i> Purchase
+            </Button>
           </div>
           <Tabs defaultActiveKey="overview" id="game-info-tabs" className="custom-tabs">
             <Tab eventKey="overview" title="Info" className="tab-content">

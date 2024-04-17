@@ -1,10 +1,11 @@
 // src/components/HomePage.js
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import './HomePage.css';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchGames, gameAdded, gameRemoved } from '../features/games/gamesSlice';
-import { addToWishlist, removeFromWishlist } from '../features/wishlist/wishlistSlice';
+import { addToWishlist, removeFromWishlist, clearWishlist } from '../features/wishlist/wishlistSlice';
+import { Modal, Button } from 'react-bootstrap'
 
 function HomePage({ searchTerm, genre }) {
     const dispatch = useDispatch();
@@ -47,6 +48,19 @@ function HomePage({ searchTerm, genre }) {
         return matchesSearchTerm && matchesGenre;
     });
 
+    // State for handling modal visibility
+    const [show, setShow] = useState(false);
+
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+
+    // Renamed function to avoid conflict
+    const handleClearWishlist = () => {
+        dispatch(clearWishlist()); // This dispatches the action from Redux
+        handleClose();
+    };
+
+
     if (gameStatus === 'loading') return <p>Loading...</p>;
     if (error) return <p>Error: {error}</p>;
 
@@ -75,6 +89,9 @@ function HomePage({ searchTerm, genre }) {
                 <div className="col-md-3">
                     <div className="wishlist-box">
                         <h3 className="wishlist-title">Wishlist</h3>
+                        <button className="btn btn-danger float-right" onClick={handleShow}>
+                            <i className="bi bi-trash"></i> 
+                        </button>
                         {wishlist.map(game => (
                             <div key={game.id} className="wishlist-item">
                                 <img src={`/images/game_artwork/${game.imageName}`} alt={game.title} className="wishlist-item-image" />
@@ -87,6 +104,20 @@ function HomePage({ searchTerm, genre }) {
                     </div>
                 </div>
             </div>
+            <Modal show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Clear Wishlist</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>Are you sure you want to clear all items from your wishlist?</Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Cancel
+                    </Button>
+                    <Button variant="danger" onClick={handleClearWishlist}>
+                        Clear Wishlist
+                    </Button>
+                </Modal.Footer>
+            </Modal>
             <button onClick={addGame} className="btn btn-success">Add New Game</button>
         </div>
     );
