@@ -5,7 +5,12 @@ import { BsSearch } from 'react-icons/bs';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './Header.css';
 
-const Header = () => {
+const Header = ({ onSearchChange }) => {
+    // Add an event handler for input changes
+    const handleInputChange = (event) => {
+        // Call the handler from HomePage with the new search term
+        onSearchChange(event.target.value);
+    };
     return (
         <>
             <nav className="navbar navbar-expand-lg navbar-custom">
@@ -25,20 +30,30 @@ const Header = () => {
                                 </Dropdown.Toggle>
 
                                 <Dropdown.Menu>
-                                    <Dropdown.Item href="#/action-1">Category 1</Dropdown.Item>
-                                    <Dropdown.Item href="#/action-2">Category 2</Dropdown.Item>
-                                    <Dropdown.Item href="#/action-3">Category 3</Dropdown.Item>
+                                    <Dropdown.Item href="#/action-1">All Genres</Dropdown.Item>
+                                    <Dropdown.Item href="#/action-2">Action</Dropdown.Item>
+                                    <Dropdown.Item href="#/action-3">Action RPG</Dropdown.Item>
+                                    <Dropdown.Item href="#/action-4">Battle Royale</Dropdown.Item>
+                                    <Dropdown.Item href="#/action-5">Fighting</Dropdown.Item>
+                                    <Dropdown.Item href="#/action-6">FPS</Dropdown.Item>
+                                    <Dropdown.Item href="#/action-7">Horror</Dropdown.Item>
+                                    <Dropdown.Item href="#/action-8">MMORPG</Dropdown.Item>
+                                    <Dropdown.Item href="#/action-9">MOBA</Dropdown.Item>
+                                    <Dropdown.Item href="#/action-10">Sports</Dropdown.Item>
                                 </Dropdown.Menu>
                             </Dropdown>
-                            <input className="form-control" type="search" placeholder="What game are you looking for?" aria-label="Search" />
+                            <input
+                                className="form-control"
+                                type="search"
+                                placeholder="What game are you looking for?"
+                                aria-label="Search"
+                                onChange={handleInputChange} // Add the onChange handler
+                            />
                             <button className="btn" type="submit">
                                 <BsSearch />
                             </button>
                         </div>
                         <ul className="navbar-nav ms-auto">
-                            <li className="nav-item">
-                                <Link className="nav-link" to="/developers">Developers</Link>
-                            </li>
                             <li className="nav-item">
                                 <Link className="nav-link" to="/purchases">Purchases</Link>
                             </li>

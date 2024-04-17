@@ -5,8 +5,9 @@ import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchGames, gameAdded, gameRemoved } from '../features/games/gamesSlice';
 import { addToWishlist, removeFromWishlist } from '../features/wishlist/wishlistSlice';
+import Header from './Header.js';
 
-function HomePage() {
+function HomePage({ searchTerm }) {
     const dispatch = useDispatch();
     const games = useSelector(state => state.games.games);
     const wishlist = useSelector(state => state.wishlist.items);
@@ -40,6 +41,11 @@ function HomePage() {
         dispatch(removeFromWishlist(id));
     };
 
+     // Filter games based on search term passed as a prop
+     const filteredGames = games.filter(game => 
+        game.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
     if (gameStatus === 'loading') return <p>Loading...</p>;
     if (error) return <p>Error: {error}</p>;
 
@@ -48,7 +54,7 @@ function HomePage() {
             <div className="row">
                 <div className="col-md-9">
                     <div className="row">
-                        {games.map(game => (
+                        {filteredGames.map(game => (
                             <div key={game.id} className="col-md-4 mb-4">
                                 <div className="card h-100">
                                     <Link to={`/game/${game.id}`}>
@@ -56,7 +62,7 @@ function HomePage() {
                                     </Link>
                                     <div className="card-body">
                                         <h5 className="card-title">{game.title}</h5>
-                                        <p className="card-text">{game.description}</p>
+                                        <p className="card-text" title={game.description}>{game.description}</p>
                                         <button onClick={() => removeGame(game.id)} className="btn btn-danger">Remove</button>
                                         <button onClick={() => handleAddToWishlist(game)} className="btn btn-primary">Add to Wishlist</button>
                                     </div>
@@ -66,10 +72,11 @@ function HomePage() {
                     </div>
                 </div>
                 <div className="col-md-3">
-                    <h3>Wishlist</h3>
                     <div className="wishlist-box">
+                        <h3 className="wishlist-title">Wishlist</h3>
                         {wishlist.map(game => (
                             <div key={game.id} className="wishlist-item">
+                                <img src={`/images/game_artwork/${game.imageName}`} alt={game.title} className="wishlist-item-image" />
                                 <div className="wishlist-content">
                                     <h5>{game.title}</h5>
                                     <button onClick={() => handleRemoveFromWishlist(game.id)} className="btn btn-danger">Remove</button>

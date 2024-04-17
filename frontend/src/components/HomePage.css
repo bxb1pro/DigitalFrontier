@@ -1,9 +1,49 @@
-/* HomePage.css */
 .wishlist-box {
     border: 1px solid #ddd;
     padding: 20px;
     border-radius: 5px;
     background-color: #f9f9f9;
-    max-height: 500px;
+    height: calc(100vh - 100px); /* Adjust the 100px offset based on your header/footer size */
     overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.wishlist-title {
+    text-align: center;
+    margin-bottom: 20px; /* Adjust spacing as needed */
+    border-bottom: 1px solid grey; /* Adds a grey line under the title */
+    padding-bottom: 10px; /* Spacing between the title and the grey line */
+}
+
+/* Add any additional styles for wishlist items if necessary */
+.wishlist-item + .wishlist-item {
+    margin-top: 15px;
+}
+
+.card-text {
+    display: -webkit-box;
+    -webkit-line-clamp: 4; /* Limits the text block */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .wishlist-item {
+    display: flex;
+    align-items: center;
+    padding-bottom: 20px; /* Spacing between the content and the grey line */
+    margin-bottom: 10px; /* Spacing between this item and the next one */
+    border-bottom: 1px solid grey; /* Adds a grey line under each item */
+}
+
+.wishlist-item-image {
+    width: 50px; /* Adjust the image size as needed */
+    height: auto;
+    margin-right: 10px; /* Space between the image and the text */
+}
+
+.wishlist-game-title {
+    margin: 0;
+    flex-grow: 1; /* Ensure the title takes up the remaining space */
 }
