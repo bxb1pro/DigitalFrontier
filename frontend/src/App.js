@@ -35,6 +35,7 @@ return (
       <Routes>  
         {/* Pass searchTerm to HomePage as a prop */}
         <Route path="/" element={<HomePage searchTerm={searchTerm} genre={genre} />} exact />
+        <Route path="/game/:gameId" element={<GameDetailPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/account" element={<Account />} />
         <Route path="/developers" element={<Developers />} />

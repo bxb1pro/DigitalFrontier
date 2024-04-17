@@ -22,7 +22,7 @@ const gamesSlice = createSlice({
       state.games.push(action.payload);
     },
     gameRemoved(state, action) {
-      state.games = state.games.filter(game => game.id !== action.payload);
+      state.games = state.games.filter(game => game.gameId !== action.payload);
     }
   },
   extraReducers(builder) {
@@ -37,13 +37,14 @@ const gamesSlice = createSlice({
         state.status = 'succeeded';
         // Map the backend game data to the frontend game structure
         state.games = action.payload.map(game => ({
-          id: game.id,
+          id: game.gameId,
           title: game.name,
           genre: game.genre, // Or any other property for the description
           price: game.price,
           releaseDate: game.releaseDate,
           imageName: game.imageName,
           description: game.description,
+          images: game.images, // array of image names for the carousel
           // Include any other data you need from the game object
         }));
       })
