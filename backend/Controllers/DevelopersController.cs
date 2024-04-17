@@ -12,7 +12,7 @@ namespace DigitalGamesMarketplace2.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "SuperAdmin,Admin")]
+    // [Authorize(Roles = "SuperAdmin,Admin")]
     public class DevelopersController : ControllerBase
     {
         private readonly MarketplaceContext _context;

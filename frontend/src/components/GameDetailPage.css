@@ -1,18 +1,52 @@
 /* GameDetailPage.css */
-.main-image-display img {
+
+.game-detail-container {
+    display: flex; /* Changed to flex for better control */
+    gap: 20px;
+    margin: 20px;
+  }
+  
+  .game-images-section {
+    flex: 1; /* Assign flexible space for the image section */
+    display: flex;
+    flex-direction: column; /* Stack images vertically */
+  }
+  
+  .main-image-display img {
     width: 100%;
-    max-height: 500px;
+    max-height: 500px; /* Adjust the max height as needed */
     object-fit: contain;
     margin-bottom: 20px;
   }
-  
-  .image-thumbnails img.thumbnail {
-    width: 100px; /* Adjust based on your design */
-    height: 75px; /* Adjust based on your design */
-    margin-right: 10px;
-    object-fit: cover;
+    
+  .image-thumbnails {
+    display: flex; /* Align thumbnails horizontally */
+    overflow-x: auto; /* Enable horizontal scrolling for thumbnails */
   }
   
+  .image-thumbnails img.thumbnail {
+    width: 100px; /* Adjust thumbnail size as needed */
+    height: 75px;
+    margin-right: 10px;
+    object-fit: cover;
+    cursor: pointer; /* Indicate clickable thumbnails */
+  }
+    
   .image-thumbnails img.thumbnail.active {
-    border: 2px solid #007bff; /* Bootstrap primary color for example */
+    border: 2px solid #007bff; /* Highlight selected thumbnail */
+  }
+  
+  .game-info-section {
+    flex: 1; /* Assign flexible space for the info section */
+    /* ... rest of your right column styles */
+  }
+  
+  .custom-tabs {
+    /* Any custom styling for your tabs */
+  }
+
+  .game-additional-info {
+    margin: 10px 0; /* Adjust the margin as needed */
+    font-size: 1rem; /* Adjust the font size as needed */
+    /* Add more styling as needed */
   }

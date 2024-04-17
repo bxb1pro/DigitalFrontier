@@ -7,6 +7,7 @@ const API_URL = 'http://localhost:5004/api/games';
 
 export const fetchGames = createAsyncThunk('games/fetchGames', async () => {
   const response = await axios.get(API_URL);
+  console.log("Fetched games:", response.data); 
   return response.data;
 });
 
@@ -35,6 +36,7 @@ const gamesSlice = createSlice({
       // and map the data to match the frontend's expected format if necessary
       .addCase(fetchGames.fulfilled, (state, action) => {
         state.status = 'succeeded';
+        console.log("Games data after fetch:", action.payload);
         // Map the backend game data to the frontend game structure
         state.games = action.payload.map(game => ({
           id: game.gameId,
@@ -44,7 +46,8 @@ const gamesSlice = createSlice({
           releaseDate: game.releaseDate,
           imageName: game.imageName,
           description: game.description,
-          images: [game.imageName, ...(game.additionalImages || [])], // array of image names for the carousel
+          images: [game.imageName, ...(game.additionalImages || [])],
+          developer: game.developerId
           // Include any other data you need from the game object
         }));
       })
