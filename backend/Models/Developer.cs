@@ -6,6 +6,7 @@ public class Developer
 {
     public int DeveloperId { get; set; }
     public string Name { get; set; }
+    public string Description { get; set; }
     public string ContactEmail { get; set; }
 
     [JsonIgnore]
