@@ -20,7 +20,7 @@ function DeveloperMap({ latitude, longitude, developerName }) {
 
             // Create an InfoWindow
             const infoWindow = new window.google.maps.InfoWindow({
-                content: `<h3>${developerName}</h3><p>Developer's Location</p>` // Custom content
+                content: `<h4>${developerName} HQ</h4>` // Custom content
             });
 
             // Open the InfoWindow immediately without waiting for marker click

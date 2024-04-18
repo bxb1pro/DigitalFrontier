@@ -95,11 +95,14 @@ const developer = developers.find(d => {
             </Tab>
             <Tab eventKey="map" title="Map" className="tab-content">
               {developer ? (
-              <DeveloperMap latitude={developer.latitude} longitude={developer.longitude} />
+              <>
+                <p><strong>Address:</strong> {developer.address}</p> 
+                <DeveloperMap latitude={developer.latitude} longitude={developer.longitude} developerName={developer.name} />
+              </>
               ) : (
               <p>Map information is not available.</p>
               )}
-              </Tab>
+            </Tab>
           </Tabs>
         </div>  
       </div>

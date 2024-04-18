@@ -10,6 +10,7 @@ public class Developer
     public string ContactEmail { get; set; }
     public double Latitude { get; set; }
     public double Longitude { get; set; }
+    public string Address { get; set; }
 
     [JsonIgnore]
     public ICollection<Game>? Games { get; set; } // Navigation to Game

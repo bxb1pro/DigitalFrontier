@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import './HomePage.css';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchGames, gameRemoved } from '../features/games/gamesSlice';
+import { fetchGames, deleteGame } from '../features/games/gamesSlice';
 import { addToWishlist, removeFromWishlist, clearWishlist } from '../features/wishlist/wishlistSlice';
 import { Modal, Button } from 'react-bootstrap'
 
@@ -20,9 +20,26 @@ function HomePage({ searchTerm, genre }) {
         }
     }, [gameStatus, dispatch]);
 
-    const removeGame = id => {
-        dispatch(gameRemoved(id));
-    };
+     // State for handling modal visibility for removal confirmation
+     const [showRemoveModal, setShowRemoveModal] = useState(false);
+     const [selectedGame, setSelectedGame] = useState(null);
+ 
+     const handleShowRemoveModal = game => {
+         setSelectedGame(game);
+         setShowRemoveModal(true);
+     };
+ 
+     const handleCloseRemoveModal = () => {
+         setShowRemoveModal(false);
+         setSelectedGame(null);
+     };
+ 
+     const confirmRemoveGame = () => {
+        if (selectedGame) {
+          dispatch(deleteGame(selectedGame.id));
+          handleCloseRemoveModal();
+        }
+      };
 
     const handleAddToWishlist = game => {
         dispatch(addToWishlist(game));
@@ -72,7 +89,7 @@ function HomePage({ searchTerm, genre }) {
                                         <Link to={`/edit/${game.id}`} className="btn btn-success me-2">
                                             Edit
                                         </Link>
-                                        <button onClick={() => removeGame(game.id)} className="btn btn-danger">Remove</button>
+                                        <button onClick={() => handleShowRemoveModal(game)} className="btn btn-danger">Remove</button>
                                         <button onClick={() => handleAddToWishlist(game)} className="btn btn-primary">Add to Wishlist</button>
                                     </div>
                                 </div>
@@ -109,6 +126,20 @@ function HomePage({ searchTerm, genre }) {
                     </Button>
                     <Button variant="danger" onClick={handleClearWishlist}>
                         Clear Wishlist
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+            <Modal show={showRemoveModal} onHide={handleCloseRemoveModal}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Confirm Removal</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>Are you sure you want to remove this game from the database?</Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCloseRemoveModal}>
+                        Cancel
+                    </Button>
+                    <Button variant="danger" onClick={confirmRemoveGame}>
+                        Remove
                     </Button>
                 </Modal.Footer>
             </Modal>
