@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import './HomePage.css';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchGames, gameRemoved } from '../features/games/gamesSlice';
+import { fetchGames, deleteGame } from '../features/games/gamesSlice';
 import { addToWishlist, removeFromWishlist, clearWishlist } from '../features/wishlist/wishlistSlice';
 import { Modal, Button } from 'react-bootstrap'
 
@@ -35,11 +35,11 @@ function HomePage({ searchTerm, genre }) {
      };
  
      const confirmRemoveGame = () => {
-         if (selectedGame) {
-             dispatch(gameRemoved(selectedGame.id));
-             handleCloseRemoveModal();
-         }
-     };
+        if (selectedGame) {
+          dispatch(deleteGame(selectedGame.id));
+          handleCloseRemoveModal();
+        }
+      };
 
     const handleAddToWishlist = game => {
         dispatch(addToWishlist(game));
