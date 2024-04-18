@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import './HomePage.css';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchGames, gameAdded, gameRemoved } from '../features/games/gamesSlice';
+import { fetchGames, gameRemoved } from '../features/games/gamesSlice';
 import { addToWishlist, removeFromWishlist, clearWishlist } from '../features/wishlist/wishlistSlice';
 import { Modal, Button } from 'react-bootstrap'
 
@@ -19,15 +19,6 @@ function HomePage({ searchTerm, genre }) {
             dispatch(fetchGames());
         }
     }, [gameStatus, dispatch]);
-
-    const addGame = () => {
-        const newGame = {
-            id: games.length + 1,
-            title: `Game Title ${games.length + 1}`,
-            description: "Game description here",
-        };
-        dispatch(gameAdded(newGame));
-    };
 
     const removeGame = id => {
         dispatch(gameRemoved(id));
@@ -78,6 +69,9 @@ function HomePage({ searchTerm, genre }) {
                                     <div className="card-body">
                                         <h5 className="card-title">{game.title}</h5>
                                         <p className="card-text" title={game.description}>{game.description}</p>
+                                        <Link to={`/edit/${game.id}`} className="btn btn-success me-2">
+                                            Edit
+                                        </Link>
                                         <button onClick={() => removeGame(game.id)} className="btn btn-danger">Remove</button>
                                         <button onClick={() => handleAddToWishlist(game)} className="btn btn-primary">Add to Wishlist</button>
                                     </div>
@@ -118,7 +112,7 @@ function HomePage({ searchTerm, genre }) {
                     </Button>
                 </Modal.Footer>
             </Modal>
-            <button onClick={addGame} className="btn btn-success">Add New Game</button>
+            <Link to="/add-game" className="btn btn-success">Add New Game</Link>
         </div>
     );
 }

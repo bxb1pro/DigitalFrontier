@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Dropdown } from 'react-bootstrap';
 import { BsSearch } from 'react-icons/bs';
+import Logout from './Logout';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './Header.css';
 
@@ -16,6 +17,11 @@ const Header = ({ onSearchChange, onGenreChange, genre }) => {
     const handleGenreChange = (event) => {
         onGenreChange(event.target.textContent); // use textContent to get the dropdown item label
     };
+
+    const [showLogoutModal, setShowLogoutModal] = useState(false);
+
+    const handleLogoutClick = () => setShowLogoutModal(true);
+    const handleCloseLogoutModal = () => setShowLogoutModal(false);
 
     return (
         <>
@@ -72,14 +78,15 @@ const Header = ({ onSearchChange, onGenreChange, genre }) => {
                             <li className="nav-item">
                                 <Link className="nav-link" to="/login">Register / Login</Link>
                             </li>
-                            <li className="nav-item">
-                                <Link className="nav-link" to="/logout">Logout</Link>
+                            <li className="nav-item" onClick={handleLogoutClick}>
+                                <span className="nav-link" style={{ cursor: 'pointer' }}>Logout</span>
                             </li>
 
                         </ul>
                     </div>
                 </div>
             </nav>
+            <Logout show={showLogoutModal} handleClose={handleCloseLogoutModal} />
         </>
     );
 };

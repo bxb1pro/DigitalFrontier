@@ -10,6 +10,9 @@ import Login from './components/Login';
 import Account from './components/Account';
 import Purchases from './components/Purchases';
 import loadScript from './utils/loadScript';
+import Register from './components/Register';
+import EditGame from './components/EditGame';
+import AddGame from './components/AddGame';
 
 function App() {
   const dispatch = useDispatch();
@@ -53,6 +56,9 @@ function App() {
           <Route path="/purchases" element={<Purchases />} />
           <Route path="/gamedetailpage" element={<GameDetailPage />} />
           <Route path="/games" element={<Games />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/edit/:gameId" element={<EditGame />} />
+          <Route path="/add-game" element={<AddGame />} />
         </Routes>
       </div>
     </Router>
