@@ -13,6 +13,8 @@ import loadScript from './utils/loadScript';
 import Register from './components/Register';
 import EditGame from './components/EditGame';
 import AddGame from './components/AddGame';
+import RemoveGame from './components/RemoveGame';
+import PrivateRoute from './components/PrivateRoute';
 
 function App() {
   const dispatch = useDispatch();
@@ -52,13 +54,16 @@ function App() {
           <Route path="/" element={<HomePage searchTerm={searchTerm} genre={genre} />} exact />
           <Route path="/game/:gameId" element={<GameDetailPage />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/account" element={<Account />} />
-          <Route path="/purchases" element={<Purchases />} />
+          <Route path="/account" element={<PrivateRoute component={Account} roles={['Admin']} />} />
+          <Route path="/purchases" element={<PrivateRoute component={Purchases} roles={['Admin']} />} />
           <Route path="/gamedetailpage" element={<GameDetailPage />} />
           <Route path="/games" element={<Games />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/edit/:gameId" element={<EditGame />} />
-          <Route path="/add-game" element={<AddGame />} />
+          <Route path="/edit/:gameId" element={<PrivateRoute component={EditGame} roles={['Admin']} />} />
+          {/* <Route path="/add-game" element={<AddGame />} /> */}
+          <Route path="/add-game" element={<PrivateRoute component={AddGame} roles={['Admin']} />} />
+          {/* <Route path="/remove-game/:gameId" element={<RemoveGame />} /> */}
+          <Route path="/remove-game/:gameId" element={<PrivateRoute component={RemoveGame} roles={['Admin']} />} />
         </Routes>
       </div>
     </Router>
