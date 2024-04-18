@@ -1,12 +1,16 @@
+// src/components/Login.js
 import React from 'react';
-import { Link } from 'react-router-dom'; // Make sure to import Link from react-router-dom
+import { useDispatch } from 'react-redux';
+import { loginUser } from '../features/auth/authSlice';
+import { Link } from 'react-router-dom';
 import AuthenticationForm from './AuthenticationForm';
-import { Button } from 'react-bootstrap'; // Import Bootstrap components
+import { Button } from 'react-bootstrap';
 
 function Login() {
-    const handleLoginSubmit = (event) => {
-        event.preventDefault();
-        // Handle the login submission logic here
+    const dispatch = useDispatch();
+
+    const handleLoginSubmit = (credentials) => {
+        dispatch(loginUser(credentials));  // Dispatch the loginUser action from authSlice
     };
 
     return (
@@ -16,7 +20,6 @@ function Login() {
             <AuthenticationForm isRegister={false} onSubmit={handleLoginSubmit} />
             <div className="mt-4">
                 <p>Don't have an account yet?</p>
-                {/* Here we use the Bootstrap Button with an icon */}
                 <Link to="/register" className="d-block">
                     <Button variant="link" className="p-0 d-inline-flex align-items-center">
                         <i className="bi bi-pencil-square"></i>
@@ -29,4 +32,5 @@ function Login() {
 }
 
 export default Login;
+
 

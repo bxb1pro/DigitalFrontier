@@ -1,30 +1,60 @@
 // src/components/AuthenticationForm.js
-import React from 'react';
+import React, { useState } from 'react';
 
 function AuthenticationForm({ isRegister, onSubmit }) {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [passwordConfirm, setPasswordConfirm] = useState('');  // Only needed for registration
+
+    const handleFormSubmit = (event) => {
+        event.preventDefault();
+        onSubmit({
+            email,
+            password,
+            ...(isRegister && { passwordConfirm })  // Include password confirmation if registering
+        });
+    };
+
     return (
-        <form onSubmit={onSubmit}>
+        <form onSubmit={handleFormSubmit}>
             <div className="mb-3">
                 <label htmlFor="email" className="form-label">Email address</label>
-                <input type="email" className="form-control" id="email" placeholder="Enter email" />
+                <input
+                    type="email"
+                    className="form-control"
+                    id="email"
+                    placeholder="Enter email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                />
             </div>
             <div className="mb-3">
                 <label htmlFor="password" className="form-label">Password</label>
-                <input type="password" className="form-control" id="password" placeholder="Password" />
+                <input
+                    type="password"
+                    className="form-control"
+                    id="password"
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                />
             </div>
             {isRegister && (
                 <div className="mb-3">
                     <label htmlFor="passwordConfirm" className="form-label">Confirm Password</label>
-                    <input type="password" className="form-control" id="passwordConfirm" placeholder="Confirm Password" />
+                    <input
+                        type="password"
+                        className="form-control"
+                        id="passwordConfirm"
+                        placeholder="Confirm Password"
+                        value={passwordConfirm}
+                        onChange={(e) => setPasswordConfirm(e.target.value)}
+                        required
+                    />
                 </div>
             )}
-            {/* Conditionally render username field if this is the register form */}
-            {/*isRegister && (
-                <div className="mb-3">
-                    <label htmlFor="username" className="form-label">Username</label>
-                    <input type="text" className="form-control" id="username" placeholder="Username" />
-                </div>
-            )*/}
             <button type="submit" className="btn btn-primary">
                 {isRegister ? 'Register' : 'Login'}
             </button>
@@ -33,3 +63,4 @@ function AuthenticationForm({ isRegister, onSubmit }) {
 }
 
 export default AuthenticationForm;
+

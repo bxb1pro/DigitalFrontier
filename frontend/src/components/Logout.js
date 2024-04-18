@@ -1,15 +1,18 @@
 import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { logout } from '../features/auth/authSlice';
 
 function Logout({ show, handleClose }) {
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        // Perform logout logic here (like clearing the user session)
+        dispatch(logout());  // Dispatch the logout action to reset the state
         console.log('User has logged out');
         navigate('/');  // Redirect to home page after logout
-        handleClose();      // Close the modal
+        handleClose();  // Close the modal
     };
 
     return (
