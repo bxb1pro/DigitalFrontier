@@ -15,6 +15,7 @@ import EditGame from './components/EditGame';
 import AddGame from './components/AddGame';
 import RemoveGame from './components/RemoveGame';
 import PrivateRoute from './components/PrivateRoute';
+import Unauthorised from './components/Unauthorised';
 
 function App() {
   const dispatch = useDispatch();
@@ -23,6 +24,12 @@ function App() {
   useEffect(() => {
     dispatch(fetchDevelopers());
   }, [dispatch]);
+
+  console.log("Component Check: Account", <Account />);
+  console.log("Component Check: Purchases", <Purchases />);
+  console.log("Component Check: EditGame", <EditGame />);
+  console.log("Component Check: AddGame", <AddGame />);
+  console.log("Component Check: RemoveGame", <RemoveGame />);
 
   // Declare the searchTerm state with its setter function
   const [searchTerm, setSearchTerm] = useState('');
@@ -54,16 +61,20 @@ function App() {
           <Route path="/" element={<HomePage searchTerm={searchTerm} genre={genre} />} exact />
           <Route path="/game/:gameId" element={<GameDetailPage />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/account" element={<PrivateRoute component={Account} roles={['SuperAdmin, Admin']} />} />
-          <Route path="/purchases" element={<PrivateRoute component={Purchases} roles={['SuperAdmin, Admin']} />} />
+          <Route path="/account" element={<PrivateRoute element={Account} roles={['SuperAdmin', 'Admin']} />} />
+          <Route path="/purchases" element={<PrivateRoute element={Purchases} roles={['SuperAdmin']} />} />
           <Route path="/gamedetailpage" element={<GameDetailPage />} />
           <Route path="/games" element={<Games />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/edit/:gameId" element={<PrivateRoute component={EditGame} roles={['SuperAdmin, Admin']} />} />
+          <Route path="/edit/:gameId" element={<PrivateRoute element={EditGame} roles={['SuperAdmin111', 'Admin']} />} />
           {/* <Route path="/add-game" element={<AddGame />} /> */}
-          <Route path="/add-game" element={<PrivateRoute component={AddGame} roles={['SuperAdmin, Admin']} />} />
+          <Route path="/add-game" element={<PrivateRoute element={AddGame} roles={['SuperAdmin111', 'Admin']} />} />
           {/* <Route path="/remove-game/:gameId" element={<RemoveGame />} /> */}
-          <Route path="/remove-game/:gameId" element={<PrivateRoute component={RemoveGame} roles={['SuperAdmin, Admin']} />} />
+          <Route path="/remove-game/:gameId" element={<PrivateRoute element={RemoveGame} roles={['SuperAdmin111', 'Admin']} />} />
+          <Route path="/unauthorised" element={<Unauthorised />} />
+
+          <Route path="/test" element={<PrivateRoute element={<div>Test Component</div>} roles={['SuperAdmin']} />} />
+
         </Routes>
       </div>
     </Router>
