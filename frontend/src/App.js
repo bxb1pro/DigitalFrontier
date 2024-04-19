@@ -16,6 +16,7 @@ import AddGame from './components/AddGame';
 import RemoveGame from './components/RemoveGame';
 import PrivateRoute from './components/PrivateRoute';
 import Unauthorised from './components/Unauthorised';
+import EmailVerification from './components/EmailVerification';
 
 function App() {
   const dispatch = useDispatch();
@@ -72,6 +73,7 @@ function App() {
           {/* <Route path="/remove-game/:gameId" element={<RemoveGame />} /> */}
           <Route path="/remove-game/:gameId" element={<PrivateRoute element={RemoveGame} roles={['SuperAdmin', 'Admin']} />} />
           <Route path="/unauthorised" element={<Unauthorised />} />
+          <Route path="/verify-email" element={<EmailVerification />} />
         </Routes>
       </div>
     </Router>

@@ -7,6 +7,8 @@ using System.Text;
 using DigitalGamesMarketplace2.Models;
 using Microsoft.AspNetCore.Authorization;
 using System.Data;
+using System.Net;
+
 
 namespace DigitalGamesMarketplace2.Controllers
 {
@@ -47,14 +49,15 @@ namespace DigitalGamesMarketplace2.Controllers
             {
                  // Assign 'User' role to the newly created user
                 await _userManager.AddToRoleAsync(user, "User");
-                
+
                 // Create customer record linked to the new user
-                var customer = new Customer { Name = model.Email, Email = model.Email, JoinDate = DateTimeOffset.Now, UserId = user.Id };
+                var customer = new Customer { Name = model.Email, Email = model.Email, JoinDate = DateTimeOffset.UtcNow, UserId = user.Id };
                 _context.Customers.Add(customer);
                 await _context.SaveChangesAsync();
         
                 var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                var verificationLink = Url.Action("VerifyEmail", "Account", new { userId = user.Id, token = token }, Request.Scheme);
+                var frontendUrl = _configuration["FrontendUrl"];
+                var verificationLink = $"{frontendUrl}/verify-email?userId={user.Id}&token={WebUtility.UrlEncode(token)}";
                 var emailSubject = "Email Verification";
                 var emailBody = $"Please verify your email by clicking the following link: {verificationLink}";
                 _emailService.SendEmail(user.Email, emailSubject, emailBody);

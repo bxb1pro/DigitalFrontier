@@ -1,16 +1,28 @@
-// src/components/Login.js
-import React from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../features/auth/authSlice';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import AuthenticationForm from './AuthenticationForm';
 import { Button } from 'react-bootstrap';
 
 function Login() {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const { isAuthenticated, error, isLoading } = useSelector(state => state.auth); // Access the auth state including isLoading
+
+    useEffect(() => {
+        if (isAuthenticated && !error && !isLoading) {
+            navigate('/'); // Redirect to the homepage on successful login
+        }
+    }, [isAuthenticated, error, isLoading, navigate]);
 
     const handleLoginSubmit = (credentials) => {
-        dispatch(loginUser(credentials));  // Dispatch the loginUser action from authSlice
+        dispatch(loginUser(credentials))
+            .unwrap()
+            .catch((error) => {
+                console.error('Login failed:', error);
+                // Optionally handle error state in UI
+            });
     };
 
     return (
@@ -32,5 +44,3 @@ function Login() {
 }
 
 export default Login;
-
-
