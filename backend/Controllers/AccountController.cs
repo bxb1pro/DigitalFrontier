@@ -19,14 +19,17 @@ namespace DigitalGamesMarketplace2.Controllers
         private readonly EmailService _emailService;
         private readonly IConfiguration _configuration;
         private readonly ILogger<AccountController> _logger; // Add ILogger field
+        private readonly MarketplaceContext _context;
 
         public AccountController(
+            MarketplaceContext context,
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
             EmailService emailService,
             IConfiguration configuration,
             ILogger<AccountController> logger) // Add logger
         {
+            _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
             _emailService = emailService;
@@ -42,15 +45,23 @@ namespace DigitalGamesMarketplace2.Controllers
 
             if (result.Succeeded)
             {
+                 // Assign 'User' role to the newly created user
+                await _userManager.AddToRoleAsync(user, "User");
+                
+                // Create customer record linked to the new user
+                var customer = new Customer { Name = model.Email, Email = model.Email, JoinDate = DateTimeOffset.Now, UserId = user.Id };
+                _context.Customers.Add(customer);
+                await _context.SaveChangesAsync();
+        
                 var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                 var verificationLink = Url.Action("VerifyEmail", "Account", new { userId = user.Id, token = token }, Request.Scheme);
                 var emailSubject = "Email Verification";
                 var emailBody = $"Please verify your email by clicking the following link: {verificationLink}";
                 _emailService.SendEmail(user.Email, emailSubject, emailBody);
 
-                _logger.LogInformation($"User {model.Email} registered successfully.");
+                _logger.LogInformation($"User and customer {model.Email} registered successfully.");
+                return Ok("User and customer registered successfully. An email verification link has been sent.");
 
-                return Ok("User registered successfully. An email verification link has been sent.");
             }
             else
             {
@@ -142,6 +153,13 @@ namespace DigitalGamesMarketplace2.Controllers
             foreach (var role in roles)
             {
                 claims.Add(new Claim(ClaimTypes.Role, role));
+            }
+
+            // Retrieve customer linked to user
+            var customer = _context.Customers.FirstOrDefault(c => c.UserId == user.Id);
+            if (customer != null)
+            {
+                claims.Add(new Claim("CustomerId", customer.CustomerId.ToString()));
             }
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
