@@ -61,20 +61,17 @@ function App() {
           <Route path="/" element={<HomePage searchTerm={searchTerm} genre={genre} />} exact />
           <Route path="/game/:gameId" element={<GameDetailPage />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/account" element={<PrivateRoute element={Account} roles={['SuperAdmin', 'Admin']} />} />
-          <Route path="/purchases" element={<PrivateRoute element={Purchases} roles={['SuperAdmin']} />} />
+          <Route path="/account" element={<PrivateRoute element={Account} roles={['SuperAdmin', 'Admin', 'User']} />} />
+          <Route path="/purchases" element={<PrivateRoute element={Purchases} roles={['SuperAdmin', 'Admin', 'User']} />} />
           <Route path="/gamedetailpage" element={<GameDetailPage />} />
           <Route path="/games" element={<Games />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/edit/:gameId" element={<PrivateRoute element={EditGame} roles={['SuperAdmin111', 'Admin']} />} />
+          <Route path="/edit/:gameId" element={<PrivateRoute element={EditGame} roles={['SuperAdmin', 'Admin']} />} />
           {/* <Route path="/add-game" element={<AddGame />} /> */}
-          <Route path="/add-game" element={<PrivateRoute element={AddGame} roles={['SuperAdmin111', 'Admin']} />} />
+          <Route path="/add-game" element={<PrivateRoute element={AddGame} roles={['SuperAdmin', 'Admin']} />} />
           {/* <Route path="/remove-game/:gameId" element={<RemoveGame />} /> */}
-          <Route path="/remove-game/:gameId" element={<PrivateRoute element={RemoveGame} roles={['SuperAdmin111', 'Admin']} />} />
+          <Route path="/remove-game/:gameId" element={<PrivateRoute element={RemoveGame} roles={['SuperAdmin', 'Admin']} />} />
           <Route path="/unauthorised" element={<Unauthorised />} />
-
-          <Route path="/test" element={<PrivateRoute element={<div>Test Component</div>} roles={['SuperAdmin']} />} />
-
         </Routes>
       </div>
     </Router>
