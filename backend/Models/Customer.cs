@@ -1,4 +1,6 @@
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DigitalGamesMarketplace2.Models;
 
@@ -8,7 +10,12 @@ public class Customer
     public string Name { get; set; }
     public string Email { get; set; }
     public DateTimeOffset JoinDate { get; set; }
-        
+
+    // Link to Identity User
+    public string? UserId { get; set; }
+    [JsonIgnore]
+    public IdentityUser User { get; set; }
+
     [JsonIgnore]
     public ICollection<Transaction>? Transactions { get; set; } // Navigation to Transaction
     [JsonIgnore]

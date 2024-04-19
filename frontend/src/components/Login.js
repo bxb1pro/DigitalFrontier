@@ -1,12 +1,28 @@
-import React from 'react';
-import { Link } from 'react-router-dom'; // Make sure to import Link from react-router-dom
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginUser } from '../features/auth/authSlice';
+import { Link, useNavigate } from 'react-router-dom';
 import AuthenticationForm from './AuthenticationForm';
-import { Button } from 'react-bootstrap'; // Import Bootstrap components
+import { Button } from 'react-bootstrap';
 
 function Login() {
-    const handleLoginSubmit = (event) => {
-        event.preventDefault();
-        // Handle the login submission logic here
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const { isAuthenticated, error, isLoading } = useSelector(state => state.auth); // Access the auth state including isLoading
+
+    useEffect(() => {
+        if (isAuthenticated && !error && !isLoading) {
+            navigate('/'); // Redirect to the homepage on successful login
+        }
+    }, [isAuthenticated, error, isLoading, navigate]);
+
+    const handleLoginSubmit = (credentials) => {
+        dispatch(loginUser(credentials))
+            .unwrap()
+            .catch((error) => {
+                console.error('Login failed:', error);
+                // Optionally handle error state in UI
+            });
     };
 
     return (
@@ -16,7 +32,6 @@ function Login() {
             <AuthenticationForm isRegister={false} onSubmit={handleLoginSubmit} />
             <div className="mt-4">
                 <p>Don't have an account yet?</p>
-                {/* Here we use the Bootstrap Button with an icon */}
                 <Link to="/register" className="d-block">
                     <Button variant="link" className="p-0 d-inline-flex align-items-center">
                         <i className="bi bi-pencil-square"></i>
@@ -29,4 +44,3 @@ function Login() {
 }
 
 export default Login;
-

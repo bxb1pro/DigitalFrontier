@@ -13,6 +13,10 @@ import loadScript from './utils/loadScript';
 import Register from './components/Register';
 import EditGame from './components/EditGame';
 import AddGame from './components/AddGame';
+import RemoveGame from './components/RemoveGame';
+import PrivateRoute from './components/PrivateRoute';
+import Unauthorised from './components/Unauthorised';
+import EmailVerification from './components/EmailVerification';
 
 function App() {
   const dispatch = useDispatch();
@@ -21,6 +25,12 @@ function App() {
   useEffect(() => {
     dispatch(fetchDevelopers());
   }, [dispatch]);
+
+  console.log("Component Check: Account", <Account />);
+  console.log("Component Check: Purchases", <Purchases />);
+  console.log("Component Check: EditGame", <EditGame />);
+  console.log("Component Check: AddGame", <AddGame />);
+  console.log("Component Check: RemoveGame", <RemoveGame />);
 
   // Declare the searchTerm state with its setter function
   const [searchTerm, setSearchTerm] = useState('');
@@ -52,13 +62,18 @@ function App() {
           <Route path="/" element={<HomePage searchTerm={searchTerm} genre={genre} />} exact />
           <Route path="/game/:gameId" element={<GameDetailPage />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/account" element={<Account />} />
-          <Route path="/purchases" element={<Purchases />} />
+          <Route path="/account" element={<PrivateRoute element={Account} roles={['SuperAdmin', 'Admin', 'User']} />} />
+          <Route path="/purchases" element={<PrivateRoute element={Purchases} roles={['SuperAdmin', 'Admin', 'User']} />} />
           <Route path="/gamedetailpage" element={<GameDetailPage />} />
           <Route path="/games" element={<Games />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/edit/:gameId" element={<EditGame />} />
-          <Route path="/add-game" element={<AddGame />} />
+          <Route path="/edit/:gameId" element={<PrivateRoute element={EditGame} roles={['SuperAdmin', 'Admin']} />} />
+          {/* <Route path="/add-game" element={<AddGame />} /> */}
+          <Route path="/add-game" element={<PrivateRoute element={AddGame} roles={['SuperAdmin', 'Admin']} />} />
+          {/* <Route path="/remove-game/:gameId" element={<RemoveGame />} /> */}
+          <Route path="/remove-game/:gameId" element={<PrivateRoute element={RemoveGame} roles={['SuperAdmin', 'Admin']} />} />
+          <Route path="/unauthorised" element={<Unauthorised />} />
+          <Route path="/verify-email" element={<EmailVerification />} />
         </Routes>
       </div>
     </Router>

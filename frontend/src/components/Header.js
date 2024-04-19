@@ -3,10 +3,12 @@ import { Link } from 'react-router-dom';
 import { Dropdown } from 'react-bootstrap';
 import { BsSearch } from 'react-icons/bs';
 import Logout from './Logout';
+import { useSelector } from 'react-redux';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './Header.css';
 
 const Header = ({ onSearchChange, onGenreChange, genre }) => {
+    const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
     // Add an event handler for input changes
     const handleInputChange = (event) => {
         // Call the handler from HomePage with the new search term
@@ -74,13 +76,16 @@ const Header = ({ onSearchChange, onGenreChange, genre }) => {
                                     <i className="bi bi-person-fill"></i>
                                     <span className="account-text">Account</span>
                                 </Link>
-                            </li>
-                            <li className="nav-item">
-                                <Link className="nav-link" to="/login">Register / Login</Link>
-                            </li>
-                            <li className="nav-item" onClick={handleLogoutClick}>
-                                <span className="nav-link" style={{ cursor: 'pointer' }}>Logout</span>
-                            </li>
+                                </li>
+                                {isAuthenticated ? (
+                                <li className="nav-item" onClick={handleLogoutClick}>
+                                    <span className="nav-link" style={{ cursor: 'pointer' }}>Logout</span>
+                                </li>
+                            ) : (
+                                <li className="nav-item">
+                                    <Link className="nav-link" to="/login">Register / Login</Link>
+                                </li>
+                            )}
 
                         </ul>
                     </div>
