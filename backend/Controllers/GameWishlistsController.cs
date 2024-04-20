@@ -91,7 +91,6 @@ namespace DigitalGamesMarketplace2.Controllers
         }
 
         // POST: api/GameWishlists
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<GameWishlist>> PostGameWishlist(GameWishlist gameWishlist)
         {
@@ -101,11 +100,26 @@ namespace DigitalGamesMarketplace2.Controllers
                 return BadRequest(ModelState);
             }
 
-            _context.GameWishlists.Add(gameWishlist);
-            await _context.SaveChangesAsync();
-            _logger.LogInformation($"A new game wishlist with ID {gameWishlist.GameWishlistId} created successfully.");
+            try
+            {
+                _context.GameWishlists.Add(gameWishlist);
+                await _context.SaveChangesAsync();
+                _logger.LogInformation($"A new game wishlist with ID {gameWishlist.GameWishlistId} created successfully.");
+                return CreatedAtAction("GetGameWishlist", new { id = gameWishlist.GameWishlistId }, gameWishlist);
+            }
+            catch (DbUpdateException ex)
+            {
+                // Log the error including the values that failed to help diagnose the issue
+                _logger.LogError(ex, $"Failed to insert into GameWishlists. GameId: {gameWishlist.GameId}, WishlistId: {gameWishlist.WishlistId}");
+                
+                if (ex.InnerException is Npgsql.PostgresException pgEx && pgEx.SqlState == "23503")
+                {
+                    return BadRequest("Failed to add to wishlist: the specified game or wishlist does not exist.");
+                }
 
-            return CreatedAtAction("GetGameWishlist", new { id = gameWishlist.GameWishlistId }, gameWishlist);
+                // General error response if it's not a known issue
+                return StatusCode(500, "An error occurred while creating the game wishlist. Please try again later.");
+            }
         }
 
         // DELETE: api/GameWishlists/5
@@ -130,5 +144,48 @@ namespace DigitalGamesMarketplace2.Controllers
         {
             return _context.GameWishlists.Any(e => e.GameWishlistId == id);
         }
+
+        // DELETE: api/GameWishlists/Clear/{customerId}
+        [HttpDelete("Clear/{customerId}")]
+        public async Task<IActionResult> ClearWishlistByCustomerId(int customerId)
+        {
+            var wishlist = await _context.Wishlists.FirstOrDefaultAsync(w => w.CustomerId == customerId);
+            if (wishlist == null)
+            {
+                _logger.LogWarning($"No wishlist found for customer ID {customerId}.");
+                return NotFound("Wishlist not found.");
+            }
+
+            var gameWishlists = await _context.GameWishlists.Where(gw => gw.WishlistId == wishlist.WishlistId).ToListAsync();
+            if (gameWishlists.Count == 0)
+            {
+                return NoContent(); // No items to delete
+            }
+
+            _context.GameWishlists.RemoveRange(gameWishlists);
+            await _context.SaveChangesAsync();
+            _logger.LogInformation($"Cleared all items from wishlist for customer ID {customerId}.");
+
+            return NoContent();
+        }
+
+        // GET: api/GameWishlists/Wishlist/5
+        [HttpGet("Wishlist/{wishlistId}")]
+        public async Task<ActionResult<IEnumerable<GameWishlist>>> GetGamesForWishlist(int wishlistId)
+        {
+            var gameWishlists = await _context.GameWishlists
+                .Where(gw => gw.WishlistId == wishlistId)
+                .ToListAsync();
+
+            if (!gameWishlists.Any())
+            {
+                _logger.LogWarning($"No games found in wishlist with ID {wishlistId}.");
+                return NotFound("No games found in wishlist.");
+            }
+
+            _logger.LogInformation($"Retrieved {gameWishlists.Count} games for wishlist ID {wishlistId}.");
+            return gameWishlists;
+        }
+
     }
 }

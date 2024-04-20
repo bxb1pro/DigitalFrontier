@@ -54,6 +54,11 @@ namespace DigitalGamesMarketplace2.Controllers
                 var customer = new Customer { Name = model.Email, Email = model.Email, JoinDate = DateTimeOffset.UtcNow, UserId = user.Id };
                 _context.Customers.Add(customer);
                 await _context.SaveChangesAsync();
+
+                // Create an empty wishlist linked to the new customer
+                var wishlist = new Wishlist { CustomerId = customer.CustomerId };
+                _context.Wishlists.Add(wishlist);
+                await _context.SaveChangesAsync();  // Save the wishlist to the database
         
                 var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                 var frontendUrl = _configuration["FrontendUrl"];

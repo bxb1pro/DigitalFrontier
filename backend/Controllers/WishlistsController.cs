@@ -126,9 +126,44 @@ namespace DigitalGamesMarketplace2.Controllers
             return NoContent();
         }
 
+        // Clear Wishlist items but keep Wishlist 
+        [HttpDelete("clear/{customerId}")]
+        public async Task<IActionResult> ClearWishlist(int customerId)
+        {
+            var wishlistItems = await _context.GameWishlists.Where(w => w.WishlistId == customerId).ToListAsync();
+            if (wishlistItems == null || !wishlistItems.Any())
+            {
+                _logger.LogWarning($"No wishlist items found for customer ID {customerId}.");
+                return NotFound("No wishlist items found.");
+            }
+
+            _context.GameWishlists.RemoveRange(wishlistItems);
+            await _context.SaveChangesAsync();
+            _logger.LogInformation($"All wishlist items for customer ID {customerId} were successfully deleted.");
+            return NoContent();
+        }
+
         private bool WishlistExists(int id)
         {
             return _context.Wishlists.Any(e => e.WishlistId == id);
         }
+
+        // GET: api/Wishlists/Customer/{customerId}/WishlistId
+        [HttpGet("Customer/{customerId}/WishlistId")]
+        public async Task<ActionResult<int>> GetWishlistIdByCustomerId(int customerId)
+        {
+            var wishlist = await _context.Wishlists.FirstOrDefaultAsync(w => w.CustomerId == customerId);
+
+            if (wishlist == null)
+            {
+                _logger.LogWarning($"No wishlist found for customer ID {customerId}.");
+                return NotFound("Wishlist not found.");
+            }
+
+            _logger.LogInformation($"Retrieved wishlist ID {wishlist.WishlistId} for customer ID {customerId}.");
+            return wishlist.WishlistId;
+        }
+
+        
     }
 }
