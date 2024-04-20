@@ -166,6 +166,17 @@
     width: 100%; /* Allows the input to expand */
 }
 
+.basket-item-count {
+    background-color: red;
+    color: white;
+    padding: 0 5px;
+    border-radius: 50%;
+    font-size: 0.8em;
+    position: relative;
+    top: -10px;
+    right: 10px;
+}
+
 /* Responsive adjustments */
 @media (max-width: 991px) {
     .navbar-custom .d-flex {

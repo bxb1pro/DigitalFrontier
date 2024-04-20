@@ -5,6 +5,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { fetchGames } from '../features/games/gamesSlice';
 import { addToWishlist, removeFromWishlist, clearWishlist, fetchWishlist } from '../features/wishlist/wishlistSlice';
 import { Modal, Button } from 'react-bootstrap';
+import { addToBasket } from '../features/basket/basketSlice';
+import { BsCart } from 'react-icons/bs';
+
 
 function HomePage({ searchTerm, genre }) {
     const dispatch = useDispatch();
@@ -106,13 +109,18 @@ function HomePage({ searchTerm, genre }) {
                             Clear All
                         </button>
                         {wishlist.map((game, index) => (
-                            <div key={index} className="wishlist-item">
-                                <img src={`/images/game_artwork/${game.imageName}`} alt={game.title} className="wishlist-item-image" />
-                                <div className="wishlist-content">
-                                    <h5>{game.title}</h5>
-                                    <button onClick={() => handleRemoveFromWishlist(game.gameWishlistId)} className="btn btn-danger">Remove</button>
-                                </div>
+                        <div key={index} className="wishlist-item">
+                            <img src={`/images/game_artwork/${game.imageName}`} alt={game.title} className="wishlist-item-image" />
+                            <div className="wishlist-content">
+                            <h5>{game.title}</h5>
+                            <button onClick={() => handleRemoveFromWishlist(game.gameWishlistId)} className="btn btn-danger">Remove</button>
+                            <button 
+                                onClick={() => dispatch(addToBasket(game))}
+                                className="btn btn-primary">
+                                <BsCart />
+                            </button>
                             </div>
+                        </div>
                         ))}
                     </div>
                 </div>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Dropdown } from 'react-bootstrap';
-import { BsSearch } from 'react-icons/bs';
+import { BsSearch, BsCart4 } from 'react-icons/bs';
 import Logout from './Logout';
 import { useSelector } from 'react-redux';
 import 'bootstrap-icons/font/bootstrap-icons.css';
@@ -9,9 +9,8 @@ import './Header.css';
 
 const Header = ({ onSearchChange, onGenreChange, genre }) => {
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
-    // Add an event handler for input changes
+    const basketItems = useSelector(state => state.basket.items); 
     const handleInputChange = (event) => {
-        // Call the handler from HomePage with the new search term
         onSearchChange(event.target.value);
     };
 
@@ -86,6 +85,12 @@ const Header = ({ onSearchChange, onGenreChange, genre }) => {
                                     <Link className="nav-link" to="/login">Register / Login</Link>
                                 </li>
                             )}
+                                {/* Basket icon with item count */}
+                                <li className="nav-item">
+                                    <Link className="nav-link" to="/basket">
+                                        <BsCart4 /> <span className="basket-item-count">{basketItems.length}</span>
+                                    </Link>
+                                </li>
 
                         </ul>
                     </div>

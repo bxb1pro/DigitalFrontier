@@ -1,0 +1,35 @@
+.basket-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.basket-item-image {
+    width: 80px; /* Appropriate size for the image */
+    height: auto;
+    margin-right: 15px;
+}
+
+.basket-item-details {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.basket-item-details h5 {
+    margin: 0;
+    flex-grow: 1; /* Allows title to take available space */
+}
+
+.basket-item-details p {
+    margin: 0 20px; /* Space before the price */
+    white-space: nowrap; /* Ensures the price does not wrap */
+}
+
+.basket-item-actions {
+    display: flex;
+    gap: 10px; /* Space between buttons */
+}

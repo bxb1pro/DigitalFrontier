@@ -4,6 +4,7 @@ import gamesReducer from '../features/games/gamesSlice';
 import wishlistReducer from '../features/wishlist/wishlistSlice';
 import developersReducer from '../features/developers/developersSlice';
 import authReducer from '../features/auth/authSlice';
+import basketReducer from '../features/basket/basketSlice';
 
 export const store = configureStore({
   reducer: {
@@ -11,5 +12,6 @@ export const store = configureStore({
     wishlist: wishlistReducer,
     developers: developersReducer,
     auth: authReducer,
+    basket: basketReducer,
   },
 });

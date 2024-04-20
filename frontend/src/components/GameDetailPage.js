@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
 import './GameDetailPage.css';
 import DeveloperMap from './DeveloperMap';
 import { Button } from 'react-bootstrap';
+import { addToBasket } from '../features/basket/basketSlice';
 
 
 function GameDetailPage() {
   const { gameId } = useParams();
   const game = useSelector(state => state.games.games.find(g => g.id === parseInt(gameId, 10)));
   console.log("Selected Game:", game);
+  const dispatch = useDispatch();
   const developers = useSelector(state => state.developers.developers);
   const [selectedImage, setSelectedImage] = useState('');
 
@@ -27,6 +29,10 @@ function GameDetailPage() {
     console.log("Game Developer ID:", game?.developer); // Updated to correct property
     console.log("Developers List:", developers);
   }, [game, developers]);
+
+  const handleAddToCart = () => {
+    dispatch(addToBasket(game));
+  };
 
   if (!game) {
       return <div>Game not found</div>;
@@ -73,9 +79,9 @@ const developer = developers.find(d => {
             <p><strong>Price:</strong> ${game.price.toFixed(2)}</p>
             <p><strong>Genre:</strong> {game.genre}</p>
             <p><strong>Release Date:</strong> {releaseDateFormatted}</p>
-            {/* Purchase button with icon */}
-            <Button variant="primary" className="purchase-button">
-              <i className="bi bi-cart"></i> Purchase
+            {/* Basket button with icon */}
+            <Button variant="primary" className="basket-button" onClick={handleAddToCart}>
+            <i className="bi bi-cart"></i> Add to Basket
             </Button>
           </div>
           <Tabs defaultActiveKey="overview" id="game-info-tabs" className="custom-tabs">

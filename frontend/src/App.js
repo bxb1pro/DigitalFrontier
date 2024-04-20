@@ -17,10 +17,11 @@ import RemoveGame from './components/RemoveGame';
 import PrivateRoute from './components/PrivateRoute';
 import Unauthorised from './components/Unauthorised';
 import EmailVerification from './components/EmailVerification';
+import Basket from './components/Basket';
 
 function App() {
   const dispatch = useDispatch();
-  
+
   // Fetch developers data when the app loads
   useEffect(() => {
     dispatch(fetchDevelopers());
@@ -74,6 +75,7 @@ function App() {
           <Route path="/remove-game/:gameId" element={<PrivateRoute element={RemoveGame} roles={['SuperAdmin', 'Admin']} />} />
           <Route path="/unauthorised" element={<Unauthorised />} />
           <Route path="/verify-email" element={<EmailVerification />} />
+          <Route path="/basket" element={<Basket />} />
         </Routes>
       </div>
     </Router>
