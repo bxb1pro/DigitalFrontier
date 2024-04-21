@@ -109,6 +109,32 @@ namespace DigitalGamesMarketplace2.Controllers
             }
         }
 
+        [HttpGet("userDetails")]
+        public async Task<IActionResult> GetUserDetails()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Get user ID from claims
+            if (userId == null)
+            {
+                _logger.LogWarning("User details fetch failed: No user ID found in claim.");
+                return NotFound("User ID not found.");
+            }
+
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                _logger.LogWarning($"User details fetch failed: User with ID {userId} not found.");
+                return NotFound("User not found.");
+            }
+
+            var roles = await _userManager.GetRolesAsync(user);
+
+            return Ok(new {
+                Email = user.Email,
+                Roles = roles // Typically, roles are a collection so you might want to return it as an array or list
+            });
+        }
+
+
         [HttpPost("login")] // Additional logging for login success/failure
         public async Task<IActionResult> Login(AuthModel model)
         {
