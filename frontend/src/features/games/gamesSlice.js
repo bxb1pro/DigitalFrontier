@@ -52,10 +52,14 @@ const gamesSlice = createSlice({
     games: [],
     status: 'idle',
     error: null,
+    needUpdate: false,
   },
   reducers: {
     gameRemoved(state, action) {
       state.games = state.games.filter(game => game.id !== action.payload);
+    },
+    updateNeeded(state, action) {
+      state.needUpdate = action.payload;
     }
   },
   extraReducers(builder) {
@@ -102,15 +106,18 @@ const gamesSlice = createSlice({
         state.error = action.payload || 'Failed to delete game';
       })
       .addCase(editGame.fulfilled, (state, action) => {
-        const index = state.games.findIndex(game => game.id === action.payload.id);
+        const { payload } = action;
+        const index = state.games.findIndex(game => game.id === payload.id);
         if (index !== -1) {
-          state.games[index] = {...state.games[index], ...action.payload};
+            state.games[index] = {...state.games[index], ...payload};
+            console.log("Edit game fulfilled. Game updated: ", payload);
         }
-      })
+        state.needUpdate = true; // Set needUpdate to true after editing a game
+    })
   },
 });
 
-export const { gameRemoved } = gamesSlice.actions;
+export const { gameRemoved, updateNeeded } = gamesSlice.actions;
 
 export default gamesSlice.reducer;
 

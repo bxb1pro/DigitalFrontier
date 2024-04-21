@@ -58,8 +58,14 @@ function EditGame() {
             DeveloperId: parseInt(gameData.developerId, 10)
         };
         console.log("Updated game data being sent:", updatedGameData);
-        dispatch(editGame({ gameId, gameData: updatedGameData }));
-        navigate('/');
+        dispatch(editGame({ gameId, gameData: updatedGameData }))
+            .then((result) => {
+                console.log("Edit game action result:", result); // Log the result of dispatching editGame
+                navigate('/');
+            })
+            .catch((error) => {
+                console.error("Error editing game:", error);
+            });
     };
 
     return (

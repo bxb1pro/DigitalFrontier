@@ -24,15 +24,19 @@ function AddGame() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        let additionalImages = gameData.additionalImages;
+        if (Array.isArray(additionalImages)) {
+            additionalImages = additionalImages.join(', '); // Convert array to string
+        }
         const newGameData = {
             Name: gameData.title,
             Description: gameData.description,
             Price: parseFloat(gameData.price),
             Genre: gameData.genre,
             ImageName: gameData.imageName,
-            AdditionalImages: gameData.additionalImages.split(', '),  // Convert string to array, assuming comma-separated
+            AdditionalImages: additionalImages.split(', '), // Convert string to array, assuming comma-separated
             ReleaseDate: new Date(gameData.releaseDate + 'Z').toISOString(),
-            DeveloperId: parseInt(gameData.developerId, 10)  // Convert string to integer
+            DeveloperId: parseInt(gameData.developerId, 10) // Convert string to integer
         };
         dispatch(addGame(newGameData));
         navigate('/');
