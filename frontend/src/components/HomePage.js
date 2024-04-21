@@ -21,6 +21,9 @@ function HomePage({ searchTerm, genre }) {
 
     const isAdmin = useMemo(() => ['SuperAdmin', 'Admin'].includes(role), [role]);
 
+    const [showCustomModal, setShowCustomModal] = useState(false);
+    const [modalMessage, setModalMessage] = useState('');
+
     // Enrich wishlist with game details
     const wishlist = useMemo(() => {
         return rawWishlist.map(wishItem => {
@@ -47,7 +50,16 @@ function HomePage({ searchTerm, genre }) {
     const handleAddToWishlist = game => {
         if (!customerId) {
             console.error('Customer ID is undefined at the time of adding to wishlist');
+            setModalMessage('Customer ID is undefined.');
+            setShowCustomModal(true);
             return; // Optionally handle this case in your UI
+        }
+        const isAlreadyAdded = wishlist.some(wishItem => wishItem.gameId === game.id);
+        if (isAlreadyAdded) {
+            console.error('Game is already in the wishlist');
+            setModalMessage('This game is already in your wishlist.');
+            setShowCustomModal(true);
+            return;
         }
         dispatch(addToWishlist({ customerId, gameId: game.id }));
     };
@@ -95,7 +107,11 @@ function HomePage({ searchTerm, genre }) {
                                         <img src={`/images/game_artwork/${game.imageName}`} className="card-img-top" alt={game.title} />
                                     </Link>
                                     <div className="card-body">
-                                        <h5 className="card-title">{game.title}</h5>
+                                    <h5 className="card-title">
+                                        <Link to={`/game/${game.id}`} className="game-title-link">
+                                            {game.title}
+                                        </Link>
+                                    </h5>
                                         <p className="card-text">{game.description}</p>
                                         {isAdmin && (
                                             <>
@@ -125,7 +141,9 @@ function HomePage({ searchTerm, genre }) {
                                 <div className="wishlist-content">
                                     {/* Add Link to GameDetailPage using game.id */}
                                     <h5>
-                                        <Link to={`/game/${game.id}`}>{game.title}</Link>
+                                    <Link to={`/game/${game.id}`} className="game-title-link">
+                                        {game.title}
+                                    </Link>
                                     </h5>
                                     <button onClick={() => handleRemoveFromWishlist(game.gameWishlistId)} className="btn btn-danger">Remove</button>
                                     <button 
@@ -147,6 +165,15 @@ function HomePage({ searchTerm, genre }) {
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>Cancel</Button>
                     <Button variant="danger" onClick={handleClearWishlist}>Clear Wishlist</Button>
+                </Modal.Footer>
+            </Modal>
+            <Modal show={showCustomModal} onHide={() => setShowCustomModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Notification</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>{modalMessage}</Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowCustomModal(false)}>Close</Button>
                 </Modal.Footer>
             </Modal>
             {isAuthenticated && <Link to="/add-game" className="btn btn-success">Add New Game</Link>}

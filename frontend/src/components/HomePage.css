@@ -52,3 +52,14 @@
     opacity: 0.5;
     pointer-events: none;
 }
+
+.game-title-link {
+    color: black;  /* Ensures the text color is black */
+    font-weight: bold;  /* Makes the text bold */
+    text-decoration: none;  /* Removes any underline from links */
+}
+
+.game-title-link:hover {
+    text-decoration: none;  /* Optionally ensures that hovering over the link does not underline it */
+    color: black;  /* Keeps the color black even on hover */
+}
