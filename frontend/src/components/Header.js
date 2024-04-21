@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Dropdown } from 'react-bootstrap';
 import { BsSearch, BsCart4 } from 'react-icons/bs';
 import Logout from './Logout';
@@ -10,13 +10,43 @@ import './Header.css';
 const Header = ({ onSearchChange, onGenreChange, genre }) => {
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
     const basketItems = useSelector(state => state.basket.items); 
+
+    // State for search input
+    const [searchInput, setSearchInput] = useState('');
+    const [selectedGenre, setSelectedGenre] = useState(genre);
+
+    const location = useLocation();
+    const navigate = useNavigate();
+
     const handleInputChange = (event) => {
-        onSearchChange(event.target.value);
+        setSearchInput(event.target.value);
+        if (location.pathname === '/') {
+            onSearchChange(event.target.value);
+        }
     };
 
-    // Updated handleGenreChange to call onGenreChange with the event value
     const handleGenreChange = (event) => {
-        onGenreChange(event.target.textContent); // use textContent to get the dropdown item label
+        const newGenre = event.target.textContent;
+        setSelectedGenre(newGenre);
+        onGenreChange(newGenre);
+    };
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        if (location.pathname !== '/') {
+            // Navigate to home page with search parameters
+            navigate(`/?genre=${encodeURIComponent(selectedGenre)}&query=${encodeURIComponent(searchInput)}`);
+        } else {
+            // Trigger the search directly
+            onSearchChange(searchInput);
+        }
+    };
+
+    const resetSearch = () => {
+        setSelectedGenre('All Genres');
+        setSearchInput('');
+        onGenreChange('All Genres'); // Reset genre
+        onSearchChange(''); // Clear search input
     };
 
     const [showLogoutModal, setShowLogoutModal] = useState(false);
@@ -28,18 +58,18 @@ const Header = ({ onSearchChange, onGenreChange, genre }) => {
         <>
             <nav className="navbar navbar-expand-lg navbar-custom">
                 <div className="container-fluid">
-                    <Link className="navbar-brand" to="/">
+                    <Link className="navbar-brand" to="/" onClick={resetSearch}>
                         <img src="/images/dfglogo.jpeg" alt="Digital Frontier Logo" />
                     </Link>
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                         <span className="navbar-toggler-icon"></span>
                     </button>
                     <div className="collapse navbar-collapse" id="navbarNav">
+                        <form className="search-container" onSubmit={handleSubmit}>
                         {/* Search container with 'All Categories' dropdown and search input/button */}
-                        <div className="search-container">
                             <Dropdown>
-                                <Dropdown.Toggle variant="" id="dropdown-basic" className="custom-dropdown-toggle">
-                                {genre} {/* Set the button label to the current genre */}
+                            <Dropdown.Toggle variant="" id="dropdown-basic" className="custom-dropdown-toggle">
+                                    {selectedGenre} {/* Changed to use state */}
                                 </Dropdown.Toggle>
 
                                 <Dropdown.Menu>
@@ -60,12 +90,13 @@ const Header = ({ onSearchChange, onGenreChange, genre }) => {
                                 type="search"
                                 placeholder="What game are you looking for?"
                                 aria-label="Search"
-                                onChange={handleInputChange} // Add the onChange handler
+                                value={searchInput} // Bind input value to state
+                                onChange={handleInputChange}
                             />
                             <button className="btn" type="submit">
                                 <BsSearch />
                             </button>
-                        </div>
+                        </form>
                         <ul className="navbar-nav ms-auto">
                             <li className="nav-item">
                                 <Link className="nav-link" to="/purchases">Purchases</Link>

@@ -17,6 +17,26 @@ export const postTransaction = createAsyncThunk(
   }
 );
 
+export const postAllTransactions = createAsyncThunk(
+    'transactions/postAllTransactions',
+    async (_, { getState, dispatch }) => {
+      const { basket, auth } = getState();
+      const results = [];
+      for (const item of basket.items) {
+        const transactionData = {
+          GameId: item.id,
+          CustomerId: auth.customerId,
+          Amount: item.price,
+          TransactionDate: new Date().toISOString(),
+        };
+        // Post each transaction and wait for the response before continuing
+        const result = await dispatch(postTransaction(transactionData));
+        results.push(result);
+      }
+      return results;
+    }
+  );
+
 export const fetchTransactionsByCustomer = createAsyncThunk(
     'transactions/fetchByCustomer',
     async (customerId, { getState, rejectWithValue }) => {
@@ -62,6 +82,17 @@ const transactionSlice = createSlice({
         state.status = 'succeeded';
       })
       .addCase(fetchTransactionsByCustomer.rejected, (state, action) => {
+        state.error = action.payload;
+        state.status = 'failed';
+      })
+      .addCase(postAllTransactions.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(postAllTransactions.fulfilled, (state, action) => {
+        state.transactions.push(...action.payload.map(res => res.payload));
+        state.status = 'succeeded';
+      })
+      .addCase(postAllTransactions.rejected, (state, action) => {
         state.error = action.payload;
         state.status = 'failed';
       });
