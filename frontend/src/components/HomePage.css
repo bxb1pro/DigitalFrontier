@@ -47,3 +47,8 @@
     margin: 0;
     flex-grow: 1; /* Ensure the title takes up the remaining space */
 }
+
+.disabled-button {
+    opacity: 0.5;
+    pointer-events: none;
+}

@@ -16,6 +16,10 @@ function HomePage({ searchTerm, genre }) {
     const gameStatus = useSelector(state => state.games.status);
     const error = useSelector(state => state.games.error);
     const customerId = useSelector(state => state.auth.customerId);
+    const role = useSelector(state => state.auth.role);
+    const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+
+    const isAdmin = useMemo(() => ['SuperAdmin', 'Admin'].includes(role), [role]);
 
     // Enrich wishlist with game details
     const wishlist = useMemo(() => {
@@ -92,9 +96,13 @@ function HomePage({ searchTerm, genre }) {
                                     </Link>
                                     <div className="card-body">
                                         <h5 className="card-title">{game.title}</h5>
-                                        <p className="card-text" title={game.description}>{game.description}</p>
-                                        <Link to={`/edit/${game.id}`} className="btn btn-success me-2">Edit</Link>
-                                        <Link to={`/remove-game/${game.id}`} className="btn btn-danger">Remove</Link>
+                                        <p className="card-text">{game.description}</p>
+                                        {isAdmin && (
+                                            <>
+                                                <Link to={`/edit/${game.id}`} className="btn btn-success me-2">Edit</Link>
+                                                <Link to={`/remove-game/${game.id}`} className="btn btn-danger">Remove</Link>
+                                            </>
+                                        )}
                                         <button onClick={() => handleAddToWishlist(game)} disabled={!customerId} className="btn btn-primary">Add to Wishlist</button>
                                     </div>
                                 </div>
@@ -105,9 +113,12 @@ function HomePage({ searchTerm, genre }) {
                 <div className="col-md-3">
                     <div className="wishlist-box">
                         <h3 className="wishlist-title">Wishlist</h3>
-                        <button className="btn btn-danger mb-3" onClick={handleShow}>
-                            Clear All
-                        </button>
+                        <Button 
+                            className="btn btn-danger mb-3" 
+                            onClick={handleShow}
+                            disabled={!customerId || wishlist.length === 0}>
+                            <i className="bi bi-trash"></i>
+                        </Button>
                         {wishlist.map((game, index) => (
                             <div key={index} className="wishlist-item">
                                 <img src={`/images/game_artwork/${game.imageName}`} alt={game.title} className="wishlist-item-image" />
@@ -138,7 +149,7 @@ function HomePage({ searchTerm, genre }) {
                     <Button variant="danger" onClick={handleClearWishlist}>Clear Wishlist</Button>
                 </Modal.Footer>
             </Modal>
-            <Link to="/add-game" className="btn btn-success">Add New Game</Link>
+            {isAuthenticated && <Link to="/add-game" className="btn btn-success">Add New Game</Link>}
         </div>
     );
 }

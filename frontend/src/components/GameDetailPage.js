@@ -5,7 +5,7 @@ import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
 import './GameDetailPage.css';
 import DeveloperMap from './DeveloperMap';
-import { Button } from 'react-bootstrap';
+import { Modal, Button } from 'react-bootstrap';
 import { addToBasket } from '../features/basket/basketSlice';
 
 
@@ -16,6 +16,11 @@ function GameDetailPage() {
   const dispatch = useDispatch();
   const developers = useSelector(state => state.developers.developers);
   const [selectedImage, setSelectedImage] = useState('');
+  const role = useSelector(state => state.auth.role);
+  const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
 
   // Initialize selectedImage with the first image when game data is loaded
   useEffect(() => {
@@ -31,7 +36,19 @@ function GameDetailPage() {
   }, [game, developers]);
 
   const handleAddToCart = () => {
-    dispatch(addToBasket(game));
+    if (!isAuthenticated) {
+      setModalMessage('Please login to use this feature');
+      setShowModal(true);
+    } else if (['SuperAdmin', 'Admin'].includes(role)) {
+      setModalMessage('Please do not purchase games on an admin account');
+      setShowModal(true);
+    } else {
+      dispatch(addToBasket(game));
+    }
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
   };
 
   if (!game) {
@@ -84,6 +101,16 @@ const developer = developers.find(d => {
             <i className="bi bi-cart"></i> Add to Basket
             </Button>
           </div>
+
+          <Modal show={showModal} onHide={handleCloseModal}>
+            <Modal.Header closeButton>
+              <Modal.Title>Notification</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>{modalMessage}</Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleCloseModal}>Close</Button>
+            </Modal.Footer>
+          </Modal>
           <Tabs defaultActiveKey="overview" id="game-info-tabs" className="custom-tabs">
             <Tab eventKey="overview" title="Info" className="tab-content">
               <p>{game.description}</p>
