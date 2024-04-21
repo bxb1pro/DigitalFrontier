@@ -49,6 +49,25 @@ namespace DigitalGamesMarketplace2.Controllers
             return transaction;
         }
 
+        // GET: api/Transactions/Customer/5
+        [HttpGet("Customer/{customerId}")]
+        public async Task<ActionResult<IEnumerable<Transaction>>> GetTransactionsByCustomer(int customerId)
+        {
+            var transactions = await _context.Transactions
+                                            .Where(t => t.CustomerId == customerId)
+                                            .Include(t => t.Game) // Assuming you want to include game details
+                                            .ToListAsync();
+
+            if (transactions == null || !transactions.Any())
+            {
+                _logger.LogWarning($"No transactions found for customer with ID {customerId}.");
+                return NotFound("No transactions found.");
+            }
+
+            _logger.LogInformation($"Retrieved {transactions.Count} transactions for customer with ID {customerId}.");
+            return transactions;
+        }
+
         // PUT: api/Transactions/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]

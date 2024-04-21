@@ -34,6 +34,18 @@ export const editGame = createAsyncThunk('games/editGame', async ({ gameId, game
   }
 });
 
+export const fetchGameById = createAsyncThunk(
+  'games/fetchById',
+  async (gameId, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`http://localhost:5004/api/Games/${gameId}`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 const gamesSlice = createSlice({
   name: 'games',
   initialState: {

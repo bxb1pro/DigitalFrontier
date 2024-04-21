@@ -17,6 +17,22 @@ export const postTransaction = createAsyncThunk(
   }
 );
 
+export const fetchTransactionsByCustomer = createAsyncThunk(
+    'transactions/fetchByCustomer',
+    async (customerId, { getState, rejectWithValue }) => {
+      const { auth } = getState();
+      try {
+        const response = await axios.get(`http://localhost:5004/api/Transactions/Customer/${customerId}`, {
+          headers: { Authorization: `Bearer ${auth.token}` },
+        });
+        return response.data;
+      } catch (error) {
+        return rejectWithValue(error.response.data);
+      }
+    }
+  );
+
+
 const transactionSlice = createSlice({
   name: 'transactions',
   initialState: {
@@ -35,6 +51,17 @@ const transactionSlice = createSlice({
         state.status = 'succeeded';
       })
       .addCase(postTransaction.rejected, (state, action) => {
+        state.error = action.payload;
+        state.status = 'failed';
+      })
+      .addCase(fetchTransactionsByCustomer.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(fetchTransactionsByCustomer.fulfilled, (state, action) => {
+        state.transactions = action.payload;
+        state.status = 'succeeded';
+      })
+      .addCase(fetchTransactionsByCustomer.rejected, (state, action) => {
         state.error = action.payload;
         state.status = 'failed';
       });
