@@ -6,18 +6,14 @@ const API_WISHLIST_URL = 'http://localhost:5004/api/Wishlists';
 const API_GAME_WISHLISTS_URL = 'http://localhost:5004/api/GameWishlists';
 
 
-export const fetchWishlist = createAsyncThunk('wishlist/fetchWishlist', async (customerId, { rejectWithValue }) => {
-  try {
+export const fetchWishlist = createAsyncThunk('wishlist/fetchWishlist', async (customerId) => {
     const wishlistIdResp = await axios.get(`${API_WISHLIST_URL}/Customer/${customerId}/WishlistId`);
     const wishlistId = wishlistIdResp.data;
     const response = await axios.get(`${API_GAME_WISHLISTS_URL}/Wishlist/${wishlistId}`);
     console.log("Fetched wishlist data:", response.data);
     return response.data;
-  } catch (error) {
-    console.error("Error fetching wishlist with games:", error);
-    return rejectWithValue(error.response.data);
   }
-});
+);
 
 export const addToWishlist = createAsyncThunk(
   'wishlist/addToWishlist',

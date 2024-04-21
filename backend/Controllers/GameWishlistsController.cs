@@ -180,7 +180,7 @@ namespace DigitalGamesMarketplace2.Controllers
             if (!gameWishlists.Any())
             {
                 _logger.LogWarning($"No games found in wishlist with ID {wishlistId}.");
-                return NotFound("No games found in wishlist.");
+                return Ok(new List<GameWishlist>()); // Return an empty list instead of NotFound
             }
 
             _logger.LogInformation($"Retrieved {gameWishlists.Count} games for wishlist ID {wishlistId}.");

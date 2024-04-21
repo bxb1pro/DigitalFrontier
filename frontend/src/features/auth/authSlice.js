@@ -56,17 +56,9 @@ const decodeToken = (token) => {
 
     export const fetchUserDetails = createAsyncThunk('auth/fetchUserDetails', async (_, { getState, rejectWithValue }) => {
         const { token } = getState().auth;
-        if (!token) return rejectWithValue('No token found');
-    
-        try {
-            const response = await axios.get('http://localhost:5004/api/Account/userDetails', {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-            console.log('User details fetched:', response.data);
-            return response.data;
-        } catch (error) {
-            console.error('Failed to fetch user details:', error.response.data);
-            return rejectWithValue(error.response.data);
+        if (!token) {
+            console.log("No token available for fetching user details.");
+            return rejectWithValue('No token found');
         }
     });
 
@@ -107,11 +99,13 @@ const authSlice = createSlice({
                 state.customerId = action.payload.customerId; // Store customerId in state
                 state.isLoading = false;
                 state.error = null;
+                state.isAuthenticated = true;
             })
             .addCase(loginUser.rejected, (state, action) => {
                 console.log('Login failed, error:', action.payload);
                 state.error = action.payload;
                 state.isLoading = false;
+                state.isAuthenticated = false;
             });
     }
 });

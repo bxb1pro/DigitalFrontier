@@ -108,14 +108,14 @@ const Header = ({ onSearchChange, onGenreChange, genre }) => {
                                 </Link>
                                 </li>
                                 {isAuthenticated ? (
-                                <li className="nav-item" onClick={handleLogoutClick}>
-                                    <span className="nav-link" style={{ cursor: 'pointer' }}>Logout</span>
-                                </li>
-                            ) : (
-                                <li className="nav-item">
-                                    <Link className="nav-link" to="/login">Register / Login</Link>
-                                </li>
-                            )}
+                                    <li className="nav-item" onClick={handleLogoutClick}>
+                                        <span className="nav-link" style={{ cursor: 'pointer' }}>Logout</span>
+                                    </li>
+                                ) : (
+                                    <li className="nav-item">
+                                        <Link className="nav-link" to="/login">Register / Login</Link>
+                                    </li>
+                                )}
                                 {/* Basket icon with item count */}
                                 <li className="nav-item">
                                     <Link className="nav-link" to="/basket">

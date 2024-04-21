@@ -19,6 +19,10 @@ function Login() {
     const handleLoginSubmit = (credentials) => {
         dispatch(loginUser(credentials))
             .unwrap()
+            .then(() => {
+                console.log('Login successful, should navigate now.');
+                navigate('/'); // This might need to be placed here to ensure it happens after login is successful
+            })
             .catch((error) => {
                 console.error('Login failed:', error);
                 // Optionally handle error state in UI

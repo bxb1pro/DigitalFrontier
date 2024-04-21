@@ -8,7 +8,6 @@ import DeveloperMap from './DeveloperMap';
 import { Modal, Button } from 'react-bootstrap';
 import { addToBasket } from '../features/basket/basketSlice';
 
-
 function GameDetailPage() {
   const { gameId } = useParams();
   const game = useSelector(state => state.games.games.find(g => g.id === parseInt(gameId, 10)));
@@ -28,12 +27,6 @@ function GameDetailPage() {
       setSelectedImage(game.images[0]);
     }
   }, [game]);
-
-  // Debugging useEffect for developer ID and developers list
-  useEffect(() => {
-    console.log("Game Developer ID:", game?.developer); // Updated to correct property
-    console.log("Developers List:", developers);
-  }, [game, developers]);
 
   const handleAddToCart = () => {
     if (!isAuthenticated) {
@@ -55,19 +48,12 @@ function GameDetailPage() {
       return <div>Game not found</div>;
   }
 
-  console.log("Game Developer ID:", game.developer, "Type:", typeof game.developer);
-  console.log("Developer IDs and Types:");
-developers.forEach(dev => console.log(dev.developerId, "Type:", typeof dev.developerId));  // Note the property change
+  developers.forEach(dev => console.log(dev.developerId, "Type:", typeof dev.developerId));  // Note the property change
 
-const developer = developers.find(d => {
-  console.log(`Comparing ${d.developerId} (type ${typeof d.developerId}) to ${game.developer} (parsed type ${typeof parseInt(game.developer, 10)})`);
-  return d.developerId === parseInt(game.developer, 10);
-});
-
-
-  console.log("Checking Developer:", game.developer);  // Log the ID being used for lookup
-  console.log("Developers Detailed:", developers);  // Log all developer IDs for comparison
-  console.log("Developer Found:", developer);  // See what is found
+  const developer = developers.find(d => {
+    console.log(`Comparing ${d.developerId} (type ${typeof d.developerId}) to ${game.developer} (parsed type ${typeof parseInt(game.developer, 10)})`);
+    return d.developerId === parseInt(game.developer, 10);
+  });
 
   const releaseDateFormatted = new Date(game.releaseDate).toLocaleDateString();
 

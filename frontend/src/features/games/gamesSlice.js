@@ -38,10 +38,10 @@ export const fetchGameById = createAsyncThunk(
   'games/fetchById',
   async (gameId, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`http://localhost:5004/api/Games/${gameId}`);
+      const response = await axios.get(`${API_URL}/${gameId}`);
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.toString());
     }
   }
 );
@@ -106,7 +106,7 @@ const gamesSlice = createSlice({
         if (index !== -1) {
           state.games[index] = {...state.games[index], ...action.payload};
         }
-      });
+      })
   },
 });
 
