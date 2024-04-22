@@ -158,33 +158,34 @@ function HomePage({ searchTerm, genre }) {
                     </div>
                 </div>
                 <div className="col-md-3">
-                    <div className="wishlist-box">
+                <div className="wishlist-box">
+                    <div className="wishlist-header">
                         <h3 className="wishlist-title">Wishlist</h3>
                         <Button 
-                            className="btn btn-danger mb-3" 
+                            className="btn btn-danger wishlist-clear-btn" 
                             onClick={handleShow}
                             disabled={!customerId || wishlist.length === 0}>
                             <i className="bi bi-trash"></i>
                         </Button>
-                        {wishlist.map((game, index) => (
-                            <div key={index} className="wishlist-item">
-                                <img src={`/images/game_artwork/${game.imageName}`} alt={game.title} className="wishlist-item-image" />
-                                <div className="wishlist-content">
-                                    {/* Add Link to GameDetailPage using game.id */}
-                                    <h5>
+                    </div>
+                    {wishlist.map((game, index) => (
+                        <div key={index} className="wishlist-item">
+                            <img src={`/images/game_artwork/${game.imageName}`} alt={game.title} className="wishlist-item-image" />
+                            <div className="wishlist-content">
+                                <h5>
                                     <Link to={`/game/${game.id}`} className="game-title-link">
                                         {game.title}
                                     </Link>
-                                    </h5>
-                                    <button onClick={() => handleRemoveFromWishlist(game.gameWishlistId)} className="btn btn-danger">Remove</button>
-                                    <button 
-                                        onClick={() => dispatch(addToBasket(game))}
-                                        className="btn btn-primary">
-                                        <BsCart />
-                                    </button>
-                                </div>
+                                </h5>
+                                <button onClick={() => handleRemoveFromWishlist(game.gameWishlistId)} className="btn btn-danger">Remove</button>
+                                <button 
+                                    onClick={() => dispatch(addToBasket(game))}
+                                    className="btn btn-primary">
+                                    <BsCart />
+                                </button>
                             </div>
-                        ))}
+                        </div>
+                    ))}
                     </div>
                 </div>
             </div>
