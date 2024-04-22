@@ -52,6 +52,8 @@ const Basket = () => {
     setSelectedItem(null);
   };
 
+  const totalPrice = basketItems.reduce((acc, item) => acc + item.price, 0);
+
   return (
     <div className="basket">
       <h2>Your Basket</h2>
@@ -71,6 +73,9 @@ const Basket = () => {
                 </div>
               </div>
             ))}
+            <div className="total-price">
+            <h5>Total Price: £{totalPrice.toFixed(2)}</h5>
+            </div>
             <div className="basket-actions"> {/* New div for aligning buttons */}
               <Button variant="danger" onClick={() => dispatch(clearBasket())}>Clear Basket</Button>
               <Button variant="primary" onClick={handlePurchaseAll}>Purchase All</Button>

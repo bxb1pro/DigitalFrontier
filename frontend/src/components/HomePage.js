@@ -66,7 +66,6 @@ function HomePage({ searchTerm, genre }) {
             }
         };
     
-    
         // Fetch data if conditions are met
         if (gameStatus === 'idle' || gameStatus === 'failed' || needUpdate) {
             fetchData();
@@ -155,6 +154,7 @@ function HomePage({ searchTerm, genre }) {
                                             </>
                                         )}
                                         <button onClick={() => handleAddToWishlist(game)} disabled={!customerId} className="btn btn-primary btn-uniform">Add to Wishlist</button>
+                                        <button onClick={() => dispatch(addToBasket(game))} disabled={!customerId} className="btn btn-primary add-to-cart-btn">Add to Basket <BsCart /></button>
                                     </div>
                                 </div>
                             </div>

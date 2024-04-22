@@ -52,11 +52,17 @@
     display: flex;
     justify-content: flex-end;
     gap: 10px;
-    margin-top: 20px;
+    margin-top: 10px;
 }
 
 .basket h2 {
     text-align: center;
     padding-top: 20px;
     margin-bottom: 20px;
+}
+
+.total-price {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
 }

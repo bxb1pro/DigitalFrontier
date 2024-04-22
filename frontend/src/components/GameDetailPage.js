@@ -115,7 +115,7 @@ function GameDetailPage() {
             <Tab eventKey="map" title="Map" className="tab-content">
               {developer ? (
               <>
-                <p><strong>Address:</strong> {developer.address}</p> 
+                <p><strong>Developer Address:</strong> {developer.address}</p> 
                 <DeveloperMap latitude={developer.latitude} longitude={developer.longitude} developerName={developer.name} />
               </>
               ) : (
