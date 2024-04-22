@@ -4,6 +4,7 @@ import { removeFromBasket, clearBasket } from '../features/basket/basketSlice';
 import { postTransaction, postAllTransactions } from '../features/transactions/transactionSlice';
 import { Button, Modal } from 'react-bootstrap';
 import { shallowEqual } from 'react-redux';
+import './Basket.css';
 
 const Basket = () => {
   const { items: basketItems, customerId } = useSelector(state => ({
@@ -52,29 +53,33 @@ const Basket = () => {
   };
 
   return (
-    <div>
+    <div className="basket">
       <h2>Your Basket</h2>
-      {basketItems.length > 0 ? (
-        <div>
-          {basketItems.map((item, index) => (
-            <div key={item.id + '-' + index} className="basket-item">
-              <img src={`/images/game_artwork/${item.imageName}`} alt={item.title} className="basket-item-image" />
-              <div className="basket-item-details">
-                <h5>{item.title}</h5>
-                <p>${item.price.toFixed(2)}</p>
+      <div className="basket-container">  {/* Added class for top border */}
+        {basketItems.length > 0 ? (
+          <div>
+            {basketItems.map((item, index) => (
+              <div key={item.id + '-' + index} className="basket-item">
+                <img src={`/images/game_artwork/${item.imageName}`} alt={item.title} className="basket-item-image" />
+                <div className="basket-item-details">
+                  <h5>{item.title}</h5>
+                  <p>£{item.price.toFixed(2)}</p>
+                </div>
+                <div className="basket-item-actions">
+                  <Button variant="danger" onClick={() => dispatch(removeFromBasket(item))}>Remove</Button>
+                  <Button variant="primary" onClick={() => handlePurchaseClick(item)}>Purchase</Button> {/* Updated variant */}
+                </div>
               </div>
-              <div className="basket-item-actions">
-                <Button variant="danger" onClick={() => dispatch(removeFromBasket(item))}>Remove</Button>
-                <Button variant="outline-primary" onClick={() => handlePurchaseClick(item)}>Purchase</Button>
-              </div>
+            ))}
+            <div className="basket-actions"> {/* New div for aligning buttons */}
+              <Button variant="danger" onClick={() => dispatch(clearBasket())}>Clear Basket</Button>
+              <Button variant="primary" onClick={handlePurchaseAll}>Purchase All</Button>
             </div>
-          ))}
-          <Button variant="danger" onClick={() => dispatch(clearBasket())}>Clear Basket</Button>
-          <Button variant="primary" onClick={handlePurchaseAll}>Purchase All</Button>
-        </div>
-      ) : (
-        <p>Your basket is empty.</p>
-      )}
+          </div>
+        ) : (
+          <p>Your basket is empty.</p>
+        )}
+      </div>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Confirm Purchase</Modal.Title>
@@ -97,6 +102,7 @@ const Basket = () => {
       </Modal>
     </div>
   );
+  
 };
 
 export default Basket;

@@ -79,7 +79,7 @@ function GameDetailPage() {
       <div className="game-info-section">
           <h2>{game.title}</h2>
           <div className="game-additional-info">
-            <p><strong>Price:</strong> ${game.price.toFixed(2)}</p>
+            <p><strong>Price:</strong> £{game.price.toFixed(2)}</p>
             <p><strong>Genre:</strong> {game.genre}</p>
             <p><strong>Release Date:</strong> {releaseDateFormatted}</p>
             {/* Basket button with icon */}

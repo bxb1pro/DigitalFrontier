@@ -9,11 +9,24 @@
     flex-direction: column;
 }
 
+.wishlist-header {
+    display: flex;
+    justify-content: space-between; /* This spreads out the child elements */
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ccc; /* Adds a border line directly under the header */
+}
+
 .wishlist-title {
     text-align: center;
-    margin-bottom: 20px; /* Adjust spacing as needed */
-    border-bottom: 1px solid grey; /* Adds a grey line under the title */
-    padding-bottom: 10px; /* Spacing between the title and the grey line */
+    flex: 1; /* Takes up the full space but keeps centering the text */
+    margin: 0; /* Adjust or remove margins as necessary */
+}
+
+.wishlist-clear-btn {
+    margin-left: auto; /* Pushes the button to the right */
+    padding-right: 0; /* Optional: Adjust padding to align button right at the edge */
 }
 
 /* Add any additional styles for wishlist items if necessary */
@@ -62,4 +75,40 @@
 .game-title-link:hover {
     text-decoration: none;  /* Optionally ensures that hovering over the link does not underline it */
     color: black;  /* Keeps the color black even on hover */
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Aligns content at the top and buttons at the bottom */
+    height: 100%; /* Ensures the card body takes up all the available space within the card */
+}
+
+.card-text {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-grow: 1; /* Allows this element to grow and fill available space, pushing the buttons down */
+    margin-bottom: 20px; /* Optional, adds some spacing between the text and the buttons */
+}
+
+.btn-uniform {
+    min-width: 120px; /* Or whatever width looks best with your design */
+    text-align: center; /* To ensure the text within the buttons is centered */
+}
+
+.link-to-add-game {
+    display: block;        /* Makes the link a block element to fill the space */
+    margin-bottom: 20px;   /* Adds space below the button */
+    text-align: center;    /* Centers the text if needed */
+}
+
+.game-price {
+    display: flex;
+    align-items: center; /* Centers the icon with the text vertically */
+    font-size: 19px; /* Adjust size as necessary */
+    margin-top: 5px;
+
 }

@@ -63,7 +63,7 @@ function Purchases() {
           {enrichedTransactions.map((transaction, index) => (
             <tr key={index}>
               <td>{transaction.game ? transaction.game.name : 'No game info'}</td>
-              <td>${transaction.amount.toFixed(2)}</td>
+              <td>£{transaction.amount.toFixed(2)}</td>
               <td>{new Date(transaction.transactionDate).toLocaleDateString()}</td>
               {/* Convert string to Date object before calling toLocaleDateString() */}
             </tr>

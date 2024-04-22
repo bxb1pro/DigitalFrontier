@@ -7,8 +7,8 @@
 }
 
 .basket-item-image {
-    width: 80px; /* Appropriate size for the image */
-    height: auto;
+    width: 60px; /* Smaller width if necessary */
+    height: auto; /* Maintain aspect ratio */
     margin-right: 15px;
 }
 
@@ -32,4 +32,31 @@
 .basket-item-actions {
     display: flex;
     gap: 10px; /* Space between buttons */
+}
+
+/* This will center the content and add space around it */
+.basket-container {
+    max-width: 960px; /* This can be adjusted based on your design preference */
+    margin: 20px auto; /* Adds vertical space and centers it horizontally */
+    padding: 0 20px; /* Adds padding inside the container */
+    border-top: 1px solid #ccc;
+    padding-top: 10px;
+}
+
+/* If you want to add more centered padding around the entire Basket component */
+.basket {
+    padding: 0 15%; /* Adds padding to the left and right, can be adjusted */
+}
+
+.basket-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.basket h2 {
+    text-align: center;
+    padding-top: 20px;
+    margin-bottom: 20px;
 }
