@@ -63,7 +63,7 @@ const Basket = () => {
                 <img src={`/images/game_artwork/${item.imageName}`} alt={item.title} className="basket-item-image" />
                 <div className="basket-item-details">
                   <h5>{item.title}</h5>
-                  <p>${item.price.toFixed(2)}</p>
+                  <p>£{item.price.toFixed(2)}</p>
                 </div>
                 <div className="basket-item-actions">
                   <Button variant="danger" onClick={() => dispatch(removeFromBasket(item))}>Remove</Button>

@@ -9,6 +9,7 @@ import { addToBasket } from '../features/basket/basketSlice';
 import { BsCart } from 'react-icons/bs';
 import { useLocation } from 'react-router-dom';
 
+
 function HomePage({ searchTerm, genre }) {
     const dispatch = useDispatch();
     const games = useSelector(state => state.games.games);
@@ -17,7 +18,6 @@ function HomePage({ searchTerm, genre }) {
     const error = useSelector(state => state.games.error);
     const customerId = useSelector(state => state.auth.customerId);
     const role = useSelector(state => state.auth.role);
-    const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
     const location = useLocation();
     const needUpdate = useSelector(state => state.games.needUpdate); 
 
@@ -128,6 +128,7 @@ function HomePage({ searchTerm, genre }) {
 
     return (
         <div className="container mt-5">
+        {isAdmin && <Link to="/add-game" className="btn btn-success link-to-add-game">Add New Game</Link>}
             <div className="row">
                 <div className="col-md-9">
                     <div className="row">
@@ -142,15 +143,18 @@ function HomePage({ searchTerm, genre }) {
                                         <Link to={`/game/${game.id}`} className="game-title-link">
                                             {game.title}
                                         </Link>
+                                        <div className="game-price">
+                                            £{game.price.toFixed(2)}
+                                        </div>
                                     </h5>
                                         <p className="card-text">{game.description}</p>
                                         {isAdmin && (
                                             <>
-                                                <Link to={`/edit/${game.id}`} className="btn btn-success me-2">Edit</Link>
-                                                <Link to={`/remove-game/${game.id}`} className="btn btn-danger">Remove</Link>
+                                                <Link to={`/edit/${game.id}`} className="btn btn-success btn-uniform">Edit</Link>
+                                                <Link to={`/remove-game/${game.id}`} className="btn btn-danger btn-uniform">Remove</Link>
                                             </>
                                         )}
-                                        <button onClick={() => handleAddToWishlist(game)} disabled={!customerId} className="btn btn-primary">Add to Wishlist</button>
+                                        <button onClick={() => handleAddToWishlist(game)} disabled={!customerId} className="btn btn-primary btn-uniform">Add to Wishlist</button>
                                     </div>
                                 </div>
                             </div>
@@ -208,7 +212,6 @@ function HomePage({ searchTerm, genre }) {
                     <Button variant="secondary" onClick={() => setShowCustomModal(false)}>Close</Button>
                 </Modal.Footer>
             </Modal>
-            {isAuthenticated && <Link to="/add-game" className="btn btn-success">Add New Game</Link>}
         </div>
     );
 }
