@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "oe1ywg16EfhqcLjcMd87CDPQmsnv5ew2hnOmw0JiY9om7+0/BH4luamhfgcaY5AJQlRnzG1A2XQfXdKcEQxGlw==",
+  "dgSpecHash": "NxsEjQzHlZxo9ulFZZjHe37ojEr+ha5vIMaqvKjirB3ubb8Yuxs0jK+6PrAahzj9onogKJxxGewgFCmRphf0Ew==",
   "success": true,
-  "projectFilePath": "/Users/brad/Documents/Coursework/backend/DigitalGamesMarketplace2.csproj",
+  "projectFilePath": "/Users/brad/Documents/Coursework/Backend/DigitalGamesMarketplace2.csproj",
   "expectedPackageFiles": [
     "/Users/brad/.nuget/packages/azure.core/1.35.0/azure.core.1.35.0.nupkg.sha512",
     "/Users/brad/.nuget/packages/azure.identity/1.10.3/azure.identity.1.10.3.nupkg.sha512",
