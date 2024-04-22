@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { fetchDevelopers } from './features/developers/developersSlice';
 import Header from './components/Header';
 import HomePage from './components/HomePage';
@@ -21,6 +22,7 @@ import Basket from './components/Basket';
 
 function App() {
   const dispatch = useDispatch();
+  const role = useSelector(state => state.auth.role);
 
   // Fetch developers data when the app loads
   useEffect(() => {
@@ -60,7 +62,7 @@ function App() {
         <Header onSearchChange={handleSearchChange} onGenreChange={handleGenreChange} genre={genre} />
         <Routes>
           {/* Pass searchTerm to HomePage as a prop */}
-          <Route path="/" element={<HomePage searchTerm={searchTerm} genre={genre} />} exact />
+          <Route path="/" element={<HomePage key={role} searchTerm={searchTerm} genre={genre} />} />
           <Route path="/game/:gameId" element={<GameDetailPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/account" element={<PrivateRoute element={Account} roles={['SuperAdmin', 'Admin', 'User']} />} />

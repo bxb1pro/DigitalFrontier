@@ -91,6 +91,7 @@ const authSlice = createSlice({
             state.token = null;
             state.isAuthenticated = false;
             state.customerId = null; // Clear customerId on logout
+            state.role = null; // Make sure this is reset
         },
         // error checking, remove after
         setUserDetailsFromToken(state, action) {
