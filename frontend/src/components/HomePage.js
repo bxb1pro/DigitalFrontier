@@ -2,12 +2,12 @@ import React, { useEffect, useState, useMemo } from 'react';
 import './HomePage.css';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchGames } from '../features/games/gamesSlice';
+import { fetchGames, updateNeeded } from '../features/games/gamesSlice';
 import { addToWishlist, removeFromWishlist, clearWishlist, fetchWishlist } from '../features/wishlist/wishlistSlice';
 import { Modal, Button } from 'react-bootstrap';
 import { addToBasket } from '../features/basket/basketSlice';
 import { BsCart } from 'react-icons/bs';
-
+import { useLocation } from 'react-router-dom';
 
 function HomePage({ searchTerm, genre }) {
     const dispatch = useDispatch();
@@ -18,6 +18,10 @@ function HomePage({ searchTerm, genre }) {
     const customerId = useSelector(state => state.auth.customerId);
     const role = useSelector(state => state.auth.role);
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+    const location = useLocation();
+    const needUpdate = useSelector(state => state.games.needUpdate); 
+
+    console.log("HomePage rendering, needUpdate:", needUpdate);
 
     const isAdmin = useMemo(() => ['SuperAdmin', 'Admin'].includes(role), [role]);
 
@@ -39,13 +43,40 @@ function HomePage({ searchTerm, genre }) {
     console.log('HomePage Rendered: Current Customer ID:', customerId);
 
     useEffect(() => {
-        if (gameStatus === 'idle') {
-            dispatch(fetchGames());
-            if (customerId) {
-                dispatch(fetchWishlist(customerId));
+        console.log("HomePage useEffect triggered.");
+        console.log("Current game status: ", gameStatus);
+        console.log("Need update flag: ", needUpdate);
+        console.log("Location path: ", location.pathname);
+    
+        const fetchData = async () => {
+            try {
+                console.log("Fetching games...");
+                await dispatch(fetchGames());
+                if (customerId) {
+                    dispatch(fetchWishlist(customerId));
+                }
+            } catch (error) {
+                console.error("Error fetching games:", error);
+            } finally {
+                console.log("Before resetting needUpdate, current flag:", needUpdate);
+                // Reset the flag only if the fetch was successful
+                if (gameStatus === 'succeeded') {
+                    dispatch(updateNeeded(false)); 
+                }
             }
+        };
+    
+    
+        // Fetch data if conditions are met
+        if (gameStatus === 'idle' || gameStatus === 'failed' || needUpdate) {
+            fetchData();
         }
-    }, [customerId, gameStatus, dispatch]);
+
+        // Add logging to check if needUpdate is updated after editing a game
+        console.log("Need update flag after editing a game:", needUpdate);
+
+        }, [customerId, gameStatus, dispatch, location.pathname, needUpdate]);
+
 
     const handleAddToWishlist = game => {
         if (!customerId) {
