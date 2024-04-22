@@ -6,7 +6,7 @@ import { fetchGames, updateNeeded } from '../features/games/gamesSlice';
 import { addToWishlist, removeFromWishlist, clearWishlist, fetchWishlist } from '../features/wishlist/wishlistSlice';
 import { Modal, Button } from 'react-bootstrap';
 import { addToBasket } from '../features/basket/basketSlice';
-import { BsCart } from 'react-icons/bs';
+import { BsCart, BsStar } from 'react-icons/bs';
 import { useLocation } from 'react-router-dom';
 
 
@@ -153,9 +153,11 @@ function HomePage({ searchTerm, genre }) {
                                                 <Link to={`/remove-game/${game.id}`} className="btn btn-danger btn-uniform">Remove</Link>
                                             </>
                                         )}
-                                        <button onClick={() => handleAddToWishlist(game)} disabled={!customerId} className="btn btn-primary btn-uniform">Add to Wishlist</button>
+                                        <div className="button-group">
+                                        <button onClick={() => handleAddToWishlist(game)} disabled={!customerId} className="btn btn-primary add-to-cart-btn">Add to Wishlist <BsStar /></button>
                                         <button onClick={() => dispatch(addToBasket(game))} disabled={!customerId} className="btn btn-primary add-to-cart-btn">Add to Basket <BsCart /></button>
-                                    </div>
+                                        </div>
+                                    </div> 
                                 </div>
                             </div>
                         ))}

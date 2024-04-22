@@ -116,3 +116,14 @@
 .add-to-cart-btn {
     margin-top: 2px;
 }
+
+.button-group {
+    display: flex;          /* Align children elements in a row */
+    justify-content: center; /* Align children to the start of the 'button-group' */
+    gap: 5px;              /* Adds space between the buttons */
+}
+
+.button-group button {
+    flex: 1;               /* Each button will take equal portion of the available space */
+    text-align: center;
+}
