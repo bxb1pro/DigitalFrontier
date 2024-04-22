@@ -20,6 +20,22 @@ const decodeToken = (token) => {
     }
 };
 
+export const fetchUsersWithRoles = createAsyncThunk(
+    'auth/fetchUsers',
+    async (_, { getState, rejectWithValue }) => { // Include rejectWithValue
+        try {
+            const { token } = getState().auth;
+            const response = await axios.get('http://localhost:5004/api/Account/users', {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            return response.data;
+        } catch (error) {
+            console.error('Failed to fetch users:', error.message);
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
     const storedToken = getTokenFromStorage();
     const decodedToken = storedToken ? decodeToken(storedToken) : null;
 
@@ -30,7 +46,8 @@ const decodeToken = (token) => {
         isLoading: false,
         error: null,
         role: decodedToken ? decodedToken["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] : null,
-        customerId: decodedToken ? decodedToken.CustomerId : null // Assuming 'customerId' is the claim name
+        customerId: decodedToken ? decodedToken.CustomerId : null, // Assuming 'customerId' is the claim name
+        users: [] 
     };
   
     export const loginUser = createAsyncThunk('auth/login', async (userData, { rejectWithValue }) => {
@@ -106,6 +123,12 @@ const authSlice = createSlice({
                 state.error = action.payload;
                 state.isLoading = false;
                 state.isAuthenticated = false;
+            })
+            .addCase(fetchUsersWithRoles.fulfilled, (state, action) => {
+                state.users = action.payload;
+              })
+            .addCase(fetchUsersWithRoles.rejected, (state, action) => {
+                state.error = action.payload;
             });
     }
 });

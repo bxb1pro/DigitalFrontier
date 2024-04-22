@@ -134,6 +134,27 @@ namespace DigitalGamesMarketplace2.Controllers
             });
         }
 
+        [HttpGet("users")]
+        // [Authorize(Roles = "Admin, SuperAdmin")]
+        public async Task<IActionResult> GetUsersWithRoles()
+        {
+            var users = _userManager.Users.ToList();
+            var userList = new List<object>();
+
+            foreach (var user in users)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                userList.Add(new 
+                {
+                    Email = user.Email,
+                    Roles = roles
+                });
+            }
+
+            _logger.LogInformation("Retrieved list of all users with their roles.");
+            return Ok(userList);
+        }
+
 
         [HttpPost("login")] // Additional logging for login success/failure
         public async Task<IActionResult> Login(AuthModel model)
