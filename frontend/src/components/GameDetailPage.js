@@ -7,19 +7,30 @@ import './GameDetailPage.css';
 import DeveloperMap from './DeveloperMap';
 import { Modal, Button } from 'react-bootstrap';
 import { addToBasket } from '../features/basket/basketSlice';
+import { fetchGameById } from '../features/games/gamesSlice';
 
 function GameDetailPage() {
   const { gameId } = useParams();
-  const game = useSelector(state => state.games.games.find(g => g.id === parseInt(gameId, 10)));
+  const game = useSelector(state => 
+    state.games.games.find(g => g.id === parseInt(gameId, 10))
+  );
   console.log("Selected Game:", game);
   const dispatch = useDispatch();
   const developers = useSelector(state => state.developers.developers);
   const [selectedImage, setSelectedImage] = useState('');
   const role = useSelector(state => state.auth.role);
   const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+  const gameStatus = useSelector(state => state.games.status); // Use game loading status to handle UI states
 
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
+
+  useEffect(() => {
+    if (!game && gameId) {
+        console.log(`Fetching game data for ID: ${gameId}`);
+        dispatch(fetchGameById(parseInt(gameId, 10)));
+    }
+  }, [game, gameId, dispatch]); // Depend on gameId to refetch if the ID changes
 
   // Initialize selectedImage with the first image when game data is loaded
   useEffect(() => {
@@ -43,6 +54,14 @@ function GameDetailPage() {
   const handleCloseModal = () => {
     setShowModal(false);
   };
+
+  if (gameStatus === 'loading') {
+    return <div>Loading...</div>;
+  }
+
+  if (gameStatus === 'failed') {
+      return <div>Game not found</div>;
+  }
 
   if (!game) {
       return <div>Game not found</div>;

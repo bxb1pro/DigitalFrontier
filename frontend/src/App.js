@@ -6,7 +6,6 @@ import { fetchDevelopers } from './features/developers/developersSlice';
 import Header from './components/Header';
 import HomePage from './components/HomePage';
 import GameDetailPage from './components/GameDetailPage';
-import Games from './components/Games';
 import Login from './components/Login';
 import Account from './components/Account';
 import Purchases from './components/Purchases';
@@ -68,7 +67,6 @@ function App() {
           <Route path="/account" element={<PrivateRoute element={Account} roles={['SuperAdmin', 'Admin', 'User']} />} />
           <Route path="/purchases" element={<PrivateRoute element={Purchases} roles={['SuperAdmin', 'Admin', 'User']} />} />
           <Route path="/gamedetailpage" element={<GameDetailPage />} />
-          <Route path="/games" element={<Games />} />
           <Route path="/register" element={<Register />} />
           <Route path="/edit/:gameId" element={<PrivateRoute element={EditGame} roles={['SuperAdmin', 'Admin']} />} />
           {/* <Route path="/add-game" element={<AddGame />} /> */}

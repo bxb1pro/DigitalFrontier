@@ -39,8 +39,10 @@ export const fetchGameById = createAsyncThunk(
   async (gameId, { rejectWithValue }) => {
     try {
       const response = await axios.get(`${API_URL}/${gameId}`);
+      console.log("API Response for Game:", response.data);  // Check the API response structure
       return response.data;
     } catch (error) {
+      console.error("Fetch game by ID failed:", error);
       return rejectWithValue(error.toString());
     }
   }
@@ -99,6 +101,32 @@ const gamesSlice = createSlice({
           developer: action.payload.developerId
         });
       })
+      .addCase(fetchGameById.fulfilled, (state, action) => {
+        const existingIndex = state.games.findIndex(g => g.id === action.payload.gameId);
+        if (existingIndex !== -1) {
+            // Update the existing game
+            state.games[existingIndex] = {
+                ...state.games[existingIndex],
+                ...action.payload,
+                images: [action.payload.imageName, ...(action.payload.additionalImages || [])],
+                developer: action.payload.developerId
+            };
+        } else {
+            // Add new game if it doesn't exist
+            const newGame = {
+                id: action.payload.gameId,
+                title: action.payload.name,
+                genre: action.payload.genre,
+                price: action.payload.price,
+                releaseDate: action.payload.releaseDate,
+                imageName: action.payload.imageName,
+                description: action.payload.description,
+                images: [action.payload.imageName, ...(action.payload.additionalImages || [])],
+                developer: action.payload.developerId
+            };
+            state.games.push(newGame);
+        }
+    })
       .addCase(deleteGame.fulfilled, (state, action) => {
         state.games = state.games.filter(game => game.id !== action.meta.arg);
       })

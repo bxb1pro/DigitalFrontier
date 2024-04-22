@@ -1,37 +1,62 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 function DeveloperMap({ latitude, longitude, developerName }) {
     const mapRef = useRef(null);
+    const [isMapLoaded, setMapLoaded] = useState(false);
+
+    // Dynamically load the Google Maps script
+    useEffect(() => {
+        if (!window.google) {
+            const script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.src = `https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap`;
+            script.async = true;
+            script.defer = true;
+            document.head.appendChild(script);
+
+            window.initMap = () => setMapLoaded(true);
+
+            script.onerror = () => {
+                console.error('Google Maps script failed to load.');
+                setMapLoaded(false);
+            };
+
+            return () => {
+                document.head.removeChild(script);
+                window.initMap = undefined;
+            };
+        } else {
+            setMapLoaded(true);
+        }
+    }, []);
 
     useEffect(() => {
-        if (mapRef.current && latitude && longitude) {
-            // Initialize the map
+        if (isMapLoaded && mapRef.current && latitude && longitude) {
             const map = new window.google.maps.Map(mapRef.current, {
                 center: { lat: latitude, lng: longitude },
                 zoom: 8,
             });
 
-            // Create a marker
             const marker = new window.google.maps.Marker({
                 position: { lat: latitude, lng: longitude },
-                map: map,
-                title: 'Developer Location', // Title to show on hover
+                map,
+                title: 'Developer Location',
             });
 
-            // Create an InfoWindow
             const infoWindow = new window.google.maps.InfoWindow({
-                content: `<h4>${developerName} HQ</h4>` // Custom content
+                content: `<h4>${developerName} HQ</h4>`,
             });
 
-            // Open the InfoWindow immediately without waiting for marker click
             infoWindow.open(map, marker);
-
-            // Optionally, you can still add a listener if you want the InfoWindow to be able to reopen if it is closed
             marker.addListener("click", () => {
                 infoWindow.open(map, marker);
             });
         }
-    }, [latitude, longitude, developerName]);  // React to changes in these props
+    }, [isMapLoaded, latitude, longitude, developerName]);
+
+    if (!isMapLoaded) {
+        return <div>Loading map...</div>;
+    }
 
     return <div ref={mapRef} style={{ height: '400px', width: '100%' }} />;
 }
