@@ -20,17 +20,20 @@ function GameDetailPage() {
   const [selectedImage, setSelectedImage] = useState('');
   const role = useSelector(state => state.auth.role);
   const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
-  const gameStatus = useSelector(state => state.games.status); // Use game loading status to handle UI states
 
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (!game && gameId) {
-        console.log(`Fetching game data for ID: ${gameId}`);
-        dispatch(fetchGameById(parseInt(gameId, 10)));
+    if (!game) {
+      setIsLoading(true);  // Set loading state locally
+      dispatch(fetchGameById(parseInt(gameId, 10)))
+        .unwrap()
+        .then(() => setIsLoading(false))
+        .catch(() => setIsLoading(false));  // Reset loading state after fetch
     }
-  }, [game, gameId, dispatch]); // Depend on gameId to refetch if the ID changes
+  }, [gameId, game, dispatch]);
 
   // Initialize selectedImage with the first image when game data is loaded
   useEffect(() => {
@@ -55,16 +58,12 @@ function GameDetailPage() {
     setShowModal(false);
   };
 
-  if (gameStatus === 'loading') {
+  if (isLoading) {
     return <div>Loading...</div>;
   }
 
-  if (gameStatus === 'failed') {
-      return <div>Game not found</div>;
-  }
-
   if (!game) {
-      return <div>Game not found</div>;
+    return <div>Game not found</div>;
   }
 
   developers.forEach(dev => console.log(dev.developerId, "Type:", typeof dev.developerId));  // Note the property change
