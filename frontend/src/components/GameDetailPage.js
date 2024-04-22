@@ -7,10 +7,13 @@ import './GameDetailPage.css';
 import DeveloperMap from './DeveloperMap';
 import { Modal, Button } from 'react-bootstrap';
 import { addToBasket } from '../features/basket/basketSlice';
+import { fetchGameById } from '../features/games/gamesSlice';
 
 function GameDetailPage() {
   const { gameId } = useParams();
-  const game = useSelector(state => state.games.games.find(g => g.id === parseInt(gameId, 10)));
+  const game = useSelector(state => 
+    state.games.games.find(g => g.id === parseInt(gameId, 10))
+  );
   console.log("Selected Game:", game);
   const dispatch = useDispatch();
   const developers = useSelector(state => state.developers.developers);
@@ -20,6 +23,17 @@ function GameDetailPage() {
 
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (!game) {
+      setIsLoading(true);  // Set loading state locally
+      dispatch(fetchGameById(parseInt(gameId, 10)))
+        .unwrap()
+        .then(() => setIsLoading(false))
+        .catch(() => setIsLoading(false));  // Reset loading state after fetch
+    }
+  }, [gameId, game, dispatch]);
 
   // Initialize selectedImage with the first image when game data is loaded
   useEffect(() => {
@@ -44,8 +58,12 @@ function GameDetailPage() {
     setShowModal(false);
   };
 
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
   if (!game) {
-      return <div>Game not found</div>;
+    return <div>Game not found</div>;
   }
 
   developers.forEach(dev => console.log(dev.developerId, "Type:", typeof dev.developerId));  // Note the property change

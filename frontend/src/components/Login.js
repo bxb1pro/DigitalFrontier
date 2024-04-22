@@ -4,17 +4,19 @@ import { loginUser } from '../features/auth/authSlice';
 import { Link, useNavigate } from 'react-router-dom';
 import AuthenticationForm from './AuthenticationForm';
 import { Button } from 'react-bootstrap';
+import { fetchWishlist } from '../features/wishlist/wishlistSlice';
 
 function Login() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { isAuthenticated, error, isLoading } = useSelector(state => state.auth); // Access the auth state including isLoading
+    const { isAuthenticated, error, isLoading, customerId } = useSelector(state => state.auth); // Access the auth state including isLoading
 
     useEffect(() => {
-        if (isAuthenticated && !error && !isLoading) {
+        if (isAuthenticated && !error && !isLoading && customerId) {
+            dispatch(fetchWishlist(customerId)); // Fetch wishlist once the user is authenticated and customerId is available
             navigate('/'); // Redirect to the homepage on successful login
         }
-    }, [isAuthenticated, error, isLoading, navigate]);
+    }, [isAuthenticated, error, isLoading, customerId, dispatch, navigate]);
 
     const handleLoginSubmit = (credentials) => {
         dispatch(loginUser(credentials))

@@ -85,12 +85,13 @@ const authSlice = createSlice({
     initialState,
     reducers: {
         logout(state) {
-            console.log('Logging out user');
+            console.log('Logging out user, clearing state');
             localStorage.removeItem('token');
             state.user = null;
             state.token = null;
             state.isAuthenticated = false;
             state.customerId = null; // Clear customerId on logout
+            state.role = null; // Make sure this is reset
         },
         // error checking, remove after
         setUserDetailsFromToken(state, action) {

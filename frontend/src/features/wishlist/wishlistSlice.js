@@ -1,6 +1,7 @@
 // src/features/wishlist/wishlistSlice.js
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { logout } from '../auth/authSlice';
 
 const API_WISHLIST_URL = 'http://localhost:5004/api/Wishlists';
 const API_GAME_WISHLISTS_URL = 'http://localhost:5004/api/GameWishlists';
@@ -85,6 +86,10 @@ const wishlistSlice = createSlice({
       })
       .addCase(clearWishlist.fulfilled, (state) => {
         state.items = []; // Clears the wishlist
+      })
+      .addCase(logout, (state) => {
+        state.items = []; // Also clear the wishlist on logout
+        state.status = 'idle';
       });
   }
 });
