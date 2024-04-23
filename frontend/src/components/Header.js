@@ -1,20 +1,18 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import Logout from './Logout';
-import { Dropdown } from 'react-bootstrap';
+import { Navbar, Nav, NavDropdown, Form, FormControl, Button } from 'react-bootstrap';
 import { BsSearch, BsCart4 } from 'react-icons/bs';
+import Logout from './Logout';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './Header.css';
 
 const Header = ({ onSearchChange, onGenreChange, genre }) => {
-    // useSelector is hook to extract data from Redux store state and re-render if state changes
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
-    const basketItems = useSelector(state => state.basket.items); 
+    const basketItems = useSelector(state => state.basket.items);
 
     const [searchInput, setSearchInput] = useState('');
     const [selectedGenre, setSelectedGenre] = useState(genre);
-
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -25,8 +23,7 @@ const Header = ({ onSearchChange, onGenreChange, genre }) => {
         }
     };
 
-    const handleGenreChange = (event) => {
-        const newGenre = event.target.textContent;
+    const handleGenreChange = (newGenre) => {
         setSelectedGenre(newGenre);
         onGenreChange(newGenre);
     };
@@ -54,79 +51,57 @@ const Header = ({ onSearchChange, onGenreChange, genre }) => {
 
     return (
         <>
-            <nav className="navbar navbar-expand-lg navbar-custom">
-                <div className="container-fluid">
-                    <Link className="navbar-brand" to="/" onClick={resetSearch}>
-                        <img src="/images/dfglogo.jpeg" alt="Digital Frontier Logo" />
-                    </Link>
-                    <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                        <span className="navbar-toggler-icon"></span>
-                    </button>
-                    <div className="collapse navbar-collapse" id="navbarNav">
-                        <form className="search-container" onSubmit={handleSubmit}>
-                            <Dropdown>
-                            <Dropdown.Toggle variant="" id="dropdown-basic" className="custom-dropdown-toggle">
-                                    {selectedGenre}
-                                </Dropdown.Toggle>
-
-                                <Dropdown.Menu>
-                                    <Dropdown.Item onClick={handleGenreChange}>All Genres</Dropdown.Item>
-                                    <Dropdown.Item onClick={handleGenreChange}>Action</Dropdown.Item>
-                                    <Dropdown.Item onClick={handleGenreChange}>Action RPG</Dropdown.Item>
-                                    <Dropdown.Item onClick={handleGenreChange}>Battle Royale</Dropdown.Item>
-                                    <Dropdown.Item onClick={handleGenreChange}>Fighting</Dropdown.Item>
-                                    <Dropdown.Item onClick={handleGenreChange}>FPS</Dropdown.Item>
-                                    <Dropdown.Item onClick={handleGenreChange}>Horror</Dropdown.Item>
-                                    <Dropdown.Item onClick={handleGenreChange}>MMORPG</Dropdown.Item>
-                                    <Dropdown.Item onClick={handleGenreChange}>MOBA</Dropdown.Item>
-                                    <Dropdown.Item onClick={handleGenreChange}>Sports</Dropdown.Item>
-                                </Dropdown.Menu>
-                            </Dropdown>
-                            <input
-                                className="form-control"
-                                type="search"
-                                placeholder="What game are you looking for?"
-                                aria-label="Search"
-                                value={searchInput}
-                                onChange={handleInputChange}
-                            />
-                            <button className="btn" type="submit">
-                                <BsSearch />
-                            </button>
-                        </form>
-                        <ul className="navbar-nav ms-auto">
-                            <li className="nav-item">
-                                <Link className="nav-link" to="/purchases">Purchases</Link>
-                            </li>
-                            <li className="nav-item">
-                                <Link className="nav-link" to="/account">
+            <Navbar collapseOnSelect expand="lg" className="navbar-custom">
+                <Navbar.Brand as={Link} to="/" onClick={resetSearch}>
+                    <img src="/images/dfglogo.jpeg" alt="Digital Frontier Logo" height="50" />
+                </Navbar.Brand>
+                <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                <Navbar.Collapse id="responsive-navbar-nav">
+                    <Form inline onSubmit={handleSubmit} className="mx-auto search-container">
+                        <NavDropdown title={selectedGenre} id="dropdown-basic" className="custom-dropdown-toggle">
+                            <NavDropdown.Item onClick={() => handleGenreChange('All Genres')}>All Genres</NavDropdown.Item>
+                            <NavDropdown.Item onClick={() => handleGenreChange('Action')}>Action</NavDropdown.Item>
+                            <NavDropdown.Item onClick={() => handleGenreChange('Action RPG')}>Action RPG</NavDropdown.Item>
+                            <NavDropdown.Item onClick={() => handleGenreChange('Battle Royale')}>Battle Royale</NavDropdown.Item>
+                            <NavDropdown.Item onClick={() => handleGenreChange('Fighting')}>Fighting</NavDropdown.Item>
+                            <NavDropdown.Item onClick={() => handleGenreChange('FPS')}>FPS</NavDropdown.Item>
+                            <NavDropdown.Item onClick={() => handleGenreChange('Horror')}>Horror</NavDropdown.Item>
+                            <NavDropdown.Item onClick={() => handleGenreChange('MMORPG')}>MMORPG</NavDropdown.Item>
+                            <NavDropdown.Item onClick={() => handleGenreChange('MOBA')}>MOBA</NavDropdown.Item>
+                            <NavDropdown.Item onClick={() => handleGenreChange('Sports')}>Sports</NavDropdown.Item>
+                        </NavDropdown>
+                        <FormControl
+                            type="search"
+                            placeholder="What game are you looking for?"
+                            aria-label="Search"
+                            value={searchInput}
+                            onChange={handleInputChange}
+                            className="mr-sm-2"
+                        />
+                        <Button type="submit" variant="outline-success"><BsSearch /></Button>
+                    </Form>
+                    <Nav className="ms-auto">
+                        <Nav.Link as={Link} to="/purchases">Purchases</Nav.Link>
+                        {isAuthenticated ? (
+                            <>
+                                <Nav.Link as={Link} to="/account" className="nav-link">
                                     <i className="bi bi-person-fill"></i>
                                     <span className="account-text">Account</span>
-                                </Link>
-                                </li>
-                                {isAuthenticated ? (
-                                    <li className="nav-item" onClick={handleLogoutClick}>
-                                        <span className="nav-link" style={{ cursor: 'pointer' }}>Logout</span>
-                                    </li>
-                                ) : (
-                                    <li className="nav-item">
-                                        <Link className="nav-link" to="/login">Register / Login</Link>
-                                    </li>
-                                )}
-                                <li className="nav-item">
-                                    <Link className="nav-link" to="/basket">
-                                        <BsCart4 /> <span className="basket-item-count">{basketItems.length}</span>
-                                    </Link>
-                                </li>
-
-                        </ul>
-                    </div>
-                </div>
-            </nav>
+                                </Nav.Link>
+                                <Nav.Link onClick={handleLogoutClick} style={{ cursor: 'pointer' }}>Logout</Nav.Link>
+                            </>
+                        ) : (
+                            <Nav.Link as={Link} to="/login">Register / Login</Nav.Link>
+                        )}
+                        <Nav.Link as={Link} to="/basket">
+                            <BsCart4 /><span className="basket-item-count">{basketItems.length}</span>
+                        </Nav.Link>
+                    </Nav>
+                </Navbar.Collapse>
+            </Navbar>
             <Logout show={showLogoutModal} handleClose={handleCloseLogoutModal} />
         </>
     );
 };
 
 export default Header;
-
