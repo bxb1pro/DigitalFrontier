@@ -11,7 +11,6 @@ export const fetchWishlist = createAsyncThunk('wishlist/fetchWishlist', async (c
     const wishlistIdResp = await axios.get(`${API_WISHLIST_URL}/Customer/${customerId}/WishlistId`);
     const wishlistId = wishlistIdResp.data;
     const response = await axios.get(`${API_GAME_WISHLISTS_URL}/Wishlist/${wishlistId}`);
-    console.log("Fetched wishlist data:", response.data);
     return response.data;
   }
 );

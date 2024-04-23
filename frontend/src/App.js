@@ -23,16 +23,9 @@ function App() {
   const dispatch = useDispatch();
   const role = useSelector(state => state.auth.role);
 
-  // Fetch developers data when the app loads
   useEffect(() => {
     dispatch(fetchDevelopers());
   }, [dispatch]);
-
-  console.log("Component Check: Account", <Account />);
-  console.log("Component Check: Purchases", <Purchases />);
-  console.log("Component Check: EditGame", <EditGame />);
-  console.log("Component Check: AddGame", <AddGame />);
-  console.log("Component Check: RemoveGame", <RemoveGame />);
 
   // Declare the searchTerm state with its setter function
   const [searchTerm, setSearchTerm] = useState('');

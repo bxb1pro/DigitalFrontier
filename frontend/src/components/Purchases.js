@@ -15,11 +15,10 @@ function Purchases() {
       dispatch(fetchTransactionsByCustomer(customerId))
         .unwrap()
         .then(data => {
-          console.log("Fetched Transactions:", data); // Log fetched transactions
-          // Initialize enriched transactions
+          // Initialise enriched transactions
           setEnrichedTransactions(data.map(transaction => ({
             ...transaction,
-            game: null // Initialize game as null
+            game: null // Initialise game as null
           })));
         })
         .catch((error) => console.error("Fetching transactions failed:", error));
@@ -44,9 +43,6 @@ function Purchases() {
 
   if (status === 'loading') return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
-
-  console.log("Transactions before rendering:", transactions);
-  console.log("Enriched Transactions:", enrichedTransactions);
 
   return (
     <div className="container mt-5">

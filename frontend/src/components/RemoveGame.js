@@ -12,7 +12,6 @@ function RemoveGame() {
     const [isLoading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Assuming you have a way to fetch a single game by ID
         const fetchGame = async () => {
             const response = await fetch(`http://localhost:5004/api/games/${gameId}`);
             const data = await response.json();

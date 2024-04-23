@@ -21,8 +21,6 @@ function HomePage({ searchTerm, genre }) {
     const location = useLocation();
     const needUpdate = useSelector(state => state.games.needUpdate); 
 
-    console.log("HomePage rendering, needUpdate:", needUpdate);
-
     const isAdmin = useMemo(() => ['SuperAdmin', 'Admin'].includes(role), [role]);
 
     const [showCustomModal, setShowCustomModal] = useState(false);
@@ -39,18 +37,9 @@ function HomePage({ searchTerm, genre }) {
         });
     }, [rawWishlist, games]);
 
-    console.log('Wishlist State:', wishlist);
-    console.log('HomePage Rendered: Current Customer ID:', customerId);
-
     useEffect(() => {
-        console.log("HomePage useEffect triggered.");
-        console.log("Current game status: ", gameStatus);
-        console.log("Need update flag: ", needUpdate);
-        console.log("Location path: ", location.pathname);
-    
         const fetchData = async () => {
             try {
-                console.log("Fetching games...");
                 await dispatch(fetchGames());
                 if (customerId) {
                     dispatch(fetchWishlist(customerId));
@@ -58,7 +47,6 @@ function HomePage({ searchTerm, genre }) {
             } catch (error) {
                 console.error("Error fetching games:", error);
             } finally {
-                console.log("Before resetting needUpdate, current flag:", needUpdate);
                 // Reset the flag only if the fetch was successful
                 if (gameStatus === 'succeeded') {
                     dispatch(updateNeeded(false)); 
@@ -71,22 +59,17 @@ function HomePage({ searchTerm, genre }) {
             fetchData();
         }
 
-        // Add logging to check if needUpdate is updated after editing a game
-        console.log("Need update flag after editing a game:", needUpdate);
-
         }, [customerId, gameStatus, dispatch, location.pathname, needUpdate]);
 
 
     const handleAddToWishlist = game => {
         if (!customerId) {
-            console.error('Customer ID is undefined at the time of adding to wishlist');
             setModalMessage('Customer ID is undefined.');
             setShowCustomModal(true);
             return; // Optionally handle this case in your UI
         }
         const isAlreadyAdded = wishlist.some(wishItem => wishItem.gameId === game.id);
         if (isAlreadyAdded) {
-            console.error('Game is already in the wishlist');
             setModalMessage('This game is already in your wishlist.');
             setShowCustomModal(true);
             return;

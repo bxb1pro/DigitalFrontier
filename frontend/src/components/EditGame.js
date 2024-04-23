@@ -58,10 +58,8 @@ function EditGame() {
             ReleaseDate: new Date(gameData.releaseDate).toISOString(), // Ensuring date is in correct format
             DeveloperId: parseInt(gameData.developerId, 10)
         };
-        console.log("Updated game data being sent:", updatedGameData);
         dispatch(editGame({ gameId, gameData: updatedGameData }))
-            .then((result) => {
-                console.log("Edit game action result:", result); // Log the result of dispatching editGame
+            .then(() => {
                 navigate('/');
             })
             .catch((error) => {

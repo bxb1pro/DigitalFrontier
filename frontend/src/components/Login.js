@@ -30,8 +30,7 @@ function Login() {
         dispatch(loginUser(credentials))
             .unwrap()
             .then(() => {
-                console.log('Login successful, should navigate now.');
-                navigate('/'); // This might need to be placed here to ensure it happens after login is successful
+                navigate('/');
             })
             .catch((error) => {
                 console.error('Login failed:', error);

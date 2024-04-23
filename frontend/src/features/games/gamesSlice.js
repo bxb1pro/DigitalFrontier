@@ -7,7 +7,6 @@ const API_URL = 'http://localhost:5004/api/games';
 
 export const fetchGames = createAsyncThunk('games/fetchGames', async () => {
   const response = await axios.get(API_URL);
-  console.log("Fetched games:", response.data); 
   return response.data;
 });
 
@@ -39,7 +38,6 @@ export const fetchGameById = createAsyncThunk(
   async (gameId, { rejectWithValue }) => {
     try {
       const response = await axios.get(`${API_URL}/${gameId}`);
-      console.log("API Response for Game:", response.data);  // Check the API response structure
       return response.data;
     } catch (error) {
       console.error("Fetch game by ID failed:", error);
@@ -71,7 +69,6 @@ const gamesSlice = createSlice({
       })
       .addCase(fetchGames.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        console.log("Games data after fetch:", action.payload);
         state.games = action.payload.map(game => ({
           id: game.gameId,
           title: game.name,

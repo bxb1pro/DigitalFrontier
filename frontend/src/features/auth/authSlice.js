@@ -5,14 +5,13 @@ import { jwtDecode } from 'jwt-decode';
 
 const getTokenFromStorage = () => {
     const token = localStorage.getItem('token');
-    console.log('Token from storage:', token);
+    console.log('Token received from storage:', token);
     return token;
 };
 
 const decodeToken = (token) => {
     try {
         const decoded = jwtDecode(token);
-        console.log('Decoded JWT:', decoded);
         return decoded;
     } catch (error) {
         console.error('Failed to decode token:', error);
@@ -46,7 +45,7 @@ export const fetchUsersWithRoles = createAsyncThunk(
         isLoading: false,
         error: null,
         role: decodedToken ? decodedToken["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] : null,
-        customerId: decodedToken ? decodedToken.CustomerId : null, // Assuming 'customerId' is the claim name
+        customerId: decodedToken ? decodedToken.CustomerId : null,
         users: [] 
     };
   
@@ -64,7 +63,6 @@ export const fetchUsersWithRoles = createAsyncThunk(
                     customerId: decoded.CustomerId
                 };
             } catch (error) {
-                // Customize the error message for incorrect credentials
                 const message = error.response && error.response.status === 401 ? 'Invalid email or password.' : error.response.data;
                 return rejectWithValue(message);
             }
@@ -78,7 +76,6 @@ export const fetchUsersWithRoles = createAsyncThunk(
                 const response = await axios.post('http://localhost:5004/api/Account/register', userData);
                 return response.data;
             } catch (error) {
-                // Customize the error message for existing email
                 const message = error.response && error.response.status === 409 ? 'Email already exists.' : error.response.data;
                 return rejectWithValue(message);
             }
@@ -109,7 +106,7 @@ const authSlice = createSlice({
         },
         // error checking, remove after
         setUserDetailsFromToken(state, action) {
-            console.log('Setting user details from token:', action.payload); // Ensure customerId is in the payload
+            console.log('Setting user details from token:', action.payload);
             state.user = action.payload.sub;
             state.customerId = action.payload.customerId;
             state.isAuthenticated = true;

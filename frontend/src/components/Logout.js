@@ -11,7 +11,6 @@ function Logout({ show, handleClose }) {
 
     const handleLogout = () => {
         dispatch(logout());  // Dispatch the logout action to reset the state
-        console.log('User has logged out');
         navigate('/');  // Redirect to home page after logout
         handleClose();  // Close the modal
         dispatch(clearBasket()); // Clearing one use of local storage in program

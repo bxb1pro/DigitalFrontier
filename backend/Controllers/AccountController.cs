@@ -130,7 +130,7 @@ namespace DigitalGamesMarketplace2.Controllers
 
             return Ok(new {
                 Email = user.Email,
-                Roles = roles // Typically, roles are a collection so you might want to return it as an array or list
+                Roles = roles
             });
         }
 

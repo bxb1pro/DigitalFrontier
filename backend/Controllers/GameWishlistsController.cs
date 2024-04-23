@@ -108,16 +108,12 @@ namespace DigitalGamesMarketplace2.Controllers
                 return CreatedAtAction("GetGameWishlist", new { id = gameWishlist.GameWishlistId }, gameWishlist);
             }
             catch (DbUpdateException ex)
-            {
-                // Log the error including the values that failed to help diagnose the issue
-                _logger.LogError(ex, $"Failed to insert into GameWishlists. GameId: {gameWishlist.GameId}, WishlistId: {gameWishlist.WishlistId}");
-                
+            {  
                 if (ex.InnerException is Npgsql.PostgresException pgEx && pgEx.SqlState == "23503")
                 {
                     return BadRequest("Failed to add to wishlist: the specified game or wishlist does not exist.");
                 }
 
-                // General error response if it's not a known issue
                 return StatusCode(500, "An error occurred while creating the game wishlist. Please try again later.");
             }
         }

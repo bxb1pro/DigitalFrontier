@@ -14,7 +14,6 @@ function GameDetailPage() {
   const game = useSelector(state => 
     state.games.games.find(g => g.id === parseInt(gameId, 10))
   );
-  console.log("Selected Game:", game);
   const dispatch = useDispatch();
   const developers = useSelector(state => state.developers.developers);
   const [selectedImage, setSelectedImage] = useState('');
@@ -66,10 +65,7 @@ function GameDetailPage() {
     return <div>Game not found</div>;
   }
 
-  developers.forEach(dev => console.log(dev.developerId, "Type:", typeof dev.developerId));  // Note the property change
-
   const developer = developers.find(d => {
-    console.log(`Comparing ${d.developerId} (type ${typeof d.developerId}) to ${game.developer} (parsed type ${typeof parseInt(game.developer, 10)})`);
     return d.developerId === parseInt(game.developer, 10);
   });
 
