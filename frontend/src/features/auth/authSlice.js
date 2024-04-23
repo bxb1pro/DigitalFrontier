@@ -50,26 +50,40 @@ export const fetchUsersWithRoles = createAsyncThunk(
         users: [] 
     };
   
-    export const loginUser = createAsyncThunk('auth/login', async (userData, { rejectWithValue }) => {
-        console.log('Login attempt with:', userData);
-        try {
-            const response = await axios.post('http://localhost:5004/api/Account/login', userData);
-            console.log('Login response:', response);
-            localStorage.setItem('token', response.data.token);
-            const decoded = decodeToken(response.data.token);
-            console.log('Decoded JWT post-login:', decoded);
-    
-            return {
-                user: decoded.sub,
-                role: decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"],
-                token: response.data.token,
-                customerId: decoded.CustomerId // Capture customerId from the token
-            };
-        } catch (error) {
-            console.error('Login failed:', error.response.data);
-            return rejectWithValue(error.response.data);
+    export const loginUser = createAsyncThunk(
+        'auth/login',
+        async (userData, { rejectWithValue }) => {
+            try {
+                const response = await axios.post('http://localhost:5004/api/Account/login', userData);
+                localStorage.setItem('token', response.data.token);
+                const decoded = decodeToken(response.data.token);
+                return {
+                    user: decoded.sub,
+                    role: decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"],
+                    token: response.data.token,
+                    customerId: decoded.CustomerId
+                };
+            } catch (error) {
+                // Customize the error message for incorrect credentials
+                const message = error.response && error.response.status === 401 ? 'Invalid email or password.' : error.response.data;
+                return rejectWithValue(message);
+            }
         }
-    });
+    );
+
+    export const registerUser = createAsyncThunk(
+        'auth/register',
+        async (userData, { rejectWithValue }) => {
+            try {
+                const response = await axios.post('http://localhost:5004/api/Account/register', userData);
+                return response.data;
+            } catch (error) {
+                // Customize the error message for existing email
+                const message = error.response && error.response.status === 409 ? 'Email already exists.' : error.response.data;
+                return rejectWithValue(message);
+            }
+        }
+    );
 
     export const fetchUserDetails = createAsyncThunk('auth/fetchUserDetails', async (_, { getState, rejectWithValue }) => {
         const { token } = getState().auth;
@@ -101,6 +115,9 @@ const authSlice = createSlice({
             state.isAuthenticated = true;
             state.role = action.payload.role;
         },
+        clearErrors(state) {
+            state.error = null;
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -130,9 +147,21 @@ const authSlice = createSlice({
               })
             .addCase(fetchUsersWithRoles.rejected, (state, action) => {
                 state.error = action.payload;
+            })
+            .addCase(registerUser.fulfilled, (state, action) => {
+                console.log('Registration successful:', action.payload);
+                state.isAuthenticated = false; // Set to false to require separate login
+                state.isLoading = false;
+                state.error = null;
+            })
+            .addCase(registerUser.rejected, (state, action) => {
+                console.log('Registration failed:', action.payload);
+                state.error = action.payload;
+                state.isLoading = false;
+                state.isAuthenticated = false; // Keep as false since registration failed
             });
     }
 });
 
-export const { logout } = authSlice.actions;
+export const { logout, clearErrors } = authSlice.actions;
 export default authSlice.reducer;

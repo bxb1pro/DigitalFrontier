@@ -1,37 +1,45 @@
-import React from 'react';
-import axios from 'axios';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import AuthenticationForm from './AuthenticationForm';
+import { registerUser } from '../features/auth/authSlice'; 
+import { clearErrors } from '../features/auth/authSlice';
 
 function Register() {
+    const dispatch = useDispatch();
     const navigate = useNavigate();
+    const { error } = useSelector(state => state.auth); // Removed unused `isAuthenticated`
 
-    const handleRegistrationSubmit = async ({ email, password, passwordConfirm }) => {
+    const handleRegistrationSubmit = ({ email, password, passwordConfirm }) => {
         if (password !== passwordConfirm) {
-            alert("Passwords don't match!"); // Keep this alert because it is necessary for user feedback
+            alert("Passwords don't match!"); // Consider using local state to handle this error as well
             return;
         }
-        try {
-            await axios.post('http://localhost:5004/api/account/register', { email, password });
-            navigate('/');
-        } catch (error) {
-            // Logging the error to the console
-            console.log(error.response.data); 
-            // Extracting error message to display, if available
-            let errorMessage = 'Failed to register.';
-            if (error.response && error.response.data) {
-                // If the server response contains an error message, include it in the alert
-                errorMessage += ' ' + (error.response.data.message || error.response.data);
-            }
-            alert(errorMessage); // Display error messages if registration fails
-        }
+
+        dispatch(registerUser({ email, password }))
+            .unwrap()
+            .then(() => {
+                navigate('/'); // Navigate on successful registration
+            })
+            .catch((error) => {
+                console.error('Registration failed:', error);
+                // Optionally update local error state here if needed
+            });
     };
+
+    useEffect(() => {
+        return () => {
+            // Clear errors when the component unmounts
+            dispatch(clearErrors());
+        };
+    }, [dispatch]);
+
 
     return (
         <div className="container mt-5">
             <h2>Register Page</h2>
             <p>Please enter your registration details.</p>
-            <AuthenticationForm isRegister={true} onSubmit={handleRegistrationSubmit} />
+            <AuthenticationForm isRegister={true} onSubmit={handleRegistrationSubmit} error={error} />
         </div>
     );
 }
