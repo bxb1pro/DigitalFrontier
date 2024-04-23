@@ -19,7 +19,7 @@ function Register() {
         dispatch(registerUser({ email, password }))
             .unwrap()
             .then(() => {
-                navigate('/'); // Navigate on successful registration
+                navigate('/login'); // Navigate to login page on successful registration
             })
             .catch((error) => {
                 console.error('Registration failed:', error);

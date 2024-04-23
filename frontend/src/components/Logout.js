@@ -3,6 +3,7 @@ import { Modal, Button } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { logout } from '../features/auth/authSlice';
+import { clearBasket } from '../features/basket/basketSlice';
 
 function Logout({ show, handleClose }) {
     const dispatch = useDispatch();
@@ -13,6 +14,7 @@ function Logout({ show, handleClose }) {
         console.log('User has logged out');
         navigate('/');  // Redirect to home page after logout
         handleClose();  // Close the modal
+        dispatch(clearBasket()); // Clearing one use of local storage in program
     };
 
     return (

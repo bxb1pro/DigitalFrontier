@@ -6,6 +6,8 @@ import { Button, Modal } from 'react-bootstrap';
 import { shallowEqual } from 'react-redux';
 import './Basket.css';
 
+// Uses local storage rather than ---
+
 const Basket = () => {
   const { items: basketItems, customerId } = useSelector(state => ({
     items: state.basket.items,
