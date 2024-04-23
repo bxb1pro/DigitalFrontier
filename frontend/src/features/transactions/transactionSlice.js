@@ -1,4 +1,3 @@
-// src/features/transactions/transactionSlice.js
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 
@@ -12,46 +11,62 @@ export const postTransaction = createAsyncThunk(
       });
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      console.error("Failed to post transaction:", {
+        errorData: error.response?.data,
+        status: error.response?.status,
+        message: error.message
+      });
+      return rejectWithValue(error.response?.data || 'Unknown error during transaction posting');
     }
   }
 );
 
 export const postAllTransactions = createAsyncThunk(
-    'transactions/postAllTransactions',
-    async (_, { getState, dispatch }) => {
-      const { basket, auth } = getState();
-      const results = [];
-      for (const item of basket.items) {
-        const transactionData = {
-          GameId: item.id,
-          CustomerId: auth.customerId,
-          Amount: item.price,
-          TransactionDate: new Date().toISOString(),
-        };
-        // Post each transaction and wait for the response before continuing
+  'transactions/postAllTransactions',
+  async (_, { getState, dispatch }) => {
+    const { basket, auth } = getState();
+    const results = [];
+    for (const item of basket.items) {
+      const transactionData = {
+        GameId: item.id,
+        CustomerId: auth.customerId,
+        Amount: item.price,
+        TransactionDate: new Date().toISOString(),
+      };
+      try {
         const result = await dispatch(postTransaction(transactionData));
         results.push(result);
+      } catch (error) {
+        console.error("Error posting transaction for item:", item.id, {
+          error: error.message,
+          transactionData
+        });
       }
-      return results;
     }
-  );
+    return results;
+  }
+);
 
 export const fetchTransactionsByCustomer = createAsyncThunk(
-    'transactions/fetchByCustomer',
-    async (customerId, { getState, rejectWithValue }) => {
-      const { auth } = getState();
-      try {
-        const response = await axios.get(`http://localhost:5004/api/Transactions/Customer/${customerId}`, {
-          headers: { Authorization: `Bearer ${auth.token}` },
-        });
-        return response.data;
-      } catch (error) {
-        return rejectWithValue(error.response.data);
-      }
+  'transactions/fetchByCustomer',
+  async (customerId, { getState, rejectWithValue }) => {
+    const { auth } = getState();
+    try {
+      const response = await axios.get(`http://localhost:5004/api/Transactions/Customer/${customerId}`, {
+        headers: { Authorization: `Bearer ${auth.token}` },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Failed to fetch transactions by customer:", {
+        customerId: customerId,
+        errorData: error.response?.data,
+        status: error.response?.status,
+        message: error.message
+      });
+      return rejectWithValue(error.response?.data || 'Unknown error fetching transactions');
     }
-  );
-
+  }
+);
 
 const transactionSlice = createSlice({
   name: 'transactions',

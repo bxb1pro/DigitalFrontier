@@ -1,4 +1,3 @@
-// GameForm.js
 import React, { useState } from 'react';
 
 function GameForm({ gameData, handleChange, handleSubmit }) {

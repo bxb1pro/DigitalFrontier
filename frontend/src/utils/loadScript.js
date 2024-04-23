@@ -1,4 +1,3 @@
-// src/utils/loadScript.js
 const loadScript = (src, position, id) => {
     if (!document.getElementById(id)) {
       const script = document.createElement('script');

@@ -1,4 +1,3 @@
-// src/features/wishlist/wishlistSlice.js
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { logout } from '../auth/authSlice';
@@ -7,13 +6,22 @@ const API_WISHLIST_URL = 'http://localhost:5004/api/Wishlists';
 const API_GAME_WISHLISTS_URL = 'http://localhost:5004/api/GameWishlists';
 
 
-export const fetchWishlist = createAsyncThunk('wishlist/fetchWishlist', async (customerId) => {
+export const fetchWishlist = createAsyncThunk('wishlist/fetchWishlist', async (customerId, { rejectWithValue }) => {
+  try {
     const wishlistIdResp = await axios.get(`${API_WISHLIST_URL}/Customer/${customerId}/WishlistId`);
     const wishlistId = wishlistIdResp.data;
     const response = await axios.get(`${API_GAME_WISHLISTS_URL}/Wishlist/${wishlistId}`);
     return response.data;
+  } catch (error) {
+    console.error("Failed to fetch wishlist:", {
+      customerId,
+      message: error.message,
+      response: error.response?.data,
+      status: error.response?.status
+    });
+    return rejectWithValue(error.response?.data || 'Failed to fetch wishlist');
   }
-);
+});
 
 export const addToWishlist = createAsyncThunk(
   'wishlist/addToWishlist',
@@ -23,12 +31,8 @@ export const addToWishlist = createAsyncThunk(
       const wishlistIdResponse = await axios.get(`${API_WISHLIST_URL}/Customer/${customerId}/WishlistId`);
       const wishlistId = wishlistIdResponse.data;
 
-      console.log('Fetched WishlistId:', wishlistId); // Log the fetched WishlistId
-
       // Send the request with the correct WishlistId
       const { data } = await axios.post(`${API_GAME_WISHLISTS_URL}`, { WishlistId: wishlistId, GameId: gameId });
-
-      console.log('Added game to wishlist:', data); // Log the response from adding the game to the wishlist
 
       return data;
     } catch (error) {
@@ -43,7 +47,13 @@ export const removeFromWishlist = createAsyncThunk('wishlist/removeFromWishlist'
     await axios.delete(`${API_GAME_WISHLISTS_URL}/${gameWishlistId}`);
     return gameWishlistId; // Return ID to remove from state
   } catch (error) {
-    return rejectWithValue(error.response.data);
+    console.error("Failed to remove game from wishlist:", {
+      gameWishlistId,
+      message: error.message,
+      response: error.response?.data,
+      status: error.response?.status
+    });
+    return rejectWithValue(error.response?.data || 'Failed to remove game from wishlist');
   }
 });
 
@@ -52,7 +62,13 @@ export const clearWishlist = createAsyncThunk('wishlist/clearWishlist', async (c
     await axios.delete(`${API_GAME_WISHLISTS_URL}/Clear/${customerId}`);
     return customerId; // Use customerId to confirm clearing in the state update
   } catch (error) {
-    return rejectWithValue(error.response.data);
+    console.error("Failed to clear wishlist:", {
+      customerId,
+      message: error.message,
+      response: error.response?.data,
+      status: error.response?.status
+    });
+    return rejectWithValue(error.response?.data || 'Failed to clear wishlist');
   }
 });
 

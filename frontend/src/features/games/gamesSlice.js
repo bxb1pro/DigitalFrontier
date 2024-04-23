@@ -1,18 +1,34 @@
-// src/features/games/gamesSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 // API endpoint
 const API_URL = 'http://localhost:5004/api/games';
 
-export const fetchGames = createAsyncThunk('games/fetchGames', async () => {
-  const response = await axios.get(API_URL);
-  return response.data;
+export const fetchGames = createAsyncThunk('games/fetchGames', async (_, { rejectWithValue }) => {
+  try {
+    const response = await axios.get(API_URL);
+    return response.data;
+  } catch (error) {
+    let errorInfo = error.response ? 
+      { status: error.response.status, data: error.response.data } : 
+      { message: "Network or server error occurred" };
+    console.error("Failed to fetch games:", errorInfo);
+    return rejectWithValue(errorInfo);
+  }
 });
 
-export const addGame = createAsyncThunk('games/addGame', async (gameData) => {
-  const response = await axios.post(API_URL, gameData);
-  return response.data;
+export const addGame = createAsyncThunk('games/addGame', async (gameData, { rejectWithValue }) => {
+  try {
+    const response = await axios.post(API_URL, gameData);
+    return response.data;
+  } catch (error) {
+    let errorInfo = error.response ? 
+      { status: error.response.status, data: error.response.data } : 
+      { message: error.message };
+
+    console.error("Failed to add game:", errorInfo);
+    return rejectWithValue(errorInfo);
+  }
 });
 
 export const deleteGame = createAsyncThunk('games/deleteGame', async (gameId, { rejectWithValue }) => {
@@ -20,7 +36,11 @@ export const deleteGame = createAsyncThunk('games/deleteGame', async (gameId, { 
     const response = await axios.delete(`${API_URL}/${gameId}`);
     return response.data;
   } catch (error) {
-    return rejectWithValue(error.response.data);
+    let errorInfo = error.response ? 
+      { status: error.response.status, data: error.response.data } : 
+      { message: error.message };
+    console.error("Failed to delete game:", errorInfo);
+    return rejectWithValue(errorInfo);
   }
 });
 
@@ -29,7 +49,11 @@ export const editGame = createAsyncThunk('games/editGame', async ({ gameId, game
     const response = await axios.put(`${API_URL}/${gameId}`, gameData);
     return response.data;
   } catch (error) {
-    return rejectWithValue(error.response.data);
+    let errorInfo = error.response ? 
+      { status: error.response.status, data: error.response.data } : 
+      { message: error.message };
+    console.error("Failed to edit game:", errorInfo);
+    return rejectWithValue(errorInfo);
   }
 });
 
@@ -135,7 +159,6 @@ const gamesSlice = createSlice({
         const index = state.games.findIndex(game => game.id === payload.id);
         if (index !== -1) {
             state.games[index] = {...state.games[index], ...payload};
-            console.log("Edit game fulfilled. Game updated: ", payload);
         }
         state.needUpdate = true; // Set needUpdate to true after editing a game
     })

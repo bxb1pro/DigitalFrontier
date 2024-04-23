@@ -1,5 +1,3 @@
-/* GameDetailPage.css */
-
 .game-detail-container {
     display: flex; /* Changed to flex for better control */
     gap: 50px;

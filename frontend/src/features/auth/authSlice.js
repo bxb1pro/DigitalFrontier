@@ -2,11 +2,13 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 
-
 const getTokenFromStorage = () => {
-    const token = localStorage.getItem('token');
-    console.log('Token received from storage:', token);
-    return token;
+    try {
+        return localStorage.getItem('token');
+    } catch (error) {
+        console.error('Error accessing local storage:', error);
+        return null;
+    }
 };
 
 const decodeToken = (token) => {
@@ -21,7 +23,7 @@ const decodeToken = (token) => {
 
 export const fetchUsersWithRoles = createAsyncThunk(
     'auth/fetchUsers',
-    async (_, { getState, rejectWithValue }) => { // Include rejectWithValue
+    async (_, { getState, rejectWithValue }) => {
         try {
             const { token } = getState().auth;
             const response = await axios.get('http://localhost:5004/api/Account/users', {
@@ -63,8 +65,14 @@ export const fetchUsersWithRoles = createAsyncThunk(
                     customerId: decoded.CustomerId
                 };
             } catch (error) {
-                const message = error.response && error.response.status === 401 ? 'Invalid email or password.' : error.response.data;
-                return rejectWithValue(message);
+                let errorMessage = 'Login failed: Unknown error';
+                if (error.response) {
+                    errorMessage = error.response.status === 401 ? 'Invalid email or password.' : error.response.data;
+                } else {
+                    console.error("Network error while logging in:", error.message);
+                }
+                console.error(errorMessage);
+                return rejectWithValue(errorMessage);
             }
         }
     );
@@ -76,8 +84,14 @@ export const fetchUsersWithRoles = createAsyncThunk(
                 const response = await axios.post('http://localhost:5004/api/Account/register', userData);
                 return response.data;
             } catch (error) {
-                const message = error.response && error.response.status === 409 ? 'Email already exists.' : error.response.data;
-                return rejectWithValue(message);
+                let errorMessage = 'Registration failed: Unknown error';
+                if (error.response) {
+                    errorMessage = error.response.status === 409 ? 'Email already exists.' : error.response.data;
+                } else {
+                    console.error("Network error while registering:", error.message);
+                }
+                console.error(errorMessage);
+                return rejectWithValue(errorMessage);
             }
         }
     );
@@ -85,18 +99,15 @@ export const fetchUsersWithRoles = createAsyncThunk(
     export const fetchUserDetails = createAsyncThunk('auth/fetchUserDetails', async (_, { getState, rejectWithValue }) => {
         const { token } = getState().auth;
         if (!token) {
-            console.log("No token available for fetching user details.");
             return rejectWithValue('No token found');
         }
     });
-
 
 const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
         logout(state) {
-            console.log('Logging out user, clearing state');
             localStorage.removeItem('token');
             state.user = null;
             state.token = null;
@@ -106,7 +117,6 @@ const authSlice = createSlice({
         },
         // error checking, remove after
         setUserDetailsFromToken(state, action) {
-            console.log('Setting user details from token:', action.payload);
             state.user = action.payload.sub;
             state.customerId = action.payload.customerId;
             state.isAuthenticated = true;
@@ -119,12 +129,9 @@ const authSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(loginUser.pending, (state) => {
-                console.log('Login pending...');
                 state.isLoading = true;
             })
             .addCase(loginUser.fulfilled, (state, action) => {
-                console.log('Login successful:', action.payload);
-                console.log('Role received in loginUser:', action.payload.role); 
                 state.token = action.payload.token;
                 state.user = action.payload.user;
                 state.role = action.payload.role;
@@ -134,7 +141,6 @@ const authSlice = createSlice({
                 state.isAuthenticated = true;
             })
             .addCase(loginUser.rejected, (state, action) => {
-                console.log('Login failed, error:', action.payload);
                 state.error = action.payload;
                 state.isLoading = false;
                 state.isAuthenticated = false;
@@ -146,13 +152,11 @@ const authSlice = createSlice({
                 state.error = action.payload;
             })
             .addCase(registerUser.fulfilled, (state, action) => {
-                console.log('Registration successful:', action.payload);
                 state.isAuthenticated = false; // Set to false to require separate login
                 state.isLoading = false;
                 state.error = null;
             })
             .addCase(registerUser.rejected, (state, action) => {
-                console.log('Registration failed:', action.payload);
                 state.error = action.payload;
                 state.isLoading = false;
                 state.isAuthenticated = false; // Keep as false since registration failed
