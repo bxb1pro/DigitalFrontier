@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { addGame } from '../features/games/gamesSlice';
-import GameForm from './GameForm'; // Importing the GameForm component
+import GameForm from './GameForm';
 
 function AddGame() {
     const [gameData, setGameData] = useState({
@@ -11,10 +11,11 @@ function AddGame() {
         price: '',
         genre: '',
         imageName: '',
-        additionalImages: [],  // Assuming it can be handled as a string input for simplicity
+        additionalImages: [],
         releaseDate: '',
         developerId: ''
     });
+    // useDispatch is hook to dispatch actions to Redux store to change state
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -27,7 +28,7 @@ function AddGame() {
         e.preventDefault();
         let additionalImages = gameData.additionalImages;
         if (Array.isArray(additionalImages)) {
-            additionalImages = additionalImages.join(', '); // Convert array to string
+            additionalImages = additionalImages.join(', ');
         }
         const newGameData = {
             Name: gameData.title,
@@ -35,9 +36,9 @@ function AddGame() {
             Price: parseFloat(gameData.price),
             Genre: gameData.genre,
             ImageName: gameData.imageName,
-            AdditionalImages: additionalImages.split(', '), // Convert string to array, assuming comma-separated
+            AdditionalImages: additionalImages.split(', '),
             ReleaseDate: new Date(gameData.releaseDate + 'Z').toISOString(),
-            DeveloperId: parseInt(gameData.developerId, 10) // Convert string to integer
+            DeveloperId: parseInt(gameData.developerId, 10)
         };
         dispatch(addGame(newGameData));
         navigate('/');

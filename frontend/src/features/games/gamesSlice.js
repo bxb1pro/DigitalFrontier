@@ -1,9 +1,13 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-// API endpoint
+// gamesSlice holds all state related to games
+// Thunks handle asynchronous data flow like API calls, and Axios sends these HTTP API requests to backend through the thunks
+
+// Backend url into variable
 const API_URL = 'http://localhost:5004/api/games';
 
+// Thunk to fetch games 
 export const fetchGames = createAsyncThunk('games/fetchGames', async (_, { rejectWithValue }) => {
   try {
     const response = await axios.get(API_URL);
@@ -17,6 +21,7 @@ export const fetchGames = createAsyncThunk('games/fetchGames', async (_, { rejec
   }
 });
 
+// Thunk to add games
 export const addGame = createAsyncThunk('games/addGame', async (gameData, { rejectWithValue }) => {
   try {
     const response = await axios.post(API_URL, gameData);
@@ -31,6 +36,7 @@ export const addGame = createAsyncThunk('games/addGame', async (gameData, { reje
   }
 });
 
+// Thunk to delete games
 export const deleteGame = createAsyncThunk('games/deleteGame', async (gameId, { rejectWithValue }) => {
   try {
     const response = await axios.delete(`${API_URL}/${gameId}`);
@@ -44,6 +50,7 @@ export const deleteGame = createAsyncThunk('games/deleteGame', async (gameId, { 
   }
 });
 
+// Thunk to edit games
 export const editGame = createAsyncThunk('games/editGame', async ({ gameId, gameData }, { rejectWithValue }) => {
   try {
     const response = await axios.put(`${API_URL}/${gameId}`, gameData);
@@ -57,6 +64,7 @@ export const editGame = createAsyncThunk('games/editGame', async ({ gameId, game
   }
 });
 
+// Thunk to fetch games by id
 export const fetchGameById = createAsyncThunk(
   'games/fetchById',
   async (gameId, { rejectWithValue }) => {
@@ -70,6 +78,7 @@ export const fetchGameById = createAsyncThunk(
   }
 );
 
+// Slice definition (integrating reducers and extra reducers)
 const gamesSlice = createSlice({
   name: 'games',
   initialState: {
@@ -78,6 +87,7 @@ const gamesSlice = createSlice({
     error: null,
     needUpdate: false,
   },
+  // Synchronous actions, resolve immediately to update state
   reducers: {
     gameRemoved(state, action) {
       state.games = state.games.filter(game => game.id !== action.payload);
@@ -86,6 +96,7 @@ const gamesSlice = createSlice({
       state.needUpdate = action.payload;
     }
   },
+  // Handle async actions created by the thunks to update state
   extraReducers(builder) {
     builder
       .addCase(fetchGames.pending, state => {
@@ -125,7 +136,6 @@ const gamesSlice = createSlice({
       .addCase(fetchGameById.fulfilled, (state, action) => {
         const existingIndex = state.games.findIndex(g => g.id === action.payload.gameId);
         if (existingIndex !== -1) {
-            // Update the existing game
             state.games[existingIndex] = {
                 ...state.games[existingIndex],
                 ...action.payload,
@@ -133,7 +143,6 @@ const gamesSlice = createSlice({
                 developer: action.payload.developerId
             };
         } else {
-            // Add new game if it doesn't exist
             const newGame = {
                 id: action.payload.gameId,
                 title: action.payload.name,
@@ -160,12 +169,12 @@ const gamesSlice = createSlice({
         if (index !== -1) {
             state.games[index] = {...state.games[index], ...payload};
         }
-        state.needUpdate = true; // Set needUpdate to true after editing a game
+        state.needUpdate = true;
     })
   },
 });
 
+// Exporting functions & thunks to be used outside the slice
 export const { gameRemoved, updateNeeded } = gamesSlice.actions;
-
 export default gamesSlice.reducer;
 

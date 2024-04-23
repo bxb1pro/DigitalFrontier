@@ -2,10 +2,8 @@ import React, { useState } from 'react';
 
 function GameForm({ gameData, handleChange, handleSubmit }) {
 
-    // State to store validation errors
     const [errors, setErrors] = useState({});
 
-    // Validation rules
     const validateField = (name, value) => {
         switch (name) {
             case 'title':
@@ -40,15 +38,13 @@ function GameForm({ gameData, handleChange, handleSubmit }) {
         }
     };
 
-    // Enhanced handleChange to include validation
     const handleValidationChange = (e) => {
         const { name, value } = e.target;
-        handleChange(e);  // call the original handleChange from props
+        handleChange(e);
         const error = validateField(name, value);
         setErrors(prev => ({ ...prev, [name]: error }));
     };
 
-    // Validate all fields on form submission
     const validateOnSubmit = () => {
         const newErrors = {};
         Object.keys(gameData).forEach(key => {
@@ -59,7 +55,6 @@ function GameForm({ gameData, handleChange, handleSubmit }) {
         return Object.keys(newErrors).length === 0;
     };
 
-    // Enhanced handleSubmit to include validation check
     const handleValidatedSubmit = (e) => {
         e.preventDefault();
         if (validateOnSubmit()) {

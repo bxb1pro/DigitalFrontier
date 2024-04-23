@@ -1,20 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import Tabs from 'react-bootstrap/Tabs';
-import Tab from 'react-bootstrap/Tab';
-import './GameDetailPage.css';
-import DeveloperMap from './DeveloperMap';
-import { Modal, Button } from 'react-bootstrap';
+import { useParams } from 'react-router-dom';
 import { addToBasket } from '../features/basket/basketSlice';
 import { fetchGameById } from '../features/games/gamesSlice';
+import DeveloperMap from './DeveloperMap';
+import Tabs from 'react-bootstrap/Tabs';
+import Tab from 'react-bootstrap/Tab';
+import { Modal, Button } from 'react-bootstrap';
+import './GameDetailPage.css';
 
 function GameDetailPage() {
   const { gameId } = useParams();
   const game = useSelector(state => 
     state.games.games.find(g => g.id === parseInt(gameId, 10))
   );
+  // useDispatch is hook to dispatch actions to Redux store to change state
   const dispatch = useDispatch();
+  // useSelector is hook to extract data from Redux store state and re-render if state changes
   const developers = useSelector(state => state.developers.developers);
   const [selectedImage, setSelectedImage] = useState('');
   const role = useSelector(state => state.auth.role);
@@ -26,15 +28,14 @@ function GameDetailPage() {
 
   useEffect(() => {
     if (!game) {
-      setIsLoading(true);  // Set loading state locally
+      setIsLoading(true);
       dispatch(fetchGameById(parseInt(gameId, 10)))
         .unwrap()
         .then(() => setIsLoading(false))
-        .catch(() => setIsLoading(false));  // Reset loading state after fetch
+        .catch(() => setIsLoading(false));
     }
   }, [gameId, game, dispatch]);
 
-  // Initialize selectedImage with the first image when game data is loaded
   useEffect(() => {
     if (game && game.images && game.images.length > 0) {
       setSelectedImage(game.images[0]);
@@ -96,7 +97,6 @@ function GameDetailPage() {
             <p><strong>Price:</strong> £{game.price.toFixed(2)}</p>
             <p><strong>Genre:</strong> {game.genre}</p>
             <p><strong>Release Date:</strong> {releaseDateFormatted}</p>
-            {/* Basket button with icon */}
             <Button variant="primary" className="basket-button" onClick={handleAddToCart}>
             <i className="bi bi-cart"></i> Add to Basket
             </Button>

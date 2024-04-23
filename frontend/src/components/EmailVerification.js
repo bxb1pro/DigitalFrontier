@@ -5,11 +5,9 @@ function EmailVerification() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        // Redirect to the home page immediately
         navigate('/');
     }, [navigate]);
 
-    // Optionally, you can display a loading message while the redirection is in progress
     return (
         <div style={{
           marginTop: '20px',

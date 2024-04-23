@@ -1,19 +1,18 @@
 import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import { removeFromBasket, clearBasket } from '../features/basket/basketSlice';
 import { postTransaction, postAllTransactions } from '../features/transactions/transactionSlice';
 import { Button, Modal } from 'react-bootstrap';
-import { shallowEqual } from 'react-redux';
 import './Basket.css';
 
-// Uses local storage rather than ---
-
 const Basket = () => {
+  // useSelector is hook to extract data from Redux store state and re-render if state changes
   const { items: basketItems, customerId } = useSelector(state => ({
     items: state.basket.items,
     customerId: state.auth.customerId,
-  }), shallowEqual);  // Use shallowEqual for comparison
+  }), shallowEqual);
 
+  // useDispatch is hook to dispatch actions to Redux store to change state
   const dispatch = useDispatch();
   const [show, setShow] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
@@ -59,7 +58,7 @@ const Basket = () => {
   return (
     <div className="basket">
       <h2>Your Basket</h2>
-      <div className="basket-container">  {/* Added class for top border */}
+      <div className="basket-container">
         {basketItems.length > 0 ? (
           <div>
             {basketItems.map((item, index) => (
@@ -71,14 +70,14 @@ const Basket = () => {
                 </div>
                 <div className="basket-item-actions">
                   <Button variant="danger" onClick={() => dispatch(removeFromBasket(item))}>Remove</Button>
-                  <Button variant="primary" onClick={() => handlePurchaseClick(item)}>Purchase</Button> {/* Updated variant */}
+                  <Button variant="primary" onClick={() => handlePurchaseClick(item)}>Purchase</Button>
                 </div>
               </div>
             ))}
             <div className="total-price">
             <h5>Total Price: £{totalPrice.toFixed(2)}</h5>
             </div>
-            <div className="basket-actions"> {/* New div for aligning buttons */}
+            <div className="basket-actions">
               <Button variant="danger" onClick={() => dispatch(clearBasket())}>Clear Basket</Button>
               <Button variant="primary" onClick={handlePurchaseAll}>Purchase All</Button>
             </div>

@@ -3,9 +3,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import { fetchUserDetails, fetchUsersWithRoles } from '../features/auth/authSlice';
 
 function Account() {
+    // useDispatch is hook to dispatch actions to Redux store to change state
     const dispatch = useDispatch();
+    // useSelector is hook to extract data from Redux store state and re-render if state changes
     const { user, role, token, users, isLoading, error } = useSelector(state => state.auth);
 
+    
     useEffect(() => {
         dispatch(fetchUserDetails());
 

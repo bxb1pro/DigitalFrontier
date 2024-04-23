@@ -1,17 +1,18 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import './HomePage.css';
-import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import { Link, useLocation } from 'react-router-dom';
 import { fetchGames, updateNeeded } from '../features/games/gamesSlice';
 import { addToWishlist, removeFromWishlist, clearWishlist, fetchWishlist } from '../features/wishlist/wishlistSlice';
-import { Modal, Button } from 'react-bootstrap';
 import { addToBasket } from '../features/basket/basketSlice';
+import { Modal, Button } from 'react-bootstrap';
 import { BsCart, BsStar } from 'react-icons/bs';
-import { useLocation } from 'react-router-dom';
+import './HomePage.css';
 
 
 function HomePage({ searchTerm, genre }) {
+    // useDispatch is hook to dispatch actions to Redux store to change state
     const dispatch = useDispatch();
+    // useSelector is hook to extract data from Redux store state and re-render if state changes
     const games = useSelector(state => state.games.games);
     const rawWishlist = useSelector(state => state.wishlist.items);
     const gameStatus = useSelector(state => state.games.status);
@@ -26,13 +27,12 @@ function HomePage({ searchTerm, genre }) {
     const [showCustomModal, setShowCustomModal] = useState(false);
     const [modalMessage, setModalMessage] = useState('');
 
-    // Enrich wishlist with game details
     const wishlist = useMemo(() => {
         return rawWishlist.map(wishItem => {
             const gameDetails = games.find(game => game.id === wishItem.gameId);
             return {
                 ...wishItem,
-                ...gameDetails  // This spreads the game details into the wishlist item
+                ...gameDetails
             };
         });
     }, [rawWishlist, games]);
@@ -47,14 +47,12 @@ function HomePage({ searchTerm, genre }) {
             } catch (error) {
                 console.error("Error fetching games:", error);
             } finally {
-                // Reset the flag only if the fetch was successful
                 if (gameStatus === 'succeeded') {
                     dispatch(updateNeeded(false)); 
                 }
             }
         };
-    
-        // Fetch data if conditions are met
+
         if (gameStatus === 'idle' || gameStatus === 'failed' || needUpdate) {
             fetchData();
         }
@@ -66,7 +64,7 @@ function HomePage({ searchTerm, genre }) {
         if (!customerId) {
             setModalMessage('Customer ID is undefined.');
             setShowCustomModal(true);
-            return; // Optionally handle this case in your UI
+            return;
         }
         const isAlreadyAdded = wishlist.some(wishItem => wishItem.gameId === game.id);
         if (isAlreadyAdded) {
@@ -80,7 +78,7 @@ function HomePage({ searchTerm, genre }) {
     const handleRemoveFromWishlist = gameWishlistId => {
         if (!gameWishlistId) {
             console.error('Game Wishlist ID is undefined');
-            return; // Prevent further action if the ID is undefined
+            return;
         }
         dispatch(removeFromWishlist(gameWishlistId));
     };
@@ -91,9 +89,8 @@ function HomePage({ searchTerm, genre }) {
         return matchesSearchTerm && matchesGenre;
     });
 
-    // State for handling modal visibility
     const [show, setShow] = useState(false);
-    // Function to show modal
+
     const handleShow = () => setShow(true);
     const handleClose = () => setShow(false);
     const handleClearWishlist = () => {

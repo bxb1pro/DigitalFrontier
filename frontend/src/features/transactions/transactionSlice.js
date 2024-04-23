@@ -1,6 +1,10 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 
+// transactionSlice holds all state related to transactions
+// Thunks handle asynchronous data flow like API calls, and Axios sends these HTTP API requests to backend through the thunks
+
+// Thunk to add a transaction
 export const postTransaction = createAsyncThunk(
   'transactions/postTransaction',
   async (transactionData, { getState, rejectWithValue }) => {
@@ -21,6 +25,7 @@ export const postTransaction = createAsyncThunk(
   }
 );
 
+// Thunk to add multiple transactions at once
 export const postAllTransactions = createAsyncThunk(
   'transactions/postAllTransactions',
   async (_, { getState, dispatch }) => {
@@ -47,6 +52,7 @@ export const postAllTransactions = createAsyncThunk(
   }
 );
 
+// Thunk to get transactions for a customer
 export const fetchTransactionsByCustomer = createAsyncThunk(
   'transactions/fetchByCustomer',
   async (customerId, { getState, rejectWithValue }) => {
@@ -68,6 +74,7 @@ export const fetchTransactionsByCustomer = createAsyncThunk(
   }
 );
 
+// Slice definition (integrating extra reducers)
 const transactionSlice = createSlice({
   name: 'transactions',
   initialState: {
@@ -76,6 +83,7 @@ const transactionSlice = createSlice({
     error: null,
   },
   reducers: {},
+  // Handle async actions created by the thunks to update state
   extraReducers: (builder) => {
     builder
       .addCase(postTransaction.pending, (state) => {
@@ -114,4 +122,5 @@ const transactionSlice = createSlice({
   },
 });
 
+// Exporting thunks to be used outside the slice
 export default transactionSlice.reducer;

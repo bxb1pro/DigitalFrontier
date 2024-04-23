@@ -32,7 +32,7 @@ function AuthenticationForm({ isRegister, onSubmit, error }) {
 
     const handleFormSubmit = (event) => {
         event.preventDefault();
-        setLocalError(''); // Reset local error message
+        setLocalError('');
     
         if (!isValidEmail(email)) {
             setLocalError('Please enter a valid email address.');
@@ -99,9 +99,7 @@ function AuthenticationForm({ isRegister, onSubmit, error }) {
                     />
                 </div>
             )}
-            {/* Display backend error message */}
             {error && <div className="alert alert-danger">{typeof error === 'string' ? error : (error.description || 'This email is already signed up.')}</div>}
-            {/* Display local error message */}
             {localError && <div className="alert alert-danger">{localError}</div>}
             <button type="submit" className="btn btn-primary">{isRegister ? 'Register' : 'Login'}</button>
         </form>

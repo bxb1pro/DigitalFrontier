@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import Logout from './Logout';
 import { Dropdown } from 'react-bootstrap';
 import { BsSearch, BsCart4 } from 'react-icons/bs';
-import Logout from './Logout';
-import { useSelector } from 'react-redux';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './Header.css';
 
 const Header = ({ onSearchChange, onGenreChange, genre }) => {
+    // useSelector is hook to extract data from Redux store state and re-render if state changes
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
     const basketItems = useSelector(state => state.basket.items); 
 
-    // State for search input
     const [searchInput, setSearchInput] = useState('');
     const [selectedGenre, setSelectedGenre] = useState(genre);
 
@@ -34,10 +34,8 @@ const Header = ({ onSearchChange, onGenreChange, genre }) => {
     const handleSubmit = (event) => {
         event.preventDefault();
         if (location.pathname !== '/') {
-            // Navigate to home page with search parameters
             navigate(`/?genre=${encodeURIComponent(selectedGenre)}&query=${encodeURIComponent(searchInput)}`);
         } else {
-            // Trigger the search directly
             onSearchChange(searchInput);
         }
     };
@@ -45,8 +43,8 @@ const Header = ({ onSearchChange, onGenreChange, genre }) => {
     const resetSearch = () => {
         setSelectedGenre('All Genres');
         setSearchInput('');
-        onGenreChange('All Genres'); // Reset genre
-        onSearchChange(''); // Clear search input
+        onGenreChange('All Genres');
+        onSearchChange('');
     };
 
     const [showLogoutModal, setShowLogoutModal] = useState(false);
@@ -66,10 +64,9 @@ const Header = ({ onSearchChange, onGenreChange, genre }) => {
                     </button>
                     <div className="collapse navbar-collapse" id="navbarNav">
                         <form className="search-container" onSubmit={handleSubmit}>
-                        {/* Search container with 'All Categories' dropdown and search input/button */}
                             <Dropdown>
                             <Dropdown.Toggle variant="" id="dropdown-basic" className="custom-dropdown-toggle">
-                                    {selectedGenre} {/* Changed to use state */}
+                                    {selectedGenre}
                                 </Dropdown.Toggle>
 
                                 <Dropdown.Menu>
@@ -90,7 +87,7 @@ const Header = ({ onSearchChange, onGenreChange, genre }) => {
                                 type="search"
                                 placeholder="What game are you looking for?"
                                 aria-label="Search"
-                                value={searchInput} // Bind input value to state
+                                value={searchInput}
                                 onChange={handleInputChange}
                             />
                             <button className="btn" type="submit">
@@ -116,7 +113,6 @@ const Header = ({ onSearchChange, onGenreChange, genre }) => {
                                         <Link className="nav-link" to="/login">Register / Login</Link>
                                     </li>
                                 )}
-                                {/* Basket icon with item count */}
                                 <li className="nav-item">
                                     <Link className="nav-link" to="/basket">
                                         <BsCart4 /> <span className="basket-item-count">{basketItems.length}</span>

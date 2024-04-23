@@ -1,35 +1,34 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { registerUser, clearErrors } from '../features/auth/authSlice'; 
 import AuthenticationForm from './AuthenticationForm';
-import { registerUser } from '../features/auth/authSlice'; 
-import { clearErrors } from '../features/auth/authSlice';
 
 function Register() {
+    // useDispatch is hook to dispatch actions to Redux store to change state
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { error } = useSelector(state => state.auth); // Removed unused `isAuthenticated`
+    // useSelector is hook to extract data from Redux store state and re-render if state changes
+    const { error } = useSelector(state => state.auth);
 
     const handleRegistrationSubmit = ({ email, password, passwordConfirm }) => {
         if (password !== passwordConfirm) {
-            alert("Passwords don't match!"); // Consider using local state to handle this error as well
+            alert("Passwords don't match!");
             return;
         }
 
         dispatch(registerUser({ email, password }))
             .unwrap()
             .then(() => {
-                navigate('/login'); // Navigate to login page on successful registration
+                navigate('/login');
             })
             .catch((error) => {
                 console.error('Registration failed:', error);
-                // Optionally update local error state here if needed
             });
     };
 
     useEffect(() => {
         return () => {
-            // Clear errors when the component unmounts
             dispatch(clearErrors());
         };
     }, [dispatch]);

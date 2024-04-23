@@ -4,28 +4,27 @@ import { fetchTransactionsByCustomer } from '../features/transactions/transactio
 import { fetchGameById } from '../features/games/gamesSlice';
 
 function Purchases() {
+  // useDispatch is hook to dispatch actions to Redux store to change state
   const dispatch = useDispatch();
+  // useSelector is hook to extract data from Redux store state and re-render if state changes
   const { transactions, status, error } = useSelector(state => state.transactions);
   const { customerId } = useSelector(state => state.auth);
   const [enrichedTransactions, setEnrichedTransactions] = useState([]);
 
-  // Fetch transactions for a customer
   useEffect(() => {
     if (customerId) {
       dispatch(fetchTransactionsByCustomer(customerId))
         .unwrap()
         .then(data => {
-          // Initialise enriched transactions
           setEnrichedTransactions(data.map(transaction => ({
             ...transaction,
-            game: null // Initialise game as null
+            game: null
           })));
         })
         .catch((error) => console.error("Fetching transactions failed:", error));
     }
   }, [dispatch, customerId]);
 
-  // Enrich transactions with game details
   useEffect(() => {
     enrichedTransactions.forEach((transaction, index) => {
       if (transaction.gameId && !transaction.game) {
@@ -33,8 +32,8 @@ function Purchases() {
           .unwrap()
           .then(gameData => {
             const updatedTransactions = [...enrichedTransactions];
-            updatedTransactions[index].game = gameData; // Update the game data in the copy of transactions
-            setEnrichedTransactions(updatedTransactions); // Set the new state
+            updatedTransactions[index].game = gameData;
+            setEnrichedTransactions(updatedTransactions);
           })
           .catch(error => console.error("Fetching game data failed:", error));
       }
@@ -61,7 +60,6 @@ function Purchases() {
               <td>{transaction.game ? transaction.game.name : 'No game info'}</td>
               <td>£{transaction.amount.toFixed(2)}</td>
               <td>{new Date(transaction.transactionDate).toLocaleDateString()}</td>
-              {/* Convert string to Date object before calling toLocaleDateString() */}
             </tr>
           ))}
         </tbody>

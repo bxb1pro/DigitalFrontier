@@ -1,4 +1,4 @@
-/*Import google fonts*/
+/*Google font imported*/
 @import url('https://fonts.googleapis.com/css2?family=Fira+Sans&display=swap');
 
 /* Set Fira Sans as the primary font for the entire application */
@@ -6,7 +6,7 @@ body {
     font-family: 'Fira Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
-    background-color: #eae4e4; /* Light grey background */
+    background-color: #eae4e4;
     margin: 0;
     padding: 0;
     box-sizing: border-box;

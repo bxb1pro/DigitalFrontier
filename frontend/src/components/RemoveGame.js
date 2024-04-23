@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Button, Card, Image } from 'react-bootstrap';
 import { deleteGame, fetchGames } from '../features/games/gamesSlice';
+import { Button, Card, Image } from 'react-bootstrap';
 
 function RemoveGame() {
     const { gameId } = useParams();
+    // useDispatch is hook to dispatch actions to Redux store to change state
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [game, setGame] = useState(null);
@@ -23,8 +24,8 @@ function RemoveGame() {
 
     const handleRemove = async () => {
         await dispatch(deleteGame(gameId));
-        dispatch(fetchGames()); // Refetch games after deletion
-        navigate('/'); // Redirect after removal
+        dispatch(fetchGames());
+        navigate('/');
     };
 
     if (isLoading) return <p>Loading...</p>;

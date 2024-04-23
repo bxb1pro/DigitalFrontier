@@ -1,19 +1,20 @@
 import React from 'react';
-import { Modal, Button } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { logout } from '../features/auth/authSlice';
 import { clearBasket } from '../features/basket/basketSlice';
+import { Modal, Button } from 'react-bootstrap';
 
 function Logout({ show, handleClose }) {
+    // useDispatch is hook to dispatch actions to Redux store to change state
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        dispatch(logout());  // Dispatch the logout action to reset the state
-        navigate('/');  // Redirect to home page after logout
-        handleClose();  // Close the modal
-        dispatch(clearBasket()); // Clearing one use of local storage in program
+        dispatch(logout());
+        navigate('/');
+        handleClose();
+        dispatch(clearBasket());
     };
 
     return (
