@@ -21,8 +21,9 @@ import loadScript from './utils/loadScript';
 // App.js defines main structure and routing of my web app
 
 function App() {
-  // useDispatch is hook to dispatch actions to Redux store to change state
+  // useDispatch is hook to dispatch actions (async or synchronous) to Redux store to change the state
   const dispatch = useDispatch();
+  // useSelector is hook to retrieve state from Redux, and re-render if state changes
   // Render based on user role
   const role = useSelector(state => state.auth.role);
 

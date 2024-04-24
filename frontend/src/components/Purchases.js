@@ -4,13 +4,16 @@ import { fetchTransactionsByCustomer } from '../features/transactions/transactio
 import { fetchGameById } from '../features/games/gamesSlice';
 
 function Purchases() {
-  // useDispatch is hook to dispatch actions to Redux store to change state
+  // useDispatch is hook to dispatch actions (async or synchronous) to Redux store to change the state
   const dispatch = useDispatch();
-  // useSelector is hook to extract data from Redux store state and re-render if state changes
+  // useSelector is hook to retrieve state from Redux, and re-render if state changes
   const { transactions, status, error } = useSelector(state => state.transactions);
   const { customerId } = useSelector(state => state.auth);
+
+  // useState adds local state to manage state in functions
   const [enrichedTransactions, setEnrichedTransactions] = useState([]);
 
+  // First useEffect executes when component mounts or customerId changes, gets transaction data and sets it to enriched transactions
   useEffect(() => {
     if (customerId) {
       dispatch(fetchTransactionsByCustomer(customerId))
@@ -25,6 +28,7 @@ function Purchases() {
     }
   }, [dispatch, customerId]);
 
+  // Second useEffect iterates over enriched transactions to fetch relevant game details via fetchgamebyid function, updates transactions with full details
   useEffect(() => {
     enrichedTransactions.forEach((transaction, index) => {
       if (transaction.gameId && !transaction.game) {

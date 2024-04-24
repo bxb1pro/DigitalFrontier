@@ -6,10 +6,11 @@ import { clearBasket } from '../features/basket/basketSlice';
 import { Modal, Button } from 'react-bootstrap';
 
 function Logout({ show, handleClose }) {
-    // useDispatch is hook to dispatch actions to Redux store to change state
+    // useDispatch is hook to dispatch actions (async or synchronous) to Redux store to change the state
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+    // Handler to logout, navigate to homepage and clear basket
     const handleLogout = () => {
         dispatch(logout());
         navigate('/');

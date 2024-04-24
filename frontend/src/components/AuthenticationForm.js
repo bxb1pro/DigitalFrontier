@@ -1,15 +1,20 @@
 import React, { useEffect, useState } from 'react';
 
+// Re-useable authentication form for login and register components
+
 function AuthenticationForm({ isRegister, onSubmit, error }) {
+    // useState adds local state to manage state in functions
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [passwordConfirm, setPasswordConfirm] = useState('');
     const [localError, setLocalError] = useState('');
 
+    // Function to validate email user input format
     const isValidEmail = (email) => {
         return /\S+@\S+\.\S+/.test(email);
     };
 
+    // Function to validate password user input format
     const validatePassword = (password) => {
         const errors = [];
         if (password.length < 6) {
@@ -30,6 +35,7 @@ function AuthenticationForm({ isRegister, onSubmit, error }) {
         return errors;
     };
 
+    // Function for form submission; 
     const handleFormSubmit = (event) => {
         event.preventDefault();
         setLocalError('');

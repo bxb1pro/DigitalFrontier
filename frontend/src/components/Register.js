@@ -5,12 +5,13 @@ import { registerUser, clearErrors } from '../features/auth/authSlice';
 import AuthenticationForm from './AuthenticationForm';
 
 function Register() {
-    // useDispatch is hook to dispatch actions to Redux store to change state
+    // useDispatch is hook to dispatch actions (async or synchronous) to Redux store to change the state
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    // useSelector is hook to extract data from Redux store state and re-render if state changes
+    // useSelector is hook to retrieve state from Redux, and re-render if state changes
     const { error } = useSelector(state => state.auth);
 
+    // Handler to check if registration passwords match, navigate to login page on successful registration
     const handleRegistrationSubmit = ({ email, password, passwordConfirm }) => {
         if (password !== passwordConfirm) {
             alert("Passwords don't match!");
@@ -27,13 +28,14 @@ function Register() {
             });
     };
 
+    // useEffect to clear any errors from failed registration
     useEffect(() => {
         return () => {
             dispatch(clearErrors());
         };
     }, [dispatch]);
 
-
+    // Re-useable authentication form component is called
     return (
         <div className="container mt-5">
             <h2>Register Page</h2>

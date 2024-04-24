@@ -5,11 +5,13 @@ import { editGame } from '../features/games/gamesSlice';
 import GameForm from './GameForm';
 
 function EditGame() {
+    // useParams hook allows for accessing parameters from URL (gameId in this case)
     const { gameId } = useParams();
     const navigate = useNavigate();
-    // useDispatch is hook to dispatch actions to Redux store to change state
+    // useDispatch is hook to dispatch actions (async or synchronous) to Redux store to change the state
     const dispatch = useDispatch();
 
+    // useState adds local state to manage state in functions
     const [gameData, setGameData] = useState({
         title: '',
         description: '',
@@ -21,6 +23,7 @@ function EditGame() {
         developerId: ''
     });
 
+    // useEffect fetches game data based on id and sets it
     useEffect(() => {
         const fetchGameData = async () => {
             const response = await fetch(`http://localhost:5004/api/games/${gameId}`);
@@ -39,11 +42,13 @@ function EditGame() {
         fetchGameData();
     }, [gameId]);
 
+    // Event handler to update gameData when form input changes
     const handleChange = (e) => {
         const { name, value } = e.target;
         setGameData(prev => ({ ...prev, [name]: value }));
     };
 
+    // Event handler for form submission and dispatching editGame to redux store
     const handleSubmit = (e) => {
         e.preventDefault();
         const updatedGameData = {
@@ -66,6 +71,7 @@ function EditGame() {
             });
     };
 
+    // Uses (re-useable) GameForm component
     return (
         <div className="container mt-5">
             <h2>Edit Game: {gameId}</h2>

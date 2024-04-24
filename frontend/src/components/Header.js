@@ -8,14 +8,18 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import './Header.css';
 
 const Header = ({ onSearchChange, onGenreChange, genre }) => {
+    // useSelector is hook to retrieve state from Redux, and re-render if state changes
     const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
     const basketItems = useSelector(state => state.basket.items);
 
+    // useState adds local state to manage state in functions
     const [searchInput, setSearchInput] = useState('');
     const [selectedGenre, setSelectedGenre] = useState(genre);
+    // useLocation hook accesses current url location
     const location = useLocation();
     const navigate = useNavigate();
 
+    // Handler to update search input when user types, directly triggered if user is on homepage
     const handleInputChange = (event) => {
         setSearchInput(event.target.value);
         if (location.pathname === '/') {
@@ -23,11 +27,13 @@ const Header = ({ onSearchChange, onGenreChange, genre }) => {
         }
     };
 
+    // Handler to update genre when genre is selected from dropdown
     const handleGenreChange = (newGenre) => {
         setSelectedGenre(newGenre);
         onGenreChange(newGenre);
     };
 
+    // Handler to submit search form, if not on homepage will re-direct to homepage and search
     const handleSubmit = (event) => {
         event.preventDefault();
         if (location.pathname !== '/') {
@@ -37,6 +43,7 @@ const Header = ({ onSearchChange, onGenreChange, genre }) => {
         }
     };
 
+    // Function to reset search to defaults
     const resetSearch = () => {
         setSelectedGenre('All Genres');
         setSearchInput('');
@@ -57,7 +64,7 @@ const Header = ({ onSearchChange, onGenreChange, genre }) => {
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
-                    <Form inline onSubmit={handleSubmit} className="mx-auto search-container">
+                    <Form inline="true" onSubmit={handleSubmit} className="mx-auto search-container">
                         <NavDropdown title={selectedGenre} id="dropdown-basic" className="custom-dropdown-toggle">
                             <NavDropdown.Item onClick={() => handleGenreChange('All Genres')}>All Genres</NavDropdown.Item>
                             <NavDropdown.Item onClick={() => handleGenreChange('Action')}>Action</NavDropdown.Item>

@@ -8,25 +8,27 @@ import { Modal, Button } from 'react-bootstrap';
 import { BsCart, BsStar } from 'react-icons/bs';
 import './HomePage.css';
 
-
 function HomePage({ searchTerm, genre }) {
-    // useDispatch is hook to dispatch actions to Redux store to change state
+    // useDispatch is hook to dispatch actions (async or synchronous) to Redux store to change the state
     const dispatch = useDispatch();
-    // useSelector is hook to extract data from Redux store state and re-render if state changes
+    // useSelector is hook to retrieve state from Redux, and re-render if state changes
     const games = useSelector(state => state.games.games);
     const rawWishlist = useSelector(state => state.wishlist.items);
     const gameStatus = useSelector(state => state.games.status);
     const error = useSelector(state => state.games.error);
     const customerId = useSelector(state => state.auth.customerId);
     const role = useSelector(state => state.auth.role);
+    // useLocation hook accesses current url location
     const location = useLocation();
     const needUpdate = useSelector(state => state.games.needUpdate); 
 
+    // useMemo hook used as experimental performance enhancer
     const isAdmin = useMemo(() => ['SuperAdmin', 'Admin'].includes(role), [role]);
 
     const [showCustomModal, setShowCustomModal] = useState(false);
     const [modalMessage, setModalMessage] = useState('');
 
+    // useMemo used again to save re-loading for wishlist items
     const wishlist = useMemo(() => {
         return rawWishlist.map(wishItem => {
             const gameDetails = games.find(game => game.id === wishItem.gameId);
@@ -37,6 +39,7 @@ function HomePage({ searchTerm, genre }) {
         });
     }, [rawWishlist, games]);
 
+    // useEffect fetches game data via dispatch, also fetches wishlist if customer is logged in
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -60,6 +63,7 @@ function HomePage({ searchTerm, genre }) {
         }, [customerId, gameStatus, dispatch, location.pathname, needUpdate]);
 
 
+    // Handler to add to wishlist if customer is logged in, rejects if game already in wishlist, dispatches wishlist updates to Redux store
     const handleAddToWishlist = game => {
         if (!customerId) {
             setModalMessage('Customer ID is undefined.');
@@ -75,6 +79,7 @@ function HomePage({ searchTerm, genre }) {
         dispatch(addToWishlist({ customerId, gameId: game.id }));
     };
 
+    // Handler to remove game from wishlist
     const handleRemoveFromWishlist = gameWishlistId => {
         if (!gameWishlistId) {
             console.error('Game Wishlist ID is undefined');
@@ -83,6 +88,7 @@ function HomePage({ searchTerm, genre }) {
         dispatch(removeFromWishlist(gameWishlistId));
     };
 
+    // Games are filtered based on search term and genre
     const filteredGames = games.filter(game => {
         const matchesSearchTerm = game.title.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesGenre = genre === 'All Genres' || game.genre === genre;
@@ -93,6 +99,8 @@ function HomePage({ searchTerm, genre }) {
 
     const handleShow = () => setShow(true);
     const handleClose = () => setShow(false);
+
+    // Handler to clear customer wishlist
     const handleClearWishlist = () => {
         if (!customerId) {
             console.error('Customer ID is undefined.');

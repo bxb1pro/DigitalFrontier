@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { addGame } from '../features/games/gamesSlice';
 import GameForm from './GameForm';
 
+// useState adds local state to manage state in functions
 function AddGame() {
     const [gameData, setGameData] = useState({
         title: '',
@@ -15,15 +16,18 @@ function AddGame() {
         releaseDate: '',
         developerId: ''
     });
-    // useDispatch is hook to dispatch actions to Redux store to change state
+
+    // useDispatch is hook to dispatch actions (async or synchronous) to Redux store to change the state
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+    // Event handler to update gameData when form input changes
     const handleChange = (e) => {
         const { name, value } = e.target;
         setGameData(prev => ({ ...prev, [name]: value }));
     };
 
+    // Event handler for form submission and dispatching addGame to redux store
     const handleSubmit = (e) => {
         e.preventDefault();
         let additionalImages = gameData.additionalImages;
@@ -44,6 +48,7 @@ function AddGame() {
         navigate('/');
     };
 
+    // Uses (re-useable) GameForm component
     return (
         <div className="container mt-5">
             <h2>Add New Game</h2>

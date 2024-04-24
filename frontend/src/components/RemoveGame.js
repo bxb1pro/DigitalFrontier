@@ -5,13 +5,17 @@ import { deleteGame, fetchGames } from '../features/games/gamesSlice';
 import { Button, Card, Image } from 'react-bootstrap';
 
 function RemoveGame() {
+    // useParams hook allows for accessing parameters from URL (gameId in this case)
     const { gameId } = useParams();
-    // useDispatch is hook to dispatch actions to Redux store to change state
+    // useDispatch is hook to dispatch actions (async or synchronous) to Redux store to change the state
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    // useState adds local state to manage state in functions
     const [game, setGame] = useState(null);
     const [isLoading, setLoading] = useState(true);
 
+    // useEffect fetches game data by id
     useEffect(() => {
         const fetchGame = async () => {
             const response = await fetch(`http://localhost:5004/api/games/${gameId}`);
@@ -22,6 +26,7 @@ function RemoveGame() {
         fetchGame();
     }, [gameId]);
 
+    // Handler to delete game
     const handleRemove = async () => {
         await dispatch(deleteGame(gameId));
         dispatch(fetchGames());

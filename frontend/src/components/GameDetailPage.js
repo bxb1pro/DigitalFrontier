@@ -9,14 +9,17 @@ import Tab from 'react-bootstrap/Tab';
 import { Modal, Button } from 'react-bootstrap';
 import './GameDetailPage.css';
 
+
 function GameDetailPage() {
+  // useParams hook allows for accessing parameters from URL (gameId in this case)
   const { gameId } = useParams();
+  // useSelector is hook to retrieve state from Redux, and re-render if state changes
   const game = useSelector(state => 
     state.games.games.find(g => g.id === parseInt(gameId, 10))
   );
-  // useDispatch is hook to dispatch actions to Redux store to change state
+  // useDispatch is hook to dispatch actions (async or synchronous) to Redux store to change the state
   const dispatch = useDispatch();
-  // useSelector is hook to extract data from Redux store state and re-render if state changes
+  // useSelector is hook to retrieve state from Redux, and re-render if state changes
   const developers = useSelector(state => state.developers.developers);
   const [selectedImage, setSelectedImage] = useState('');
   const role = useSelector(state => state.auth.role);
@@ -26,6 +29,7 @@ function GameDetailPage() {
   const [modalMessage, setModalMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
+  // useEffect checks if game is already loaded, if not dispatches fetch for game info by ID
   useEffect(() => {
     if (!game) {
       setIsLoading(true);
@@ -36,12 +40,14 @@ function GameDetailPage() {
     }
   }, [gameId, game, dispatch]);
 
+  // useEffect sets initial image display to first image in game array
   useEffect(() => {
     if (game && game.images && game.images.length > 0) {
       setSelectedImage(game.images[0]);
     }
   }, [game]);
 
+  // Event handler to add game to basket (checks for login and role)
   const handleAddToCart = () => {
     if (!isAuthenticated) {
       setModalMessage('Please login to use this feature');
@@ -54,6 +60,7 @@ function GameDetailPage() {
     }
   };
 
+  // Event handler to close modal
   const handleCloseModal = () => {
     setShowModal(false);
   };

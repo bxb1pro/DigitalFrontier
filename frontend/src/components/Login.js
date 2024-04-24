@@ -7,12 +7,13 @@ import AuthenticationForm from './AuthenticationForm';
 import { Button } from 'react-bootstrap';
 
 function Login() {
-    // useDispatch is hook to dispatch actions to Redux store to change state
+    // useDispatch is hook to dispatch actions (async or synchronous) to Redux store to change the state
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    // useSelector is hook to extract data from Redux store state and re-render if state changes
+    // useSelector is hook to retrieve state from Redux, and re-render if state changes
     const { isAuthenticated, error, isLoading, customerId } = useSelector(state => state.auth);
 
+    // useEffect uses dispatch to fetch wishlist via customerId on login
     useEffect(() => {
         if (isAuthenticated && !error && !isLoading && customerId) {
             dispatch(fetchWishlist(customerId));
@@ -27,6 +28,7 @@ function Login() {
         };
     }, [dispatch]);
 
+    // Handler to navigate to homepage on successful login or give error if login failed
     const handleLoginSubmit = (credentials) => {
         dispatch(loginUser(credentials))
             .unwrap()
@@ -38,6 +40,7 @@ function Login() {
             });
     };
 
+    // Re-useable authentication form component is called
     return (
         <div className="container mt-5">
             <h2>Login Page</h2>

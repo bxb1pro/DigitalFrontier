@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 
+// Re-useable game form for add game and edit game components
+
 function GameForm({ gameData, handleChange, handleSubmit }) {
 
+    // useState adds local state to manage state in functions
     const [errors, setErrors] = useState({});
 
+    // Function to check for user input validation
     const validateField = (name, value) => {
         switch (name) {
             case 'title':
@@ -38,6 +42,7 @@ function GameForm({ gameData, handleChange, handleSubmit }) {
         }
     };
 
+    // Function triggered on every change in form input, error checks
     const handleValidationChange = (e) => {
         const { name, value } = e.target;
         handleChange(e);
@@ -45,6 +50,7 @@ function GameForm({ gameData, handleChange, handleSubmit }) {
         setErrors(prev => ({ ...prev, [name]: error }));
     };
 
+    // Function checks all fields for errors before submission
     const validateOnSubmit = () => {
         const newErrors = {};
         Object.keys(gameData).forEach(key => {
@@ -55,6 +61,7 @@ function GameForm({ gameData, handleChange, handleSubmit }) {
         return Object.keys(newErrors).length === 0;
     };
 
+    // Function to submit form if all input is validated
     const handleValidatedSubmit = (e) => {
         e.preventDefault();
         if (validateOnSubmit()) {
