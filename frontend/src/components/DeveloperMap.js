@@ -6,15 +6,16 @@ function DeveloperMap({ latitude, longitude, developerName }) {
     // useState adds local state to manage state in functions
     const [isMapLoaded, setMapLoaded] = useState(false);
 
-    // Effect hook dynamically load the Google Maps script if not already available
+    // Effect hook dynamically loads the Google Maps script if not already available
     useEffect(() => {
         const scriptId = 'google-maps-script';
     
-        // Define initMap globally before adding the script
+        // Defines initMap globally before adding the script
         window.initMap = () => {
             setMapLoaded(true);
         };
 
+        // Checks script not already loaded
         if (!document.getElementById(scriptId) && !window.google) {
             const script = document.createElement('script');
             script.id = scriptId;
