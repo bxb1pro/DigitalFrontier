@@ -1,15 +1,14 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+// Simple function to navigate to the homepage when email is verified
 function EmailVerification() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        // Redirect to the home page immediately
         navigate('/');
     }, [navigate]);
 
-    // Optionally, you can display a loading message while the redirection is in progress
     return (
         <div style={{
           marginTop: '20px',

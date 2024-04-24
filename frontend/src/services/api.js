@@ -1,5 +1,6 @@
-// src/api.js
 import axios from 'axios';
+
+// Setting up axios instance & providing necessary authorisation token for HTTP requests
 
 const API = axios.create({ baseURL: 'http://localhost:5004/api/' });
 

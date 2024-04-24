@@ -1,21 +1,23 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { loginUser } from '../features/auth/authSlice';
 import { Link, useNavigate } from 'react-router-dom';
+import { loginUser, clearErrors } from '../features/auth/authSlice';
+import { fetchWishlist } from '../features/wishlist/wishlistSlice';
 import AuthenticationForm from './AuthenticationForm';
 import { Button } from 'react-bootstrap';
-import { fetchWishlist } from '../features/wishlist/wishlistSlice';
-import { clearErrors } from '../features/auth/authSlice';
 
 function Login() {
+    // useDispatch is hook to dispatch actions (async or synchronous) to Redux store to change the state
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { isAuthenticated, error, isLoading, customerId } = useSelector(state => state.auth); // Access the auth state including isLoading
+    // useSelector is hook to retrieve state from Redux, and re-render if state changes
+    const { isAuthenticated, error, isLoading, customerId } = useSelector(state => state.auth);
 
+    // useEffect uses dispatch to fetch wishlist via customerId on login
     useEffect(() => {
         if (isAuthenticated && !error && !isLoading && customerId) {
-            dispatch(fetchWishlist(customerId)); // Fetch wishlist once the user is authenticated and customerId is available
-            navigate('/'); // Redirect to the homepage on successful login
+            dispatch(fetchWishlist(customerId));
+            navigate('/');
         }
     }, [isAuthenticated, error, isLoading, customerId, dispatch, navigate]);
 
@@ -26,18 +28,19 @@ function Login() {
         };
     }, [dispatch]);
 
+    // Handler to navigate to homepage on successful login or give error if login failed
     const handleLoginSubmit = (credentials) => {
         dispatch(loginUser(credentials))
             .unwrap()
             .then(() => {
-                console.log('Login successful, should navigate now.');
-                navigate('/'); // This might need to be placed here to ensure it happens after login is successful
+                navigate('/');
             })
             .catch((error) => {
                 console.error('Login failed:', error);
             });
     };
 
+    // Re-useable authentication form component is called
     return (
         <div className="container mt-5">
             <h2>Login Page</h2>

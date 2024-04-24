@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DigitalGamesMarketplace2")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ccf6b60c7848e2fa369e9c6efcd6ca5978eb74d9")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
 [assembly: System.Reflection.AssemblyProductAttribute("DigitalGamesMarketplace2")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DigitalGamesMarketplace2")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

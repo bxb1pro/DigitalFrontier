@@ -1,35 +1,41 @@
-// src/features/wishlist/wishlistSlice.js
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { logout } from '../auth/authSlice';
 
+// wishlistSlice holds all state related to wishlists and gamewishlists
+// Thunks handle asynchronous data flow like API calls, and Axios sends these HTTP API requests to backend through the thunks
+
+// Backend urls into variables
 const API_WISHLIST_URL = 'http://localhost:5004/api/Wishlists';
 const API_GAME_WISHLISTS_URL = 'http://localhost:5004/api/GameWishlists';
 
-
-export const fetchWishlist = createAsyncThunk('wishlist/fetchWishlist', async (customerId) => {
+// Thunk to get a wishlist
+export const fetchWishlist = createAsyncThunk('wishlist/fetchWishlist', async (customerId, { rejectWithValue }) => {
+  try {
     const wishlistIdResp = await axios.get(`${API_WISHLIST_URL}/Customer/${customerId}/WishlistId`);
     const wishlistId = wishlistIdResp.data;
     const response = await axios.get(`${API_GAME_WISHLISTS_URL}/Wishlist/${wishlistId}`);
-    console.log("Fetched wishlist data:", response.data);
     return response.data;
+  } catch (error) {
+    console.error("Failed to fetch wishlist:", {
+      customerId,
+      message: error.message,
+      response: error.response?.data,
+      status: error.response?.status
+    });
+    return rejectWithValue(error.response?.data || 'Failed to fetch wishlist');
   }
-);
+});
 
+// Thunk to add a game to a wishlist
 export const addToWishlist = createAsyncThunk(
   'wishlist/addToWishlist',
   async ({ customerId, gameId }, { rejectWithValue }) => {
     try {
-      // Fetch the WishlistId associated with the customerId from the backend
       const wishlistIdResponse = await axios.get(`${API_WISHLIST_URL}/Customer/${customerId}/WishlistId`);
       const wishlistId = wishlistIdResponse.data;
 
-      console.log('Fetched WishlistId:', wishlistId); // Log the fetched WishlistId
-
-      // Send the request with the correct WishlistId
       const { data } = await axios.post(`${API_GAME_WISHLISTS_URL}`, { WishlistId: wishlistId, GameId: gameId });
-
-      console.log('Added game to wishlist:', data); // Log the response from adding the game to the wishlist
 
       return data;
     } catch (error) {
@@ -39,24 +45,39 @@ export const addToWishlist = createAsyncThunk(
   }
 );
 
+// Thunk to remove a game from a wishlist
 export const removeFromWishlist = createAsyncThunk('wishlist/removeFromWishlist', async (gameWishlistId, { rejectWithValue }) => {
   try {
     await axios.delete(`${API_GAME_WISHLISTS_URL}/${gameWishlistId}`);
-    return gameWishlistId; // Return ID to remove from state
+    return gameWishlistId;
   } catch (error) {
-    return rejectWithValue(error.response.data);
+    console.error("Failed to remove game from wishlist:", {
+      gameWishlistId,
+      message: error.message,
+      response: error.response?.data,
+      status: error.response?.status
+    });
+    return rejectWithValue(error.response?.data || 'Failed to remove game from wishlist');
   }
 });
 
+// Thunk to remove all games from a wishlist
 export const clearWishlist = createAsyncThunk('wishlist/clearWishlist', async (customerId, { rejectWithValue }) => {
   try {
     await axios.delete(`${API_GAME_WISHLISTS_URL}/Clear/${customerId}`);
-    return customerId; // Use customerId to confirm clearing in the state update
+    return customerId;
   } catch (error) {
-    return rejectWithValue(error.response.data);
+    console.error("Failed to clear wishlist:", {
+      customerId,
+      message: error.message,
+      response: error.response?.data,
+      status: error.response?.status
+    });
+    return rejectWithValue(error.response?.data || 'Failed to clear wishlist');
   }
 });
 
+// Slice definition (integrating extra reducers)
 const wishlistSlice = createSlice({
   name: 'wishlist',
   initialState: {
@@ -65,6 +86,7 @@ const wishlistSlice = createSlice({
     error: null
   },
   reducers: {},
+  // Handle async actions created by the thunks to update state
   extraReducers: (builder) => {
     builder
       .addCase(fetchWishlist.pending, (state) => {
@@ -85,13 +107,14 @@ const wishlistSlice = createSlice({
         state.items = state.items.filter(item => item.gameWishlistId !== action.payload);
       })
       .addCase(clearWishlist.fulfilled, (state) => {
-        state.items = []; // Clears the wishlist
+        state.items = [];
       })
       .addCase(logout, (state) => {
-        state.items = []; // Also clear the wishlist on logout
+        state.items = [];
         state.status = 'idle';
       });
   }
 });
 
+// Exporting thunks to be used outside the slice
 export default wishlistSlice.reducer;

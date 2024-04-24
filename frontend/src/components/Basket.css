@@ -7,8 +7,8 @@
 }
 
 .basket-item-image {
-    width: 60px; /* Smaller width if necessary */
-    height: auto; /* Maintain aspect ratio */
+    width: 60px;
+    height: auto;
     margin-right: 15px;
 }
 
@@ -21,31 +21,29 @@
 
 .basket-item-details h5 {
     margin: 0;
-    flex-grow: 1; /* Allows title to take available space */
+    flex-grow: 1;
 }
 
 .basket-item-details p {
-    margin: 0 20px; /* Space before the price */
-    white-space: nowrap; /* Ensures the price does not wrap */
+    margin: 0 20px;
+    white-space: nowrap;
 }
 
 .basket-item-actions {
     display: flex;
-    gap: 10px; /* Space between buttons */
+    gap: 10px;
 }
 
-/* This will center the content and add space around it */
 .basket-container {
-    max-width: 960px; /* This can be adjusted based on your design preference */
-    margin: 20px auto; /* Adds vertical space and centers it horizontally */
-    padding: 0 20px; /* Adds padding inside the container */
+    max-width: 960px;
+    margin: 20px auto;
+    padding: 0 20px;
     border-top: 1px solid #ccc;
     padding-top: 10px;
 }
 
-/* If you want to add more centered padding around the entire Basket component */
 .basket {
-    padding: 0 15%; /* Adds padding to the left and right, can be adjusted */
+    padding: 0 15%;
 }
 
 .basket-actions {

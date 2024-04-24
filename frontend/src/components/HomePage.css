@@ -3,7 +3,7 @@
     padding: 20px;
     border-radius: 5px;
     background-color: #f9f9f9;
-    height: calc(100vh - 100px); /* Adjust the 100px offset based on your header/footer size */
+    height: calc(100vh - 100px);
     overflow-y: auto;
     display: flex;
     flex-direction: column;
@@ -11,77 +11,26 @@
 
 .wishlist-header {
     display: flex;
-    justify-content: space-between; /* This spreads out the child elements */
+    justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
     padding-bottom: 10px;
-    border-bottom: 1px solid #ccc; /* Adds a border line directly under the header */
+    border-bottom: 1px solid #ccc;
 }
 
 .wishlist-title {
     text-align: center;
-    flex: 1; /* Takes up the full space but keeps centering the text */
-    margin: 0; /* Adjust or remove margins as necessary */
+    flex: 1;
+    margin: 0;
 }
 
 .wishlist-clear-btn {
-    margin-left: auto; /* Pushes the button to the right */
-    padding-right: 0; /* Optional: Adjust padding to align button right at the edge */
+    margin-left: auto;
+    padding-right: 0;
 }
 
-/* Add any additional styles for wishlist items if necessary */
 .wishlist-item + .wishlist-item {
     margin-top: 15px;
-}
-
-.card-text {
-    display: -webkit-box;
-    -webkit-line-clamp: 4; /* Limits the text block */
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .wishlist-item {
-    display: flex;
-    align-items: center;
-    padding-bottom: 20px; /* Spacing between the content and the grey line */
-    margin-bottom: 10px; /* Spacing between this item and the next one */
-    border-bottom: 1px solid grey; /* Adds a grey line under each item */
-}
-
-.wishlist-item-image {
-    width: 50px; /* Adjust the image size as needed */
-    height: auto;
-    margin-right: 10px; /* Space between the image and the text */
-}
-
-.wishlist-game-title {
-    margin: 0;
-    flex-grow: 1; /* Ensure the title takes up the remaining space */
-}
-
-.disabled-button {
-    opacity: 0.5;
-    pointer-events: none;
-}
-
-.game-title-link {
-    color: black;  /* Ensures the text color is black */
-    font-weight: bold;  /* Makes the text bold */
-    text-decoration: none;  /* Removes any underline from links */
-}
-
-.game-title-link:hover {
-    text-decoration: none;  /* Optionally ensures that hovering over the link does not underline it */
-    color: black;  /* Keeps the color black even on hover */
-}
-
-.card-body {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between; /* Aligns content at the top and buttons at the bottom */
-    height: 100%; /* Ensures the card body takes up all the available space within the card */
 }
 
 .card-text {
@@ -90,25 +39,75 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
-    flex-grow: 1; /* Allows this element to grow and fill available space, pushing the buttons down */
-    margin-bottom: 20px; /* Optional, adds some spacing between the text and the buttons */
+  }
+
+  .wishlist-item {
+    display: flex;
+    align-items: center;
+    padding-bottom: 20px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid grey;
+}
+
+.wishlist-item-image {
+    width: 50px;
+    height: auto;
+    margin-right: 10px;
+}
+
+.wishlist-game-title {
+    margin: 0;
+    flex-grow: 1;
+}
+
+.disabled-button {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.game-title-link {
+    color: black;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.game-title-link:hover {
+    text-decoration: none;
+    color: black;
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.card-text {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-grow: 1;
+    margin-bottom: 20px;
 }
 
 .btn-uniform {
-    min-width: 120px; /* Or whatever width looks best with your design */
-    text-align: center; /* To ensure the text within the buttons is centered */
+    min-width: 120px;
+    text-align: center;
 }
 
 .link-to-add-game {
-    display: block;        /* Makes the link a block element to fill the space */
-    margin-bottom: 20px;   /* Adds space below the button */
-    text-align: center;    /* Centers the text if needed */
+    display: block;
+    margin-bottom: 20px;
+    text-align: center;
 }
 
 .game-price {
     display: flex;
-    align-items: center; /* Centers the icon with the text vertically */
-    font-size: 19px; /* Adjust size as necessary */
+    align-items: center;
+    font-size: 19px;
     margin-top: 5px;
 
 }
@@ -118,12 +117,12 @@
 }
 
 .button-group {
-    display: flex;          /* Align children elements in a row */
-    justify-content: center; /* Align children to the start of the 'button-group' */
-    gap: 5px;              /* Adds space between the buttons */
+    display: flex;
+    justify-content: center;
+    gap: 5px;
 }
 
 .button-group button {
-    flex: 1;               /* Each button will take equal portion of the available space */
+    flex: 1;
     text-align: center;
 }

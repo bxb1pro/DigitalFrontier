@@ -1,21 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import Tabs from 'react-bootstrap/Tabs';
-import Tab from 'react-bootstrap/Tab';
-import './GameDetailPage.css';
-import DeveloperMap from './DeveloperMap';
-import { Modal, Button } from 'react-bootstrap';
+import { useParams } from 'react-router-dom';
 import { addToBasket } from '../features/basket/basketSlice';
 import { fetchGameById } from '../features/games/gamesSlice';
+import DeveloperMap from './DeveloperMap';
+import Tabs from 'react-bootstrap/Tabs';
+import Tab from 'react-bootstrap/Tab';
+import { Modal, Button } from 'react-bootstrap';
+import './GameDetailPage.css';
+
 
 function GameDetailPage() {
+  // useParams hook allows for accessing parameters from URL (gameId in this case)
   const { gameId } = useParams();
+  // useSelector is hook to retrieve state from Redux, and re-render if state changes
   const game = useSelector(state => 
     state.games.games.find(g => g.id === parseInt(gameId, 10))
   );
-  console.log("Selected Game:", game);
+  // useDispatch is hook to dispatch actions (async or synchronous) to Redux store to change the state
   const dispatch = useDispatch();
+  // useSelector is hook to retrieve state from Redux, and re-render if state changes
   const developers = useSelector(state => state.developers.developers);
   const [selectedImage, setSelectedImage] = useState('');
   const role = useSelector(state => state.auth.role);
@@ -25,23 +29,25 @@ function GameDetailPage() {
   const [modalMessage, setModalMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
+  // useEffect checks if game is already loaded, if not dispatches fetch for game info by ID
   useEffect(() => {
     if (!game) {
-      setIsLoading(true);  // Set loading state locally
+      setIsLoading(true);
       dispatch(fetchGameById(parseInt(gameId, 10)))
         .unwrap()
         .then(() => setIsLoading(false))
-        .catch(() => setIsLoading(false));  // Reset loading state after fetch
+        .catch(() => setIsLoading(false));
     }
   }, [gameId, game, dispatch]);
 
-  // Initialize selectedImage with the first image when game data is loaded
+  // useEffect sets initial image display to first image in game array
   useEffect(() => {
     if (game && game.images && game.images.length > 0) {
       setSelectedImage(game.images[0]);
     }
   }, [game]);
 
+  // Event handler to add game to basket (checks for login and role)
   const handleAddToCart = () => {
     if (!isAuthenticated) {
       setModalMessage('Please login to use this feature');
@@ -54,6 +60,7 @@ function GameDetailPage() {
     }
   };
 
+  // Event handler to close modal
   const handleCloseModal = () => {
     setShowModal(false);
   };
@@ -66,10 +73,7 @@ function GameDetailPage() {
     return <div>Game not found</div>;
   }
 
-  developers.forEach(dev => console.log(dev.developerId, "Type:", typeof dev.developerId));  // Note the property change
-
   const developer = developers.find(d => {
-    console.log(`Comparing ${d.developerId} (type ${typeof d.developerId}) to ${game.developer} (parsed type ${typeof parseInt(game.developer, 10)})`);
     return d.developerId === parseInt(game.developer, 10);
   });
 
@@ -100,7 +104,6 @@ function GameDetailPage() {
             <p><strong>Price:</strong> £{game.price.toFixed(2)}</p>
             <p><strong>Genre:</strong> {game.genre}</p>
             <p><strong>Release Date:</strong> {releaseDateFormatted}</p>
-            {/* Basket button with icon */}
             <Button variant="primary" className="basket-button" onClick={handleAddToCart}>
             <i className="bi bi-cart"></i> Add to Basket
             </Button>

@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+// Simple unauthorised page function for when user without correct role attempts access
+
 const Unauthorised = () => {
     return (
         <div className="container mt-5">

@@ -54,9 +54,9 @@ namespace DigitalGamesMarketplace2.Controllers
         public async Task<ActionResult<IEnumerable<Transaction>>> GetTransactionsByCustomer(int customerId)
         {
             var transactions = await _context.Transactions
-                                            .Where(t => t.CustomerId == customerId)
-                                            .Include(t => t.Game) // Assuming you want to include game details
-                                            .ToListAsync();
+                .Where(t => t.CustomerId == customerId)
+                .Include(t => t.Game)
+                .ToListAsync();
 
             if (transactions == null || !transactions.Any())
             {

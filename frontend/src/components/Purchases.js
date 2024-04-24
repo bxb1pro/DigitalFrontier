@@ -4,29 +4,31 @@ import { fetchTransactionsByCustomer } from '../features/transactions/transactio
 import { fetchGameById } from '../features/games/gamesSlice';
 
 function Purchases() {
+  // useDispatch is hook to dispatch actions (async or synchronous) to Redux store to change the state
   const dispatch = useDispatch();
+  // useSelector is hook to retrieve state from Redux, and re-render if state changes
   const { transactions, status, error } = useSelector(state => state.transactions);
   const { customerId } = useSelector(state => state.auth);
+
+  // useState adds local state to manage state in functions
   const [enrichedTransactions, setEnrichedTransactions] = useState([]);
 
-  // Fetch transactions for a customer
+  // First useEffect executes when component mounts or customerId changes, gets transaction data and sets it to enriched transactions
   useEffect(() => {
     if (customerId) {
       dispatch(fetchTransactionsByCustomer(customerId))
         .unwrap()
         .then(data => {
-          console.log("Fetched Transactions:", data); // Log fetched transactions
-          // Initialize enriched transactions
           setEnrichedTransactions(data.map(transaction => ({
             ...transaction,
-            game: null // Initialize game as null
+            game: null
           })));
         })
         .catch((error) => console.error("Fetching transactions failed:", error));
     }
   }, [dispatch, customerId]);
 
-  // Enrich transactions with game details
+  // Second useEffect iterates over enriched transactions to fetch relevant game details via fetchgamebyid function, updates transactions with full details
   useEffect(() => {
     enrichedTransactions.forEach((transaction, index) => {
       if (transaction.gameId && !transaction.game) {
@@ -34,8 +36,8 @@ function Purchases() {
           .unwrap()
           .then(gameData => {
             const updatedTransactions = [...enrichedTransactions];
-            updatedTransactions[index].game = gameData; // Update the game data in the copy of transactions
-            setEnrichedTransactions(updatedTransactions); // Set the new state
+            updatedTransactions[index].game = gameData;
+            setEnrichedTransactions(updatedTransactions);
           })
           .catch(error => console.error("Fetching game data failed:", error));
       }
@@ -44,9 +46,6 @@ function Purchases() {
 
   if (status === 'loading') return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
-
-  console.log("Transactions before rendering:", transactions);
-  console.log("Enriched Transactions:", enrichedTransactions);
 
   return (
     <div className="container mt-5">
@@ -65,7 +64,6 @@ function Purchases() {
               <td>{transaction.game ? transaction.game.name : 'No game info'}</td>
               <td>£{transaction.amount.toFixed(2)}</td>
               <td>{new Date(transaction.transactionDate).toLocaleDateString()}</td>
-              {/* Convert string to Date object before calling toLocaleDateString() */}
             </tr>
           ))}
         </tbody>

@@ -1,11 +1,8 @@
-/* Header.css */
-
-/* General navbar styles */
 .navbar-custom {
     background-color: #000;
     padding: 1rem 0;
     display: flex;
-    justify-content: center; /* Changed to center */
+    justify-content: center;
     align-items: center;
 }
 
@@ -20,72 +17,63 @@
     max-height: 100px;
 }
 
-/* Adjusting the size and alignment of nav links */
 .navbar-custom .navbar-nav .nav-link {
     color: white;
     font-size: 1.2rem;
     padding: 8px 16px;
 }
 
-/* Hover styles for account-related links */
 .navbar-custom .navbar-nav .nav-link:hover {
-    color: #bfbfbf; /* Slightly grey color */
+    color: #bfbfbf;
 }
 
-/* Ensuring the parent link is positioned relatively */
 .navbar-custom .nav-link {
-    position: relative; /* This ensures the tooltip is positioned relative to the link */
+    position: relative;
     display: flex;
-    align-items: center; /* This centers the icon vertically */
+    align-items: center;
+    color: white;
 }
 
-/* Hide text by default */
 .navbar-custom .nav-link .account-text {
     visibility: hidden;
     opacity: 0;
-    overflow: hidden;
     position: absolute;
     transition: opacity 0.2s, width 0.2s;
     font-size: 1rem;
     color: white;
-    bottom: 100%; /* Position it fully above the parent link */
-    left: 50%; /* Center it horizontally */
-    transform: translateX(-50%); /* Align center of the tooltip with the center of the link/icon */
-    white-space: nowrap; /* Prevents the text from wrapping */
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
 }
 
-/* Show text on hover */
 .navbar-custom .nav-link:hover .account-text {
     visibility: visible;
     opacity: 1;
     width: auto;
 }
 
-/* Removing underlines from links on hover */
 .navbar-custom a:hover {
     text-decoration: none;
 }
 
-/* Styles for the search bar container */
 .navbar-custom .search-container {
     display: flex;
     justify-content: center;
     align-items: center;
     width: auto;
-    max-width: 1000px; /* Set the max width for the entire search bar container */
-    margin: 0 auto; /* Center the search container in the available space */
+    max-width: 1000px;
+    margin: 0 auto;
 }
 
-/* Styles specific to the search form elements */
-.navbar-custom .custom-dropdown-toggle,
+.navbar-custom,
 .navbar-custom .form-control,
 .navbar-custom .btn {
-    margin: 0; /* Removes margins between elements */
-    border-radius: 0; /* Removes rounded corners for middle elements */
+    margin: 0;
+    border-radius: 0;
 }
 
-/* Force override left corners of all categories button not rounding */
-.navbar-custom .search-container .dropdown .dropdown-toggle {
+.navbar-custom .search-container {
     border-top-left-radius: 0.25rem;
     border-bottom-left-radius: 0.25rem;
 }
@@ -95,43 +83,13 @@
     border-bottom-right-radius: 0.25rem;
 }
 
-/* Custom Dropdown Toggle Styles */
-.navbar-custom .custom-dropdown-toggle {
-    background-color: #fff;
-    color: #495057;
-    border: 1px solid #ced4da;
-    border-right: none; /* Aligns with the search input */
-    box-shadow: none;
-}
 
-.navbar-custom .custom-dropdown-toggle:hover, 
-.navbar-custom .custom-dropdown-toggle:focus {
-    background-color: #e9ecef;
-    color: #495057;
-}
-
-.navbar-custom .custom-dropdown-toggle:active,
-.navbar-custom .custom-dropdown-toggle.show {
-    background-color: #fff;
-    color: #495057;
-}
-
-.navbar-custom .dropdown-menu {
-    border: 1px solid #ced4da;
-}
-
-.navbar-custom .dropdown-item {
-    color: #495057;
-}
-
-/* Search input styles */
 .navbar-custom .form-control {
     border: 1px solid #ced4da;
-    border-radius: 0; /* No corner rounding */
-    flex-grow: 1; /* Takes up the remaining space */
+    border-radius: 0;
+    flex-grow: 1;
 }
 
-/* Search button styles */
 .navbar-custom .btn {
     background-color: #007bff;
     border: 1px solid #007bff;
@@ -143,27 +101,67 @@
     font-size: 1.25rem;
 }
 
-/* Hover styles for search button */
 .navbar-custom .btn:hover {
-    background-color: #e2e6ea;
+    background-color: #0056b3;
 }
 
-/* Styles for the search bar container */
 .navbar-custom .search-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 60%; /* Full width of the navbar */
-    max-width: 60%; /* Adjust this percentage to make the container smaller */
-    margin: 0 auto; /* This will center the search container */
+    width: 60%;
+    max-width: 60%;
+    margin: 0 auto;
 }
 
-/* Search input styles */
+.custom-dropdown-toggle {
+    background-color: #007bff;
+    color: white;
+    border: 1px solid #007bff;
+    width: 150px;
+    height: 38px;
+    border-top-left-radius: 0.25rem;
+    border-bottom-left-radius: 0.25rem;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.custom-dropdown-toggle:hover, .custom-dropdown-toggle:focus {
+    background-color: #0056b3;
+    color: white;
+}
+
+.custom-dropdown-toggle .dropdown-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    border: 0;
+}
+
+.custom-dropdown-toggle::after {
+    content: none;
+}
+
+.custom-dropdown-toggle .dropdown-toggle {
+    margin: 0;
+}
+
+.nav-dropdown-menu {
+    width: 150px;
+}
+
 .navbar-custom .form-control {
     border: 1px solid #ced4da;
-    border-radius: 0; /* No corner rounding */
-    flex-grow: 1; /* Takes up the remaining space */
-    width: 100%; /* Allows the input to expand */
+    border-radius: 0;
+    flex-grow: 1;
+    width: 100%;
 }
 
 .basket-item-count {
@@ -177,7 +175,6 @@
     right: 10px;
 }
 
-/* Responsive adjustments */
 @media (max-width: 991px) {
     .navbar-custom .d-flex {
         flex-basis: 100%;
@@ -187,6 +184,6 @@
         width: auto;
     }
     .navbar-custom .form-control {
-        width: 100%; /* Make sure input expands fully on smaller screens */
+        width: 100%;
     }
 }

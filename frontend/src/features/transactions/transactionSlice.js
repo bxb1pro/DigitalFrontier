@@ -1,7 +1,10 @@
-// src/features/transactions/transactionSlice.js
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 
+// transactionSlice holds all state related to transactions
+// Thunks handle asynchronous data flow like API calls, and Axios sends these HTTP API requests to backend through the thunks
+
+// Thunk to add a transaction
 export const postTransaction = createAsyncThunk(
   'transactions/postTransaction',
   async (transactionData, { getState, rejectWithValue }) => {
@@ -12,47 +15,66 @@ export const postTransaction = createAsyncThunk(
       });
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      console.error("Failed to post transaction:", {
+        errorData: error.response?.data,
+        status: error.response?.status,
+        message: error.message
+      });
+      return rejectWithValue(error.response?.data || 'Unknown error during transaction posting');
     }
   }
 );
 
+// Thunk to add multiple transactions at once
 export const postAllTransactions = createAsyncThunk(
-    'transactions/postAllTransactions',
-    async (_, { getState, dispatch }) => {
-      const { basket, auth } = getState();
-      const results = [];
-      for (const item of basket.items) {
-        const transactionData = {
-          GameId: item.id,
-          CustomerId: auth.customerId,
-          Amount: item.price,
-          TransactionDate: new Date().toISOString(),
-        };
-        // Post each transaction and wait for the response before continuing
+  'transactions/postAllTransactions',
+  async (_, { getState, dispatch }) => {
+    const { basket, auth } = getState();
+    const results = [];
+    for (const item of basket.items) {
+      const transactionData = {
+        GameId: item.id,
+        CustomerId: auth.customerId,
+        Amount: item.price,
+        TransactionDate: new Date().toISOString(),
+      };
+      try {
         const result = await dispatch(postTransaction(transactionData));
         results.push(result);
-      }
-      return results;
-    }
-  );
-
-export const fetchTransactionsByCustomer = createAsyncThunk(
-    'transactions/fetchByCustomer',
-    async (customerId, { getState, rejectWithValue }) => {
-      const { auth } = getState();
-      try {
-        const response = await axios.get(`http://localhost:5004/api/Transactions/Customer/${customerId}`, {
-          headers: { Authorization: `Bearer ${auth.token}` },
-        });
-        return response.data;
       } catch (error) {
-        return rejectWithValue(error.response.data);
+        console.error("Error posting transaction for item:", item.id, {
+          error: error.message,
+          transactionData
+        });
       }
     }
-  );
+    return results;
+  }
+);
 
+// Thunk to get transactions for a customer
+export const fetchTransactionsByCustomer = createAsyncThunk(
+  'transactions/fetchByCustomer',
+  async (customerId, { getState, rejectWithValue }) => {
+    const { auth } = getState();
+    try {
+      const response = await axios.get(`http://localhost:5004/api/Transactions/Customer/${customerId}`, {
+        headers: { Authorization: `Bearer ${auth.token}` },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Failed to fetch transactions by customer:", {
+        customerId: customerId,
+        errorData: error.response?.data,
+        status: error.response?.status,
+        message: error.message
+      });
+      return rejectWithValue(error.response?.data || 'Unknown error fetching transactions');
+    }
+  }
+);
 
+// Slice definition (integrating extra reducers)
 const transactionSlice = createSlice({
   name: 'transactions',
   initialState: {
@@ -61,6 +83,7 @@ const transactionSlice = createSlice({
     error: null,
   },
   reducers: {},
+  // Handle async actions created by the thunks to update state
   extraReducers: (builder) => {
     builder
       .addCase(postTransaction.pending, (state) => {
@@ -99,4 +122,5 @@ const transactionSlice = createSlice({
   },
 });
 
+// Exporting thunks to be used outside the slice
 export default transactionSlice.reducer;

@@ -1,12 +1,13 @@
-// GameForm.js
 import React, { useState } from 'react';
+
+// Re-useable game form for add game and edit game components
 
 function GameForm({ gameData, handleChange, handleSubmit }) {
 
-    // State to store validation errors
+    // useState adds local state to manage state in functions
     const [errors, setErrors] = useState({});
 
-    // Validation rules
+    // Function to check for user input validation
     const validateField = (name, value) => {
         switch (name) {
             case 'title':
@@ -41,15 +42,15 @@ function GameForm({ gameData, handleChange, handleSubmit }) {
         }
     };
 
-    // Enhanced handleChange to include validation
+    // Function triggered on every change in form input, error checks
     const handleValidationChange = (e) => {
         const { name, value } = e.target;
-        handleChange(e);  // call the original handleChange from props
+        handleChange(e);
         const error = validateField(name, value);
         setErrors(prev => ({ ...prev, [name]: error }));
     };
 
-    // Validate all fields on form submission
+    // Function checks all fields for errors before submission
     const validateOnSubmit = () => {
         const newErrors = {};
         Object.keys(gameData).forEach(key => {
@@ -60,7 +61,7 @@ function GameForm({ gameData, handleChange, handleSubmit }) {
         return Object.keys(newErrors).length === 0;
     };
 
-    // Enhanced handleSubmit to include validation check
+    // Function to submit form if all input is validated
     const handleValidatedSubmit = (e) => {
         e.preventDefault();
         if (validateOnSubmit()) {
