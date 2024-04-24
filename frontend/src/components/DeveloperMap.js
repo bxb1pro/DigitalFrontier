@@ -8,8 +8,16 @@ function DeveloperMap({ latitude, longitude, developerName }) {
 
     // Effect hook dynamically load the Google Maps script if not already available
     useEffect(() => {
-        if (!window.google) {
+        const scriptId = 'google-maps-script';
+    
+        // Define initMap globally before adding the script
+        window.initMap = () => {
+            setMapLoaded(true);
+        };
+
+        if (!document.getElementById(scriptId) && !window.google) {
             const script = document.createElement('script');
+            script.id = scriptId;
             script.type = 'text/javascript';
             script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyCwIXyqJr9tjrny4DC3hEL1DoAaXUQV0kM&callback=initMap`;
             // Sets script to load async
@@ -17,19 +25,12 @@ function DeveloperMap({ latitude, longitude, developerName }) {
             script.defer = true;
             document.head.appendChild(script);
 
-            // Updates state when script loads successfully
-            window.initMap = () => setMapLoaded(true);
-
             script.onerror = () => {
                 console.error('Google Maps script failed to load.');
                 setMapLoaded(false);
             };
-
-            return () => {
-                document.head.removeChild(script);
-                window.initMap = undefined;
-            };
-        } else {
+        } else if (window.google) {
+            // If script is already loaded and google is available
             setMapLoaded(true);
         }
     }, []);

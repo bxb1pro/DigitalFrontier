@@ -16,7 +16,6 @@ import PrivateRoute from './components/PrivateRoute';
 import Unauthorised from './components/Unauthorised';
 import EmailVerification from './components/EmailVerification';
 import Basket from './components/Basket';
-import loadScript from './utils/loadScript';
 
 // App.js defines main structure and routing of my web app
 
@@ -40,11 +39,6 @@ function App() {
   const handleGenreChange = (newGenre) => {
     setGenre(newGenre);
   };
-
-  // Google maps API key, loading asynchronously
-  useEffect(() => {
-    loadScript('https://maps.googleapis.com/maps/api/js?key=AIzaSyCwIXyqJr9tjrny4DC3hEL1DoAaXUQV0kM', 'body', 'google-maps-script');
-  }, []);
 
   return (
     // Site routing, including private routes based on roles
